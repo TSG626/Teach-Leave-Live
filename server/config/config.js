@@ -1,8 +1,7 @@
-//This file holds any configuration variables we may need
-//'config.js' is usually ignored by git to protect sensitive information, such as your database's username and password
-
+//Holds our secrets
 module.exports = {
     db: {
-        uri: '', //place the URI of your mongo database here.
-    }
+        uri: 'mongodb+srv://admin:pass@bootcamp2-sajda.mongodb.net/test?retryWrites=true&w=majority',
+    },
+    secret: 'secret'
 };
