@@ -3,30 +3,39 @@ const path = require('path'),
     mongoose = require('mongoose'),
     morgan = require('morgan'),
     bodyParser = require('body-parser'),
-    exampleRouter = require('../routes/examples.server.routes');
+    config = require('./config.js'),
+    session = require('express-session'),
+    passport = require('passport');
 
 module.exports.init = () => {
-    /* 
-        connect to database
-        - reference README for db uri
-    */
-    mongoose.connect(process.env.DB_URI || require('./config').db.uri, {
-        useNewUrlParser: true
+    //connect to database
+    mongoose.connect(config.db.uri, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}).then(() => {
+        console.log(`Successfully connected to mongoose database.`)
     });
-    mongoose.set('useCreateIndex', true);
-    mongoose.set('useFindAndModify', false);
 
-    // initialize app
+    //initialize app
     const app = express();
 
-    // enable request logging for development debugging
+    //Auth/Session
+    app.use(session({
+        secret: config.secret,
+        resave: false,
+        saveUninitialized: false
+    }));
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    //enable request logging for development debugging
     app.use(morgan('dev'));
 
-    // body parsing middleware
+    //body parsing middleware
+    app.use(bodyParser.urlencoded({
+        extended: false
+    }));
     app.use(bodyParser.json());
 
-    // add a router
-    app.use('/api/example', exampleRouter);
+    //routing index
+    app.use(require('../routes'));
 
     if (process.env.NODE_ENV === 'production') {
         // Serve any static files
