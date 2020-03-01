@@ -1,7 +1,7 @@
 import React from 'react';
-import './Home.css';
+import './Confirmation.css';
 
-export default function Home() {
+export default function Confirmation() {
     return (
         <div className="App">
             <header className="App-header">
