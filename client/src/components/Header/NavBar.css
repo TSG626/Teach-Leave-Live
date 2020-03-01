@@ -13,8 +13,13 @@
     padding: 10%;
 }
 
-.nav-logo:hover {
+.nav-title {
+    color: #0055ff;
+    text-decoration: none;
+    font-family: monospace;
+}
 
+.nav-logo:hover {
 }
 
 .nav-items {
@@ -25,14 +30,15 @@
 }
 
 .nav-link {
-    background-color: #09d3ac;
+    background-color: #ffffff;
     color: black;
+    font-size: large;
     padding: 14px 25px;
     text-align: center;
     text-decoration: none;
 }
 
 .nav-link:hover {
-    background-color: #08bd9a;
+    background-color: #98c5bc;
 }
 
