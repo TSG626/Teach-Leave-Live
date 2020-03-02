@@ -6,15 +6,15 @@ import Checkout from "./Checkout/Checkout";
 import Confirmation from "./Confirmation/Confirmation";
 import Summary from "./Summary/Summary";
 
-export default function Store() {
+export default function Store({match}) {
     return (
         <div>
             <header>
                 <Switch>
-                    <Route exact path="/Store/Cart" component={Cart} />
-                    <Route exact path="/Store/Checkout" component={Checkout} />
-                    <Route exact path="/Store/Confirmation" component={Confirmation} />
-                    <Route exact path="/Store/Summary" component={Summary} />
+                    <Route exact path={`${match.path}/Cart`} component={Cart} />
+                    <Route exact path={`${match.path}/Checkout`} component={Checkout} />
+                    <Route exact path={`${match.path}/Confirmation`} component={Confirmation} />
+                    <Route exact path={`${match.path}/Summary`} component={Summary} />
                 </Switch>
             </header>
         </div>

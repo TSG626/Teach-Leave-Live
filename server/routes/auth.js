@@ -1,14 +1,8 @@
 const express = require('express'); 
-const bcrypt = require('bcrypt'); 
 const passport = require('passport'); 
-const User = require('../models/UserModel.js');
 const validator = require('validator');
 
 const router = express.Router();
-
-//TODO: Figure out how to make these work with react server
-const loginPage = null;
-const registerPage = null;
 
 //Filters unauthed users to /login
 function checkAuthenticated (req, res, next) {
@@ -70,15 +64,20 @@ const registerHandler = (req, res, next) => {
     }
     return passport.authenticate('local-signup', (err) => {
         if (err) {
-            if (err.name === 'MongoError' && err.code === 11000) {
+            if (err.name === 'Conflict') {
                 // the 11000 Mongo code is for a duplication email error
                 // the 409 HTTP status code is for conflict error
+                const errors = {}
+                if(err.message.includes('Email')){
+                    errors.email = 'This email is already taken.';
+                }
+                if(err.message.includes('Username')){
+                    errors.username = 'This username is already taken.';
+                }
                 return res.status(409).json({
                     success: false,
                     message: 'Check the form for errors.',
-                    errors: {
-                        email: 'This email is already taken.'
-                    }
+                    errors: errors
                 });
             }
 
@@ -121,15 +120,9 @@ function validateLoginForm(body) {
     };
 }
 
-//Temp login page
-router.get('/login', checkNotAuthenticated, (req, res) => {
-    res.send('loginPage');
-});
-
 router.get('/user', 
     checkAuthenticated, 
     (req, res) => {
-        console.log(req.user);
         res.statusCode = 200;
     }
 );
@@ -167,11 +160,6 @@ router.post('/login', (req, res, next) => {
             user: userData
         });
     })(req, res, next);
-});
-
-//Temp registration page
-router.get('/register', checkNotAuthenticated, (req, res) => {
-    res.send('registerPage');
 });
 
 //Signup

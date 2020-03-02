@@ -11,6 +11,7 @@ import Container from '@material-ui/core/Container';
 import {UserContext} from '../../../contexts/UserContext';
 import axios from 'axios';
 import './SignUp.css';
+import { useScrollTrigger } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -36,9 +37,20 @@ export default function SignUp() {
     const classes = useStyles();
 
     const [registered, setRegistered] = useState(false);
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState({
+        email: '',
+        username: ''
+    });
 
     function validatePassword(){
+        if(document.getElementById('password').value.length < 8){
+            setErrors({...errors, password: true});
+        }else{
+            setErrors({...errors, password: false});
+        }
+    }
+
+    function confirmPassword(){
         if(document.getElementById('password').value !== document.getElementById('cpassword').value){
             setErrors({...errors, passwordMismatch: true});
         }else{
@@ -46,10 +58,9 @@ export default function SignUp() {
         }
     }
 
-    function handleSubmit(e, context){
+    function handleSubmit(e){
         e.preventDefault();
-        
-        if (errors.passwordMismatch == false){
+        if (!errors.passwordMismatch && !errors.password){
             axios.post('/api/register', JSON.stringify({
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
@@ -64,20 +75,20 @@ export default function SignUp() {
                     "Content-Type" : "application/json"
                 },
             }).then(res => {
-                if(res.status === 200){
-                    setRegistered(true);
-                }else{
-                    console.log(res.errors)
-                    setErrors(...errors, res.errors);
-                }
+                setRegistered(true);
             }).catch(err => {
-                console.log(err);
+                console.log(err.response.data);
+                setErrors({
+                    ...errors, 
+                    email: err.response.data.errors.email, 
+                    username: err.response.data.errors.username
+                });
             });
-        };
+        }
     }
 
     if(registered) {
-        return(<Redirect to='/Login'/>);
+        return(<Redirect to='/User/Login'/>);
     };
 
     return (
@@ -122,7 +133,7 @@ export default function SignUp() {
                         name="email"
                         autoComplete="email"
                     />
-                    {errors.email ? errors.email.value : <React.Fragment/>}
+                    {errors.email}
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -140,6 +151,7 @@ export default function SignUp() {
                         label="Username"
                         name="Username"
                     />
+                    {errors.username}
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -150,8 +162,12 @@ export default function SignUp() {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        onChange={() => {
+                            validatePassword();
+                            confirmPassword();
+                        }}
                     />
-                    <h1>{errors.password}</h1>
+                    {errors.password ? 'Password must be atleast 8 characters.' : <React.Fragment/>}
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -162,6 +178,7 @@ export default function SignUp() {
                         type="password"
                         id="cpassword"
                         autoComplete="current-password"
+                        onChange={confirmPassword}
                     />
                     {errors.passwordMismatch ? 'Password fields do not match.' : <React.Fragment/>}
                     <Button

@@ -51,6 +51,21 @@ const createUser = async (req, email, password, done) => {
         password: password.trim(),
         username: req.body.username.trim()
     };
+    const error = new Error('');
+    await User.findOne({ email: userData.email }).then((user) => {
+        if(user){
+            error.message = 'Email';
+        }
+    });
+    await User.findOne({ username: userData.username }).then((user) => {
+        if(user){
+            error.message = error.message + ', Username';
+        }
+    });
+    if(error.message != ''){
+        error.name = 'Conflict';
+        return done(error);
+    }
     try {
         const hashedPassword = await bcrypt.hash(userData.password, 10);
         const user = new User({
@@ -59,7 +74,11 @@ const createUser = async (req, email, password, done) => {
             password: hashedPassword
         });
         user.save((err) => {
-            return done(err);
+            if(err){
+                return done(err);
+            }else{
+                return done(null);
+            }
         });
     } catch (err) {
         return done(err);

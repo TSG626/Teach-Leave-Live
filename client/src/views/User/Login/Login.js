@@ -36,11 +36,11 @@ const useStyles = makeStyles(theme => ({
     },
   }));
   
-export default function SignIn() {
+export default function Login() {
     const classes = useStyles();
 
     const [authed, setAuthed] = useState(false);
-    const [errors, setErrors] = useState({});
+    const [message, setMessage] = useState('');
 
     async function handleSubmit(e, context){
         e.preventDefault();
@@ -58,7 +58,7 @@ export default function SignIn() {
                 setAuthed(true);
             }
         }).catch(err => {
-            console.log(err);
+            setMessage(err.response.data.message);
         });
     }
 
@@ -102,6 +102,7 @@ export default function SignIn() {
                         id="password"
                         autoComplete="current-password"
                     />
+                    <h5>{message}</h5>
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
