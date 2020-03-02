@@ -7,7 +7,6 @@ const router = express.Router();
 //Filters unauthed users to /login
 function checkAuthenticated (req, res, next) {
     if(req.isAuthenticated()){
-        console.log("User is authorized");
         return next();
     }
     res.redirect('/api/login');
