@@ -1,7 +1,7 @@
 import React from 'react';
-import './Home.css';
+import './ForgotPassword.css';
 
-export default function Home() {
+export default function ForgotPassword() {
     return (
         <div className="App">
             <header className="App-header">

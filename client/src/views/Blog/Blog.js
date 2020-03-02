@@ -1,7 +1,7 @@
 import React from 'react';
-import './Home.css';
+import './Blog.css';
 
-export default function Home() {
+export default function Blog() {
     return (
         <div className="App">
             <header className="App-header">
