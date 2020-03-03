@@ -1,0 +1,73 @@
+body {
+    margin: 0;
+    background-color: #282c34;
+}
+
+.App {
+    text-align: center;
+}
+
+.App-logo {
+    height: 40vmin;
+}
+.App-header {
+    font-size: calc(10px + 2vmin);
+    color: white;
+    background-color: #282c34;
+}
+
+.App-link {
+    color: #09d3ac;
+}
+.Welcome{
+    color: white;
+    font-size: calc(50px + 2vmin);
+    align-self: top;
+}
+.NormalHeader{
+    font-size: calc(10px + 2vmin);
+    color: white;
+    align-self: top;
+    margin-bottom: 50px;
+}
+.About{
+    color: white;
+    padding-left: 15px;
+    padding-right: 30px;
+    padding-bottom: 25px;
+}
+.AboutTitle{
+    font-size: calc(15px + 1vmin);
+    text-align: left;
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+.BodyText{
+    text-align: left;
+    justify-content: space-evenly;
+}
+.Socials{
+    font-size: calc(15px + 1vmin);
+    font-weight: bold;
+    color: white;
+    background: #282c34;
+}
+.RecentBlogs{
+    font-size: calc(15px + 1vmin);
+    text-decoration: underline;
+    font-style: italic;
+    font-family: "Times New Roman", Times, serif;
+    color: white;
+    background: #282c34;
+}
+.column1 {
+	float: left;
+    width: 50%;
+	background-color: #282c34;
+}
+.column2 {
+	float: right;
+	width: 40%;
+    text-align: center;
+	background-color: #282c34;
+}
