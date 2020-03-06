@@ -54,7 +54,7 @@ export default function Login() {
         }).then(res => {
             if(res.status == 200){
                 context.authenticateUser(res.token);
-                context.setUser(res.user);
+                context.setUser(res.data.user);
                 setAuthed(true);
             }
         }).catch(err => {

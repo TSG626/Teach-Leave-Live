@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, {useState, useContext} from 'react';
 import './Home.css';
 import InstagramIcon from '@material-ui/icons/Instagram'
 import Link from '@material-ui/core/Link'
@@ -11,8 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';    //Baseline of look f
 export default function Home() {
     const [topBlogs, setTopBlogs] = useState("No recent blogs posted!");
     const [courses, setCourses] = useState("No courses listed!");
-    const [user, setUser] = useState({});
-    const [auth, isAuth] = useState(false)
+    const userInfo = useContext(UserContext);
 
     //LINE 26: user is a placeholder; should have user's first name pop up
     return (
@@ -23,7 +22,7 @@ export default function Home() {
             <div className="App">
             <header className="App-header">
                 <Typography component="h1" variant="h3">
-                    Welcome back, user!
+                    Welcome back, {userInfo.user.username}!
                 </Typography>            
             </header>
             <header className="App-table">
