@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
 import './Landing.css';
 
 export default function Landing() {
@@ -53,7 +52,6 @@ export default function Landing() {
                     <text>Recent Blogs</text>
                     <div className="BlogList">
                         <tr>
-                            <td></td>
                             <td></td>
                             <td></td>
                         </tr>
