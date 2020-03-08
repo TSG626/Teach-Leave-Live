@@ -49,6 +49,7 @@ export default function ForgotPassword() {
         setValidEmail(true);
         //TODO: Generate code and send to email.
 
+        setMessage('');
         document.getElementById("email").value = ('');
     }
 
@@ -57,6 +58,7 @@ export default function ForgotPassword() {
         setValidCode(true);
         //TODO: Verify email
 
+        setMessage('');
         document.getElementById("code").value = ('');
     }
 
