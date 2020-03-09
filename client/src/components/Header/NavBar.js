@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './NavBar.css';
 import {UserContext} from '../../contexts/UserContext';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Button from '@material-ui/core/Button';
 
 const AccountOptions = () => {
     return(
@@ -17,6 +19,11 @@ const AccountOptions = () => {
                 return(
                     <React.Fragment>
                         <Link className = "nav-link" to='/User/Logout'>Log Out</Link>
+                        <Link className="nav-link" to='/User/Profile'>
+                            <Button>
+                                <AccountCircleIcon />
+                            </Button>
+                        </Link>
                     </React.Fragment>
                 )
             }
