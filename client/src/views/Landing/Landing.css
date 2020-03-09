@@ -1,10 +1,10 @@
 body {
     margin: 0;
-    background-color: #282c34;
 }
 
 .App {
     text-align: center;
+    background: #282c34;
 }
 
 .App-logo {
@@ -14,14 +14,19 @@ body {
     font-size: calc(10px + 2vmin);
     color: white;
     background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .App-link {
     color: #09d3ac;
 }
 .Welcome{
-    color: white;
     font-size: calc(50px + 2vmin);
+    color: white;
     align-self: top;
 }
 .NormalHeader{
@@ -31,8 +36,6 @@ body {
     margin-bottom: 50px;
 }
 .About{
-    color: white;
-    padding-left: 15px;
     padding-right: 30px;
     padding-bottom: 50px;
 }
@@ -49,8 +52,6 @@ body {
 .Socials{
     font-size: calc(15px + 1vmin);
     font-weight: bold;
-    color: white;
-    background: #282c34;
 }
 .InstLink{
     height: 100px;
@@ -78,19 +79,11 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    background-image: url(https://cdn3.iconfinder.com/data/icons/universal-2-4/48/102-512.png);
+    background-image: url(https://images.hired.com/companies/7915/logos/1475782310/offer.png);
 }
 .ButtonGrid{
     display: flex;
     justify-content: space-evenly;
-}
-.LoginLink{
-    width: 90%;
-    background-color: #ffffff;
-    color: black;
-    padding: 10px 10px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-    text-decoration: none;
 }
 .LoginLink:hover{
     background-color: #98c5bc;
@@ -105,17 +98,15 @@ body {
     text-decoration: underline;
     font-style: italic;
     font-family: "Times New Roman", Times, serif;
-    color: white;
-    background: #282c34;
 }
 .column1 {
 	float: left;
     width: 50%;
-	background-color: #282c34;
+    padding-left: 30px;
 }
 .column2 {
 	float: right;
 	width: 40%;
     text-align: center;
-	background-color: #282c34;
+    padding-right: 30px;
 }
