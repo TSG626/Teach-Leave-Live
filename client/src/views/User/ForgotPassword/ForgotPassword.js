@@ -65,7 +65,7 @@ export default function ForgotPassword() {
     async function handleNewPassSubmit(e){
         e.preventDefault();
         if (document.getElementById("new password").value !== document.getElementById("confirm password").value) {
-            alert("Passwords do not match.");
+            alert("Passwords must match.");
         }
         //TODO: Set new password
 
