@@ -63,7 +63,7 @@ export default function Login() {
     }
 
     if(authed) {
-        return(<Redirect to='/'/>);
+        return(<Redirect to='/Home'/>);
     };
 
     return (
