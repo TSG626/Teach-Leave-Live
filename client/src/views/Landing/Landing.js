@@ -36,13 +36,10 @@ export default function Landing() {
                 <div>
                     <text className = "Socials">Socials</text>
                     <div className = "ButtonGrid">
-                        <Button className="InstLink" href="https://www.instagram.com/teachleavelive/"></Button>
-                        <Button className="TwitLink" href="https://www.twitter.com"></Button>
-                        <Button className="FBLink" href="https://www.facebook.com"></Button>
-                        <Button className="OtherLink" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live"></Button>
-                    </div>
-                    <div className = "ButtonGrid">
-                        <Button class="LoginLink" href="/User/Login">LOGIN</Button>
+                        <Button className="InstLink" target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/"></Button>
+                        <Button className="TwitLink" target="_blank" rel="noopener" href="https://www.twitter.com"></Button>
+                        <Button className="FBLink" target="_blank" rel="noopener" href="https://www.facebook.com"></Button>
+                        <Button className="OtherLink" target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live"></Button>
                     </div>
                 </div>
             </div>
