@@ -30,7 +30,8 @@ const authenticateUser = (req, email, password, done) => {
                     sub: user._id
                 }, config.secret);
                 const data = {
-                    username: user.username
+                    username: user.username,
+                    email: user.email,
                 };
         
                 return done(null, token, data);
