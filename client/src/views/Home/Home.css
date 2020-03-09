@@ -4,7 +4,6 @@ body {
 
 .App {
     text-align: center;
-    background: #282c34;
 }
 
 .App-logo {
@@ -12,16 +11,22 @@ body {
 }
 
 .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
+    margin-top: 50px ;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     font-size: calc(10px + 2vmin);
-    color: white;
+    min-height: 13vh;
+}
+.App-table {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    font-size: calc(10px + 2vmin);
 }
 
-.App-link {
-    color: #09d3ac;
+.App-socials {
+    margin-right: 0px;
+    margin-left: auto;
+    width: auto;
 }

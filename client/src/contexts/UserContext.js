@@ -7,6 +7,7 @@ const UserContext = createContext();
 const UserProvider = (props) => {
     const [authenticated, setAuthenticated] = useState(false);
     const [user, setUser] = useState({});
+    const [email, setEmail] = useState({});
 
     const deauthenticateUser = () => {
         localStorage.removeItem('token');
@@ -26,6 +27,8 @@ const UserProvider = (props) => {
         //data
         user,
         setUser,
+        email,
+        setEmail,
         authenticated,
         //functions
         authenticateUser,
