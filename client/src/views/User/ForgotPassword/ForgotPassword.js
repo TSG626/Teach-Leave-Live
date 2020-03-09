@@ -149,6 +149,7 @@ export default function ForgotPassword() {
                 margin="normal"
                 required
                 fullWidth
+                type="password"
                 id="new password"
                 label="New Password"
                 name="new password"
@@ -163,6 +164,7 @@ export default function ForgotPassword() {
                 margin="normal"
                 required
                 fullWidth
+                type="password"
                 id="confirm password"
                 label="Confirm Password"
                 name="confirm password"
