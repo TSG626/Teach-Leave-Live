@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function ForgotPassword() {
     const classes = useStyles();
-
+    let email = '';
     const [validEmail, setValidEmail] = useState(false);
     const [validCode, setValidCode] = useState(false);
     const [message, setMessage] = useState('');
@@ -48,8 +48,8 @@ export default function ForgotPassword() {
         e.preventDefault();
         setValidEmail(true);
         //TODO: Generate code and send to email.
-
-        setMessage('');
+        email = document.getElementById("email").value;
+        setMessage('Email sent to ' + email);
         document.getElementById("email").value = ('');
     }
 
@@ -66,6 +66,7 @@ export default function ForgotPassword() {
         e.preventDefault();
         if (document.getElementById("new password").value !== document.getElementById("confirm password").value) {
             alert("Passwords must match.");
+            return;
         }
         //TODO: Set new password
 
@@ -94,7 +95,7 @@ export default function ForgotPassword() {
               <Button
                   type="submit"
                   fullWidth
-                  varient="contained"
+                  variant="contained"
                   color="primary"
                   className={classes.submit}
               >
@@ -123,11 +124,11 @@ export default function ForgotPassword() {
             <Button
                 type="submit"
                 fullWidth
-                varient="contained"
+                variant="contained"
                 color="primary"
                 className={classes.submit}
             >
-                Send password-reset code
+                Confirm code
             </Button>
             <p>
                 {"We sent a 6-digit code to your email. If you don't receive it soon, "}
@@ -175,7 +176,7 @@ export default function ForgotPassword() {
             <Button
                 type="submit"
                 fullWidth
-                varient="contained"
+                variant="contained"
                 color="primary"
                 className={classes.submit}
             >
