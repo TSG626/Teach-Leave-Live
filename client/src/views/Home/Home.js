@@ -1,14 +1,27 @@
 import React, {useState, useContext} from 'react';
 import './Home.css';
 import InstagramIcon from '@material-ui/icons/Instagram'
-import Link from '@material-ui/core/Link'
+import Link2 from '@material-ui/core/Link'
 import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
 import {UserContext} from '../../contexts/UserContext';
 import CssBaseline from '@material-ui/core/CssBaseline';    //Baseline of look for entire page
+import FacebookIcon from '@material-ui/icons/Facebook';
+import TwitterIcon from '@material-ui/icons/Twitter';
+import StoreIcon from '@material-ui/icons/Store';
 
-export default function Home() {
+
+const litsCourses = () => {
+
+}
+
+const listBlogs = () => {
+
+
+}
+
+const Home = () => {
     const [topBlogs, setTopBlogs] = useState("No recent blogs posted!");
     const [courses, setCourses] = useState("No courses listed!");
     const userInfo = useContext(UserContext);
@@ -35,19 +48,34 @@ export default function Home() {
                         <td><Typography component="h1" variant="h6">{topBlogs}</Typography></td> 
                         <td><Typography component="h1" variant="h6">{courses}</Typography></td>
                         <table className= "App-socials">
-                            <Link target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/">
-                                <InstagramIcon fontSize="large" color="inherit"/>
-                            </Link>
+                            <tr>
+                                <Link2 target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/">
+                                    <InstagramIcon fontSize="large" color="inherit"/>
+                                </Link2>
+                            </tr>
+                            <tr>
+                                <Link2 target="_blank" rel="noopener" href="https://www.facebook.com">
+                                    <FacebookIcon fontSize="large" color="inherit"/>
+                                </Link2>
+                            </tr>
+                            <tr>
+                                <Link2 target="_blank" rel="noopener" href="https://www.twitter.com">
+                                    <TwitterIcon fontSize="large" color="inherit"/>
+                                </Link2>
+                            </tr>
+                            <tr>
+                                <Link2 target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live">
+                                    <StoreIcon fontSize="large" color="inherit"/>
+                                </Link2>
+                            </tr>
                         </table>
                     </tr>
                     <tr>
                         <td></td>
                         <td>
-                            <Link href="/Store">
-                            <Button color="default" variant="contained">
-                                Course Store
-                            </Button>
-                            </Link>
+                                <Button color="default" variant="contained" color="primary" component={Link} to="/Store">
+                                    Course Store
+                                </Button>
                         </td>
                     </tr>
                 </table>
@@ -64,3 +92,5 @@ export default function Home() {
     }}</UserContext.Consumer>
     );
 }
+
+export default Home;

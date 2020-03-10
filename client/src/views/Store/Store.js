@@ -8,7 +8,6 @@ import Summary from "./Summary/Summary";
 import { UserContext } from '../../contexts/UserContext';
 import { CssBaseline } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Link from '@material-ui/core/Link'
 import Button from '@material-ui/core/Button';
 
@@ -36,20 +35,12 @@ const DefaultStore = () => {
     return(<div></div>);
 }
 
-const styleIcon = {
-    
-}
 const Store = ({match}) => {
     return(
         <UserContext.Consumer>{context =>{
             if(context.isAuthenticated()) {
                 return (
                     <CssBaseline>
-                        <Link href="/Store/Cart">
-                            <Button>
-                                <ShoppingCartIcon style={styleIcon}/>
-                            </Button>
-                        </Link>
                         <DefaultStore/>
                         <div>
                             <header>
