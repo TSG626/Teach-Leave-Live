@@ -30,3 +30,14 @@ body {
     margin-left: auto;
     width: auto;
 }
+.table {
+    width: 100%;
+
+}
+.right {
+    text-align: center;
+    right: 0px;
+}
+.left {
+    text-align: left;
+}
