@@ -44,10 +44,10 @@ const ListBlogs = () => {
     //TEMPORARY! For the purpose of presenting in Sprint 1
     const [blogs, setBlogs] = useState([
         {
-            title: "First Course Up!",
+            title: "This website is cool",
             date: "March 9, 2020",
             post: "The first course is available! I hope you enjoy it!",
-            user: "anna99",
+            user: "Spencer",
             comments: [
                 {
                     username: "john123",
@@ -59,10 +59,10 @@ const ListBlogs = () => {
                 }
             ],
         },{
-        title: "Welcome!",
+        title: "This website is nice",
         date: "March 8, 2020",
         post: "Welcome to TLL! Have fun!",
-        user: "susie3",
+        user: "Amanda",
         comments: [
             {
                 username: "bob7",
@@ -110,19 +110,21 @@ const Home = () => {
             return(
             <CssBaseline>
             <div className="App">
-            <header className="App-header">
-                <Grow in="true" mountOnEnter timeout={3000}>
+            <header>
+                <Grow in="true" mountOnEnter timeout={1000}>
+                    <Box p={4}>
                     <Typography component="h1" variant="h2">
                         Welcome back, {userInfo.user.username}!
-                    </Typography>   
+                    </Typography> 
+                    </Box>  
                 </Grow>         
             </header>
             <header className="App-table">
-            <Slide direction="up" in="true" mountOnEnter timeout={3000}>                       
+            <Slide direction="up" in="true" mountOnEnter timeout={1000}>                       
                 <table align="center" width="100%">
                     <tr>
-                        <th><Typography component="h1" variant="h4">Recent Blogs</Typography></th>
-                        <th><Typography component="h1" variant="h4">Recent Courses</Typography></th> 
+                        <th align="center"><Typography component="h1" variant="h4">Recent Blogs</Typography></th>
+                        <th align="center"><Typography component="h1" variant="h4">Recent Courses</Typography></th> 
                     </tr>
                     <tr>
                      <td>
@@ -136,7 +138,6 @@ const Home = () => {
                         </Box>
                         </td>
                         <td right="1">
-                        <Slide direction="left" in="true" mountOnEnter timeout={3000}>
                         <table className= "App-socials" width="100%" align="center">
                             <tr>
                                 <Link2 target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/">
@@ -159,12 +160,11 @@ const Home = () => {
                                 </Link2>
                             </tr>
                         </table>
-                        </Slide>
                         </td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td>
+                        <td align="center">
                                 <Button color="default" variant="contained" color="primary" component={Link} to="/Store">
                                     Course Store
                                 </Button>
