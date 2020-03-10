@@ -21,37 +21,50 @@ export default function Landing() {
                     
                     <div className="BodyText">
                         <text>
-                            The world is changing and as the world is changing and the technology is 
-                            involving there is lots and lots of garbage piling up every day in our whole world. 
-                            This is leading to many diseases such as Malaria and Dengue and causes a lot of pollution. 
-                            People are becoming careless and think that garbage is only the responsibility of poor 
-                            people, but I want to say that it is responsibility of every person living in this world 
-                            to not to throw garbage. That is why government has made a rule that wet waste will go 
-                            in green dustbin and dry waste in blue dustbin. So, that wet waste can be decomposed, and 
-                            dry waste can be recycled. Also, don't throw garbage in water as it causes water pollution 
-                            and diseases like Jaundice and Cholera. So, save earth and make it green.
+                            TLL is a web-based platform designed to provide tools to teachers so that they can teach their 
+                            hearts out, leave work at work, and live life with intention. We provide resources for teachers to 
+                            learn how to efficiently manage time and organize their work.
                         </text>
                     </div>
                 </div>
-                <div>
-                    <text className = "Socials">Socials</text>
-                    <div className = "ButtonGrid">
-                        <Button className="InstLink" target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/"></Button>
-                        <Button className="TwitLink" target="_blank" rel="noopener" href="https://www.twitter.com"></Button>
-                        <Button className="FBLink" target="_blank" rel="noopener" href="https://www.facebook.com"></Button>
-                        <Button className="OtherLink" target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live"></Button>
+                <div className="TopPad">
+                    <div className="TopLinks">
+                        <text className = "Socials">Socials</text>
+                        <div className = "ButtonGrid">
+                            <Button className="InstLink" target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/"></Button>
+                            <Button className="TwitLink" target="_blank" rel="noopener" href="https://www.twitter.com"></Button>
+                            <Button className="FBLink" target="_blank" rel="noopener" href="https://www.facebook.com"></Button>
+                            <Button className="OtherLink" target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live"></Button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div className="column2">
-                <div className="RecentBlogs">
-                    <text>Recent Blogs</text>
+                <div className="BlogTableSection">
+                    <text className="RecentBlogs">Recent Blogs</text>
                     <div className="BlogList">
-                        <tr>
-                            <td></td>
-                            <td></td>
-                        </tr>
+                        <table>
+                            <th>
+                                <td>User</td>
+                            </th>
+                            <th>
+                                <td>Blog Post</td>
+                            </th>
+                            <tr>
+                                <td>Spencer</td>
+                                <td>This website is cool</td>
+                            </tr>
+                            <tr>
+                                <td>Amanda</td>
+                                <td>This website is nice</td>
+                            </tr>
+                            <tr>
+                                <td>Daniel</td>
+                                <td>This website is awesome</td>
+                            </tr>
+                        </table>
+                            
                     </div>
                 </div>
             </div>
