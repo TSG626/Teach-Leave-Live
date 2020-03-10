@@ -34,6 +34,9 @@ const useStyles = makeStyles(theme => ({
     submit: {
       margin: theme.spacing(3, 0, 2),
     },
+    error: {
+        color: 'red'
+    }
   }));
 
 export default function Login() {
@@ -63,7 +66,7 @@ export default function Login() {
         });
     }
 
-    if(authed) {
+    if(authed === true) {
         return(<Redirect to='/Home'/>);
     };
 
@@ -103,7 +106,9 @@ export default function Login() {
                         id="password"
                         autoComplete="current-password"
                     />
-                    <h5>{message}</h5>
+                    {message ? <Typography className={classes.error}>
+                        {message}
+                    </Typography> : <React.Fragment/>}
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
