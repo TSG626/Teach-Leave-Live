@@ -1,10 +1,12 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import './Landing.css';
+import { CssBaseline } from '@material-ui/core';
 
 export default function Landing() {
     return (
-        <div className="App">
+        <CssBaseline>
+                    <div className="App">
             <div className="Welcome">
                 <text>Teach. Leave. Live.</text>
             </div>
@@ -69,5 +71,6 @@ export default function Landing() {
                 </div>
             </div>
         </div>
+        </CssBaseline>
     );
 }
