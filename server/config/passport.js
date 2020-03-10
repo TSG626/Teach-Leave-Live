@@ -38,7 +38,7 @@ const authenticateUser = (req, email, password, done) => {
             }else{
                 const error = new Error('Incorrect email or password');
                 error.name = 'IncorrectCredentialsError';
-                return done(null, error);
+                return done(error);
             }
         } catch (error) {
             return done(error);
