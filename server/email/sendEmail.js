@@ -36,5 +36,26 @@ module.exports = {
                 console.log('Welcome email sent: ' + info.response);
             }
         });
+    },
+    forgotPassword: function (key, userInfo) {
+        const emailTemplate = fs.readFileSync('./forgotPassword/forgotPassword-inlined.html', 'utf-8')
+        var compiledEmail = Hogan.compile(emailTemplate)
+
+
+
+        var mailOptions = {
+            from: config.username,
+            to: userInfo.email,
+            subject: 'Teach Leave Live: Forgot Password',
+            html: compiledEmail.render({ firstName: userInfo.firstName, code: key })
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Forgot password email sent: ' + info.response);
+            }
+        });
     }
 }
