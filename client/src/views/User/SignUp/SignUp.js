@@ -45,7 +45,7 @@ export default function SignUp() {
         email: '',
         username: ''
     });
-
+    //Add error handling here
     function validatePassword(){
         setErrors({
             ...errors, 
@@ -61,11 +61,9 @@ export default function SignUp() {
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
                 username: document.getElementById('username').value,
-                data: {
-                    firstname: document.getElementById('firstname').value,
-                    lastname: document.getElementById('lastname').value,
-                    reference: document.getElementById('reference').value
-                }
+                firstname: document.getElementById('firstname').value,
+                lastname: document.getElementById('lastname').value,
+                reference: document.getElementById('reference').value
             }),{
                 headers: {
                     "Content-Type" : "application/json"
