@@ -6,4 +6,5 @@ const userInfo = {
     lastName: "Frank"
 }
 
+sendEmail.forgotPassword('abcd1234', userInfo);
 sendEmail.welcomeEmail(userInfo);
