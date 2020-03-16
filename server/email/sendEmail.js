@@ -1,14 +1,17 @@
 var nodemailer = require('nodemailer');
 const fs = require('fs')
 const Hogan = require('hogan.js')
+const config = require('./config')
 
 
 const transporter = nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
+    service: "gmail",
     auth: {
-        user: "5c4bb73cdbc195",
-        pass: "a239993ba6222e"
+        user: config.email.username,
+        pass: config.email.password
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 });
 
@@ -20,7 +23,7 @@ module.exports = {
 
 
         var mailOptions = {
-            from: 'youremail@gmail.com',
+            from: config.username,
             to: userInfo.email,
             subject: 'Welcome to Teach Leave Live',
             html: compiledEmail.render({ firstName: userInfo.firstName })
