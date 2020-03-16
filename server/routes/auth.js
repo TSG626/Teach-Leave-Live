@@ -119,13 +119,6 @@ function validateLoginForm(body) {
     };
 }
 
-router.get('/user', 
-    checkAuthenticated, 
-    (req, res) => {
-        res.statusCode = 200;
-    }
-);
-
 //Login post request handles by passport
 router.post('/login', (req, res, next) => {
     const validationResult = validateLoginForm(req.body);

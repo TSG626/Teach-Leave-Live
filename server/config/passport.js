@@ -50,7 +50,7 @@ const createUser = async (req, email, password, done) => {
     const userData = {
         email: email.trim(),
         password: password.trim(),
-        username: req.body.username.trim()
+        username: req.body.username.trim(),
     };
     const error = new Error('');
     await User.findOne({ email: userData.email }).then((user) => {
@@ -72,7 +72,10 @@ const createUser = async (req, email, password, done) => {
         const user = new User({
             username: userData.username, 
             email: userData.email,
-            password: hashedPassword
+            password: hashedPassword,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            reference: req.body.reference,
         });
         user.save((err) => {
             if(err){
