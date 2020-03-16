@@ -1,5 +1,6 @@
 var nodemailer = require('nodemailer');
-//import Email from './Email'
+const fs = require('fs')
+const Hogan = require('hogan.js')
 
 
 const transporter = nodemailer.createTransport({
@@ -11,19 +12,29 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+module.exports = {
+    welcomeEmail: function (userInfo) {
+        const emailTemplate = fs.readFileSync('./welcomeEmail/welcomeEmail-inlined.html', 'utf-8')
+        var compiledEmail = Hogan.compile(emailTemplate)
 
 
-const mailOptions = {
-    from: 'youremail@gmail.com',
-    to: 'myfriend@yahoo.com',
-    subject: 'Sending Email using Node.js',
-    body: "etstd"
-};
 
-transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-        console.log(error);
-    } else {
-        console.log('Email sent: ' + info.response);
+        var mailOptions = {
+            from: 'youremail@gmail.com',
+            to: userInfo.email,
+            subject: 'Welcome to Teach Leave Live',
+            html: compiledEmail.render({ firstName: userInfo.firstName })
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Welcome email sent: ' + info.response);
+            }
+        });
     }
-});
+}
+
+
+
