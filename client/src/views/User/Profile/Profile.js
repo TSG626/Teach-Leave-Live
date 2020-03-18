@@ -14,7 +14,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function Profile() {
     const classes = useStyles();
-    const userInfo = useContext(UserContext);
     return(
         <UserContext.Consumer>{context => {
             if(context.isAuthenticated()) {
@@ -26,7 +25,7 @@ export default function Profile() {
                                     <AccountCircleIcon fontSize='large'/>
                                 </Button>
                                 <Button>
-                                    <Typography variant="h3" component="h3">{userInfo.user.username}</Typography>
+                                    <Typography variant="h3" component="h3">{context.user.username}</Typography>
                                 </Button>
                             </header>
                         </div>
@@ -37,13 +36,13 @@ export default function Profile() {
                         </div>
                         <div className="AccountSubHeader">
                             <Typography className={classes.marginStuff}>
-                                First Name:
+                                First Name: {context.user.firstname}
                             </Typography>
                             <Typography className={classes.marginStuff}>
-                                Last Name:
+                                Last Name: {context.user.lastname}
                             </Typography>
                             <Typography className={classes.marginStuff}>
-                                E-mail: {userInfo.user.email}
+                                E-mail: {context.user.email}
                             </Typography>
                         </div>
                     </CssBaseline>

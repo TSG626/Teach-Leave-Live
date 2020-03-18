@@ -3,11 +3,15 @@ const mongoose = require('mongoose');
 var {Schema, Number} = mongoose; 
 
 const courseSchema = new Schema({
-    // username: {type: String, required: true},
-    // email: {type: String, required: true},
-    // password: {type: String, required: true},
+    title: {type: String, required: true},
+    author: {type: String, required: true},
+    description: {type: String, required: true},
+    free: {type: Boolean, required: true, default: false},
+    modules: [Object],
+    last_updated: {type: Date, default: Date.now},
+    published: {type: Boolean, default: false},
+    students: [Object],
 });
 
 const Course = mongoose.model('Course', courseSchema);
-//Check out - https://mongoosejs.com/docs/guide.html#models
 module.exports = Course;
