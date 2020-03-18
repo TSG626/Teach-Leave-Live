@@ -1,15 +1,105 @@
 import React, {useState, useContext} from 'react';
 import './Home.css';
 import InstagramIcon from '@material-ui/icons/Instagram'
-import Link from '@material-ui/core/Link'
-import { Typography } from '@material-ui/core';
+import Link2 from '@material-ui/core/Link'
+import { Typography, Box, CircularProgress } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
 import {UserContext} from '../../contexts/UserContext';
 import CssBaseline from '@material-ui/core/CssBaseline';    //Baseline of look for entire page
+import FacebookIcon from '@material-ui/icons/Facebook';
+import TwitterIcon from '@material-ui/icons/Twitter';
+import StoreIcon from '@material-ui/icons/Store';
+import Slide from '@material-ui/core/Slide';
+import Grow from '@material-ui/core/Grow';
 
-export default function Home() {
-    const [topBlogs, setTopBlogs] = useState("No recent blogs posted!");
+
+const ListCourses = () => {
+    const [courses, setCourses] = useState ([
+        {
+            title: "Tutuoring Forums",
+            progress: 70
+        }
+        , {
+            title: "Last 9 Weeks Checklist",
+            progress: 50
+        }
+    ])
+    return(
+        courses.map(course => {
+            return(
+                <Box p={5} m={3} border={1}>
+                <table>
+                <td className="left"><Typography component="h1" variant="h5">{course.title}:</Typography></td> 
+                <td align="right"><CircularProgress variant="static" value={course.progress}/></td>
+                </table>
+            </Box>
+            )
+        })
+    )
+}
+
+const ListBlogs = () => {
+    //const [blogs, setBlogs] = useState("No blogs available!")
+    //TEMPORARY! For the purpose of presenting in Sprint 1
+    const [blogs, setBlogs] = useState([
+        {
+            title: "This website is cool",
+            date: "March 9, 2020",
+            post: "The first course is available! I hope you enjoy it!",
+            user: "Spencer",
+            comments: [
+                {
+                    username: "john123",
+                    text: "Awesome! Can't wait!"
+                },
+                {
+                    username: "simon32",
+                    text: "I'm excited!"
+                }
+            ],
+        },{
+        title: "This website is nice",
+        date: "March 8, 2020",
+        post: "Welcome to TLL! Have fun!",
+        user: "Amanda",
+        comments: [
+            {
+                username: "bob7",
+                text: "Thanks!"
+            },
+            {
+                username: "maryC",
+                text: "Very cool!"
+            },
+            {
+                username: "john123",
+                text: "Hi!"
+            },
+            {
+                username: "simon32",
+                text: "This is helpful!"
+            }
+        ],
+    }, ]);
+    return(
+        blogs.map((blog) => {
+            return (
+                <div>
+                    <Box p={5} m={4.5} border={1}>
+                        <table>
+                        <td className="left"><Typography component="h1" variant="h5">{blog.user}: </Typography></td>
+                            <td className="right"><Typography component="h1" variant="h5">{blog.title}</Typography></td>
+                        </table>
+                    </Box>
+                </div> 
+            )
+        })
+    ) 
+
+}
+
+const Home = () => {
     const [courses, setCourses] = useState("No courses listed!");
 
     return (
@@ -18,37 +108,68 @@ export default function Home() {
             return(
             <CssBaseline>
             <div className="App">
-            <header className="App-header">
-                <Typography component="h1" variant="h3">
-                    Welcome back, {context.user.firstname}!
-                </Typography>            
+            <header>
+                <Grow in="true" mountOnEnter timeout={1000}>
+                    <Box p={4}>
+                    <Typography component="h1" variant="h2">
+                        Welcome back, {context.user.firstname}!
+                    </Typography> 
+                    </Box>  
+                </Grow>
             </header>
             <header className="App-table">
-                <table>
+            <Slide direction="up" in="true" mountOnEnter timeout={1000}>                       
+                <table align="center" width="100%">
                     <tr>
-                        <th><Typography component="h1" variant="h5">Recent Blogs</Typography></th>
-                        <th><Typography component="h1" variant="h5">Recent Courses</Typography></th>                        
+                        <th align="center"><Typography component="h1" variant="h4">Recent Blogs</Typography></th>
+                        <th align="center"><Typography component="h1" variant="h4">Recent Courses</Typography></th> 
                     </tr>
                     <tr>
-                        <td><Typography component="h1" variant="h6">{topBlogs}</Typography></td> 
-                        <td><Typography component="h1" variant="h6">{courses}</Typography></td>
-                        <table className= "App-socials">
-                            <Link target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/">
-                                <InstagramIcon fontSize="large" color="inherit"/>
-                            </Link>
+                     <td>
+                         <Box border={1} m={2} p={1}>
+                            <ListBlogs/>
+                         </Box>
+                    </td> 
+                        <td>
+                        <Box border={1} m={2} p={1}>
+                            <ListCourses/>
+                        </Box>
+                        </td>
+                        <td right="1">
+                        <table className= "App-socials" width="100%" align="center">
+                            <tr>
+                                <Link2 target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/">
+                                    <InstagramIcon fontSize="large" color="inherit"/>
+                                </Link2>
+                            </tr>
+                            <tr>
+                                <Link2 target="_blank" rel="noopener" href="https://www.facebook.com">
+                                    <FacebookIcon fontSize="large" color="inherit"/>
+                                </Link2>
+                            </tr>
+                            <tr>
+                                <Link2 target="_blank" rel="noopener" href="https://www.twitter.com">
+                                    <TwitterIcon fontSize="large" color="inherit"/>
+                                </Link2>
+                            </tr>
+                            <tr>
+                                <Link2 target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live">
+                                    <StoreIcon fontSize="large" color="inherit"/>
+                                </Link2>
+                            </tr>
                         </table>
+                        </td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td>
-                            <Link href="/Store">
-                            <Button color="default" variant="contained">
-                                Course Store
-                            </Button>
-                            </Link>
+                        <td align="center">
+                                <Button color="default" variant="contained" color="primary" component={Link} to="/Store">
+                                    Course Store
+                                </Button>
                         </td>
                     </tr>
                 </table>
+                </Slide>
             </header>
         </div>
         </CssBaseline>
@@ -62,3 +183,5 @@ export default function Home() {
     }}</UserContext.Consumer>
     );
 }
+
+export default Home;
