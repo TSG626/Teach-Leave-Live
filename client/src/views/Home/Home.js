@@ -11,9 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';    //Baseline of look f
 export default function Home() {
     const [topBlogs, setTopBlogs] = useState("No recent blogs posted!");
     const [courses, setCourses] = useState("No courses listed!");
-    const userInfo = useContext(UserContext);
 
-    //LINE 26: user is a placeholder; should have user's first name pop up
     return (
     <UserContext.Consumer>{context => {
         if(context.isAuthenticated()) {
@@ -22,7 +20,7 @@ export default function Home() {
             <div className="App">
             <header className="App-header">
                 <Typography component="h1" variant="h3">
-                    Welcome back, {userInfo.user.username}!
+                    Welcome back, {context.user.firstname}!
                 </Typography>            
             </header>
             <header className="App-table">

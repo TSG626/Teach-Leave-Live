@@ -5,6 +5,18 @@ import {UserContext} from '../../contexts/UserContext';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
 
+const AdminOptions = () => {
+    return(
+        <UserContext.Consumer>{context => {
+            return(
+                <React.Fragment>
+                    {context.user.admin == true && <Link className = "nav-link" to='/Admin'>Admin Panel</Link>}
+                </React.Fragment>
+            )
+        }}</UserContext.Consumer>
+    )
+}
+
 const AccountOptions = () => {
     return(
         <UserContext.Consumer>{context => {
@@ -46,6 +58,7 @@ const NavBar = () => {
                     <Link className = "nav-link" to='/Store'>Store</Link>
                     <Link className = "nav-link" to='/User/Profile'>Profile</Link>
                     <AccountOptions/>
+                    <AdminOptions/>
                 </div>
             </div>
         )
