@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Redirect, Link} from 'react-router-dom';
+import { Route, Switch, Redirect, Link, useLocation} from 'react-router-dom';
 import './Admin.css';
 import BlogPublisher from "./Publishers/Blog/BlogPublisher";
 import CoursePublisher from "./Publishers/Course/CoursePublisher";
@@ -11,6 +11,7 @@ const AdminLinks = (props) => {
     //temporary! it's just to access all the pages for admin
     //perhaps we can implement a side bar for admin to chose?
     //maybe '/Admin' page can just be like a welcome page
+
     return(
         <CssBaseline>
         <div align="center">
@@ -36,11 +37,11 @@ const Admin = ({match}) => {
         <div>
             <header>
                 <Switch>
-                    <AdminLinks match={`${match.path}`}/>
                     <Route path={`${match.path}/Blog`} component={BlogPublisher} />
                     <Route path={`${match.path}/Course`} component={CoursePublisher} />
                     <Route path={`${match.path}/Newsletter`} component={NewsletterPublisher} />
                     <Route path={`${match.path}/User`} component={UserEditor} />
+                    <AdminLinks match={`${match.path}`}/>
                 </Switch>
             </header>
         </div>
