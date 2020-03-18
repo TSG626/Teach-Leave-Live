@@ -101,9 +101,7 @@ const ListBlogs = () => {
 
 const Home = () => {
     const [courses, setCourses] = useState("No courses listed!");
-    const userInfo = useContext(UserContext);
 
-    //LINE 26: user is a placeholder; should have user's first name pop up
     return (
     <UserContext.Consumer>{context => {
         if(context.isAuthenticated()) {
@@ -114,10 +112,10 @@ const Home = () => {
                 <Grow in="true" mountOnEnter timeout={1000}>
                     <Box p={4}>
                     <Typography component="h1" variant="h2">
-                        Welcome back, {userInfo.user.username}!
+                        Welcome back, {context.user.firstname}!
                     </Typography> 
                     </Box>  
-                </Grow>         
+                </Grow>
             </header>
             <header className="App-table">
             <Slide direction="up" in="true" mountOnEnter timeout={1000}>                       
