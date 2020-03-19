@@ -1,5 +1,5 @@
 .header {
-    background: gray;
+    background: #282c34;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -14,13 +14,12 @@
 }
 
 .nav-title {
-    color: black;
+    color: #0055ff;
     text-decoration: none;
     font-family: monospace;
 }
 
 .nav-logo:hover {
-    color: #01ffff
 }
 
 .nav-items {
@@ -31,16 +30,15 @@
 }
 
 .nav-link {
-    background-color: gray;
+    background-color: #ffffff;
     color: black;
     font-size: large;
     padding: 14px 25px;
     text-align: center;
     text-decoration: none;
-    
 }
 
 .nav-link:hover {
-    color: #a0faea;
+    background-color: #98c5bc;
 }
 

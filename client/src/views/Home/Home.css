@@ -1,22 +1,10 @@
 body {
     margin: 0;
 }
-table {
-    table-layout: auto;
-    width: 100%;
-}
-tr{
-    text-align: left;
-    table-layout: auto;
-    width: 100%;
-}
-tr:hover{
-    cursor: default;
-    background-color: transparent;
-}
 
 .App {
     text-align: center;
+    background: #282c34;
 }
 
 .App-logo {
@@ -24,27 +12,16 @@ tr:hover{
 }
 
 .App-header {
-    margin-top: 50px ;
+    background-color: #282c34;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     font-size: calc(10px + 2vmin);
-    min-height: 13vh;
+    color: white;
 }
 
-.App-socials {
-    margin-right: 0px;
-    margin-left: auto;
-    width: auto;
-}
-.table {
-    width: 100%;
-
-}
-.right {
-    text-align: center;
-    right: 0px;
-}
-.left {
-    text-align: left;
+.App-link {
+    color: #09d3ac;
 }
