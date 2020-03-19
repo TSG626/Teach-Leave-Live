@@ -1,6 +1,8 @@
-const express = require('express'); 
-const passport = require('passport'); 
+const express = require('express');
+const passport = require('passport');
 const validator = require('validator');
+User = require('../models/UserModel.js');
+bcrypt = require('bcrypt');
 
 const router = express.Router();
 
@@ -92,7 +94,7 @@ const registerHandler = (req, res, next) => {
         });
     })(req, res, next);
 };
-  
+
 function validateLoginForm(body) {
     const errors = {};
     let isFormValid = true;
@@ -119,8 +121,8 @@ function validateLoginForm(body) {
     };
 }
 
-router.get('/user', 
-    checkAuthenticated, 
+router.get('/user',
+    checkAuthenticated,
     (req, res) => {
         res.statusCode = 200;
     }
@@ -160,6 +162,99 @@ router.post('/login', (req, res, next) => {
         });
     })(req, res, next);
 });
+
+function validateEmail(body) {
+    const errors = {};
+    let isFormValid = true;
+    let message = '';
+
+    if (!body || typeof body.email !== 'string' || body.email.trim().length === 0) {
+        isFormValid = false;
+        errors.form = 'Please provide your email address.';
+    }
+
+    if (!body.email.includes('@')) {
+        isFormValid = false;
+        errors.form = 'Please provide a valid email address.';
+    }
+
+    if (!isFormValid) {
+        message = 'Check the form for errors.';
+    }
+
+    return {
+        success: isFormValid,
+        message,
+        errors
+    };
+}
+
+function validateCode(body) {
+    const errors = {};
+    let authCode = '123456';
+    let isFormValid = true;
+    let message = '';
+
+    if (!body || typeof body.code !== 'string' || body.code.trim().length === 0) {
+        isFormValid = false;
+        errors.form = 'Please enter your code.';
+    } else if (body.code.trim().length !== 6) {
+        isFormValid = false;
+        errors.form = 'Code must be 6-digits.';
+    } else if (body.code.trim() !== authCode) {
+        isFormValid = false;
+        errors.form = 'Invalid code.';
+    }
+
+    return {
+        success: isFormValid,
+        message,
+        errors
+    };
+}
+
+const updatePasswordHandler = async (req, res, next) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        //console.log(User.findOne({email: req.body.email.trim()}).password);
+        User.findOneAndUpdate(
+          { email: req.body.email.trim() },
+          { password: hashedPassword },
+        );
+    } catch (err) {
+        console.log(err);
+        return done(err);
+    }
+};
+
+router.post('/forgotpassword', (req, res, next) => {
+    let validationResult;
+    if (req.body.mode === 'email') {
+        validationResult = validateEmail(req.body);
+    }
+    else if (req.body.mode === 'code') {
+        validationResult = validateCode(req.body);
+    }
+    else if (req.body.mode === 'password') {
+        validationResult = validateNewPassword(req.body);
+    }
+
+    if (!validationResult.success) {
+        return res.status(400).json({
+            success: false,
+            message: validationResult.message,
+            errors: validationResult.errors
+        });
+    } else {
+        return res.json({
+            success: true,
+            message: ''
+        });
+    }
+});
+
+//Update password
+router.post('/updatepassword', updatePasswordHandler);
 
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);

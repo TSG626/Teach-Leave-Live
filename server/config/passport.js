@@ -6,7 +6,7 @@ const LocalStrategy = require('passport-local').Strategy,
     config = require('./config');
 
 function getUserById (id) {
-    return (User.findById(id));    
+    return (User.findById(id));
 }
 
 const authenticateUser = (req, email, password, done) => {
@@ -17,7 +17,7 @@ const authenticateUser = (req, email, password, done) => {
 
     return User.findOne({ email: userData.email }, async (err, user) => {
         if (err) { return done(err); }
-    
+
         if (!user) {
             const error = new Error('Incorrect email or password');
             error.name = 'IncorrectCredentialsError';
@@ -32,7 +32,7 @@ const authenticateUser = (req, email, password, done) => {
                 const data = {
                     username: user.username
                 };
-        
+
                 return done(null, token, data);
             }else{
                 const error = new Error('Incorrect email or password');
@@ -69,7 +69,7 @@ const createUser = async (req, email, password, done) => {
     try {
         const hashedPassword = await bcrypt.hash(userData.password, 10);
         const user = new User({
-            username: userData.username, 
+            username: userData.username,
             email: userData.email,
             password: hashedPassword
         });
