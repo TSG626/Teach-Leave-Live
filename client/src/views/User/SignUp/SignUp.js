@@ -106,6 +106,7 @@ export default function SignUp() {
                         id="firstname"
                         label="First Name"
                         name="firstname"
+                        value="Daniel"
                         autoFocus
                     />
                     <TextField
@@ -115,6 +116,7 @@ export default function SignUp() {
                         fullWidth
                         id="lastname"
                         label="Last Name"
+                        value="Park"
                         name="lastname"
                     />
                     <TextField
@@ -125,6 +127,7 @@ export default function SignUp() {
                         id="email"
                         label="Email Address"
                         name="email"
+                        value="120pjy@gmail.com"
                         autoComplete="email"
                     />
                     {errors.email ? <Typography className={classes.error}>
@@ -146,6 +149,7 @@ export default function SignUp() {
                         id="username"
                         label="Username"
                         name="Username"
+                        value="120pjy"
                     />
                     {errors.username}
                     <TextField
@@ -157,6 +161,7 @@ export default function SignUp() {
                         label="Password"
                         type="password"
                         id="password"
+                        value="123456789"
                         autoComplete="current-password"
                         onChange={validatePassword}
                     />
@@ -172,6 +177,7 @@ export default function SignUp() {
                         label="Confirm Password"
                         type="password"
                         id="cpassword"
+                        value="12345789"
                         autoComplete="current-password"
                         onChange={validatePassword}
                     />

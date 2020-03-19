@@ -1,6 +1,8 @@
 const LocalStrategy = require('passport-local').Strategy,
     passport = require('passport'),
     bcrypt = require('bcrypt'),
+    crypto = require('crypto'),
+    sendEmail = require('../email/sendEmail'),
     User = require('../models/UserModel.js'),
     config = require('./config'),
     JWTStategy = require('passport-jwt').Strategy,
@@ -11,7 +13,7 @@ const login = (email, password, done) => {
         email: email.trim(),
         password: password.trim()
     };
-    User.findOne({ email: userData.email }, async (err, user) => {
+    User.findOne({ email: userData.email}, async (err, user) => {
         if (err) { return done(err); }    
         if (!user) {
             const error = new Error('Incorrect email or password');
@@ -27,6 +29,11 @@ const login = (email, password, done) => {
                 return done(error);
             }
         }).catch(error => done(error));
+        if (user.email_verified === false) {
+            const error = new Error('Email has not been verified');
+            error.name='Unverified Email';
+            return done(error);
+        }
     });
 }
 
@@ -53,6 +60,15 @@ const register = async (req, email, password, done) => {
     }
     try {
         const hashedPassword = await bcrypt.hash(userData.password, 10);
+        var key_one = crypto.randomBytes(256).toString('hex').substr(100, 5);
+        var key_two = crypto.randomBytes(256).toString('base64').substr(50, 5);
+        var key_for_verify = key_one + key_two;
+
+        //send email *****************************************************
+        var url = 'http://' + req.get('host')+'/api/confirmEmail'+'?key='+key_for_verify;
+        sendEmail.userAuthenticate(url, userData.email);
+        //****************************************************************
+
         const user = new User({
             username: userData.username, 
             email: userData.email,
@@ -60,6 +76,7 @@ const register = async (req, email, password, done) => {
             firstname: req.body.firstname,
             lastname: req.body.lastname,
             reference: req.body.reference,
+            key_for_verify: key_for_verify
         });
         user.save((err) => {
             if(err){

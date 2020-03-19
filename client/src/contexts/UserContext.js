@@ -36,7 +36,7 @@ const UserProvider = (props) => {
                     Authorization: `JWT ${localStorage.getItem('token')}`
                 }
             })
-            if(response.status == 200){
+            if(response.status === 200){
                 const {username, email, firstname, lastname, admin} = response.data;
                 setUser({
                     username: username,
