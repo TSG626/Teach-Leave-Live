@@ -12,7 +12,6 @@ import {UserContext} from '../../../contexts/UserContext';
 import axios from 'axios';
 import './SignUp.css';
 import { useScrollTrigger } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -32,9 +31,6 @@ const useStyles = makeStyles(theme => ({
     submit: {
       margin: theme.spacing(3, 0, 2),
     },
-    error:{
-        color: 'red',
-    }
 }));
   
 export default function SignUp() {
@@ -45,13 +41,21 @@ export default function SignUp() {
         email: '',
         username: ''
     });
-    //Add error handling here
+
     function validatePassword(){
-        setErrors({
-            ...errors, 
-            password: (document.getElementById('password').value.length < 8),
-            passwordMismatch: document.getElementById('password').value !== document.getElementById('cpassword').value
-        });
+        if(document.getElementById('password').value.length < 8){
+            setErrors({...errors, password: true});
+        }else{
+            setErrors({...errors, password: false});
+        }
+    }
+
+    function confirmPassword(){
+        if(document.getElementById('password').value !== document.getElementById('cpassword').value){
+            setErrors({...errors, passwordMismatch: true});
+        }else{
+            setErrors({...errors, passwordMismatch: false});
+        }
     }
 
     function handleSubmit(e){
@@ -61,9 +65,11 @@ export default function SignUp() {
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
                 username: document.getElementById('username').value,
-                firstname: document.getElementById('firstname').value,
-                lastname: document.getElementById('lastname').value,
-                reference: document.getElementById('reference').value
+                data: {
+                    firstname: document.getElementById('firstname').value,
+                    lastname: document.getElementById('lastname').value,
+                    reference: document.getElementById('reference').value
+                }
             }),{
                 headers: {
                     "Content-Type" : "application/json"
@@ -127,9 +133,7 @@ export default function SignUp() {
                         name="email"
                         autoComplete="email"
                     />
-                    {errors.email ? <Typography className={classes.error}>
-                        {errors.email}
-                    </Typography> : <React.Fragment/>}
+                    {errors.email}
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -158,11 +162,12 @@ export default function SignUp() {
                         type="password"
                         id="password"
                         autoComplete="current-password"
-                        onChange={validatePassword}
+                        onChange={() => {
+                            validatePassword();
+                            confirmPassword();
+                        }}
                     />
-                    {errors.password ? <Typography className={classes.error}>
-                        Password must be atleast 8 characters.
-                    </Typography> : <React.Fragment/>}
+                    {errors.password ? 'Password must be atleast 8 characters.' : <React.Fragment/>}
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -173,11 +178,9 @@ export default function SignUp() {
                         type="password"
                         id="cpassword"
                         autoComplete="current-password"
-                        onChange={validatePassword}
+                        onChange={confirmPassword}
                     />
-                    {errors.passwordMismatch ? <Typography className={classes.error}>
-                        Password fields do not match.
-                    </Typography> : <React.Fragment/>}
+                    {errors.passwordMismatch ? 'Password fields do not match.' : <React.Fragment/>}
                     <Button
                         type="submit"
                         fullWidth
