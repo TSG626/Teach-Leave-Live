@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-// import './Login.css';
+import './ForgotPassword.css';
 import { Redirect } from 'react-router-dom';
 import {UserContext} from '../../../contexts/UserContext';
 
@@ -43,34 +43,91 @@ export default function ForgotPassword() {
     const [validEmail, setValidEmail] = useState(false);
     const [validCode, setValidCode] = useState(false);
     const [message, setMessage] = useState('');
+    const [errors, setErrors] = useState({
+        email: '',
+        username: '',
+        passwordMismatch: '',
+        newPassword: ''
+    });
 
     async function handleEmailSubmit(e){
         e.preventDefault();
-        setValidEmail(true);
-        //TODO: Generate code and send to email.
-        email = document.getElementById("email").value;
-        setMessage('Email sent to ' + email);
-        document.getElementById("email").value = ('');
+        axios.post('/api/forgotpassword', JSON.stringify({
+            mode: 'email',
+            email: document.getElementById('email').value
+        }),{
+            headers: {
+                "Content-Type" : "application/json"
+            },
+        }).then(res => {
+            setMessage('Email sent to ' + document.getElementById('email').value + '. Please enter your 6-digit code.');
+            setErrors({...errors, email: ''});
+            email = document.getElementById('email').value;
+            document.getElementById('email').value = ('');
+            setValidEmail(true);
+        }).catch(err => {
+            console.log(err);
+            setErrors({...errors, email: err.response.data.errors.form});
+        });
     }
 
     async function handleCodeSubmit(e){
         e.preventDefault();
-        setValidCode(true);
-        //TODO: Verify email
-
-        setMessage('');
-        document.getElementById("code").value = ('');
+        axios.post('/api/forgotpassword', JSON.stringify({
+            mode: 'code',
+            code: document.getElementById('code').value
+        }),{
+            headers: {
+                "Content-Type" : "application/json"
+            },
+        }).then(res => {
+            document.getElementById('code').value = ('');
+            setMessage('');
+            setErrors({...errors, code: ''});
+            setValidCode(true);
+        }).catch(err => {
+            console.log(err);
+            setErrors({...errors, code: err.response.data.errors.form});
+        });
     }
 
     async function handleNewPassSubmit(e){
         e.preventDefault();
-        if (document.getElementById("new password").value !== document.getElementById("confirm password").value) {
-            alert("Passwords must match.");
-            return;
+        if (errors.newPassword === '' && errors.passwordMismatch === ''){
+            axios.post('/api/updatepassword', JSON.stringify({
+                email: email,
+                password: document.getElementById("new password").value,
+                confirm_password: document.getElementById("confirm password").value
+            }),{
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+            }).then(res => {
+                return <Redirect to='/' />;
+            }).catch(err => {
+                console.log(err);
+            });
         }
-        //TODO: Set new password
+    }
 
-        return <Redirect to='/' />
+    function validatePassword(){
+        if(validEmail && validCode){
+            if(document.getElementById('new password').value.length < 8){
+                setErrors({...errors, newPassword: 'Password must be at least 8 characters long.'});
+            } else {
+                setErrors({...errors, newPassword: ''});
+            }
+        }
+    }
+
+    function confirmPassword(){
+        if(validEmail && validCode){
+            if(document.getElementById('new password').value !== document.getElementById('confirm password').value){
+                setErrors({...errors, passwordMismatch: 'Passwords do not match.'});
+            } else {
+                setErrors({...errors, passwordMismatch: ''});
+            }
+        }
     }
 
     const formSelection = (
@@ -91,7 +148,8 @@ export default function ForgotPassword() {
                   autoComplete="email"
                   autoFocus
               />
-              <h5>{message}</h5>
+              <h5>{errors.email}</h5>
+              <h5 class="message">{message}</h5>
               <Button
                   type="submit"
                   fullWidth
@@ -120,7 +178,8 @@ export default function ForgotPassword() {
                 autoComplete="code"
                 autoFocus
             />
-            <h5>{message}</h5>
+            <h5>{errors.code}</h5>
+            <h5 class="message">{message}</h5>
             <Button
                 type="submit"
                 fullWidth
@@ -155,8 +214,13 @@ export default function ForgotPassword() {
                 label="New Password"
                 name="new password"
                 autoComplete="new password"
+                onChange={() => {
+                    validatePassword();
+                    confirmPassword();
+                }}
                 autoFocus
             />
+            <h5>{errors.newPassword}</h5>
             <Typography component="h1" variant="h5">
                 Confirm password
             </Typography>
@@ -170,9 +234,14 @@ export default function ForgotPassword() {
                 label="Confirm Password"
                 name="confirm password"
                 autoComplete="confirm password"
+                onChange={() => {
+                    validatePassword();
+                    confirmPassword();
+                }}
                 autoFocus
             />
-            <h5>{message}</h5>
+            <h5>{errors.passwordMismatch}</h5>
+            <h5 class="message">{message}</h5>
             <Button
                 type="submit"
                 fullWidth
