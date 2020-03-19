@@ -1,15 +1,14 @@
-const express = require('express'); 
-const passport = require('passport'); 
-const validator = require('validator');
+const express = require('express'),
+    passport = require('passport'),
+    validator = require('validator'),
+    config = require('../config/config'),
+    jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
 //Filters unauthed users to /login
 function checkAuthenticated (req, res, next) {
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect('/api/login');
+    // (req, res, next);
 }
 
 //Filters authed users to home page
@@ -129,27 +128,28 @@ router.post('/login', (req, res, next) => {
             errors: validationResult.errors
         });
     }
-
-    return passport.authenticate('local-login', (err, token, userData) => {
+    passport.authenticate('local-login', (err, user) => {
         if (err) {
             if (err.name === 'IncorrectCredentialsError') {
                 return res.status(400).json({
                     success: false,
                     message: err.message
                 });
+            }else{
+                return res.status(400).json({
+                    success: false,
+                    message: 'Could not process the form.'
+                });
             }
-
-            return res.status(400).json({
-                success: false,
-                message: 'Could not process the form.'
-            });
         }
-
-        return res.json({
-            success: true,
-            message: 'You have successfully logged in!',
-            token,
-            user: userData
+        req.logIn(user, () => {
+            const token = jwt.sign({id: user.id}, config.secret, {expiresIn: 60 * 60 * 24 * 1});
+            return res.json({
+                auth: true,
+                success: true,
+                message: 'You have successfully logged in!',
+                token,
+            });    
         });
     })(req, res, next);
 });
@@ -158,6 +158,15 @@ router.post('/login', (req, res, next) => {
 router.post('/register', checkNotAuthenticated, registerHandler);
 
 //Authed users may access other routes of the site including homepage.
-router.use('/', checkAuthenticated);
+router.use('/', (req, res, next) => {
+    passport.authenticate('jwt', {session: false}, (err, user) => {
+        if(err){
+            return res.status(401).json({message: 'error'});
+        }else{
+            req.user = user;
+            next();
+        }
+    })(req, res, next);
+});
 
 module.exports = router;
