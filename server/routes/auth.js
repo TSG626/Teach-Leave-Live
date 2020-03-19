@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const express = require('express'),
     passport = require('passport'),
     validator = require('validator'),
@@ -5,6 +6,11 @@ const express = require('express'),
     jwt = require('jsonwebtoken'),
     User = require('../models/UserModel.js'),
     bcrypt = require('bcrypt'),
+=======
+const express = require('express'); 
+const passport = require('passport'); 
+const validator = require('validator');
+>>>>>>> parent of 3bf966f... Implements password replacement and fixes up ui
 
 const router = express.Router();
 
@@ -93,7 +99,7 @@ const registerHandler = (req, res, next) => {
         });
     })(req, res, next);
 };
-
+  
 function validateLoginForm(body) {
     const errors = {};
     let isFormValid = true;
@@ -120,6 +126,16 @@ function validateLoginForm(body) {
     };
 }
 
+<<<<<<< HEAD
+=======
+router.get('/user', 
+    checkAuthenticated, 
+    (req, res) => {
+        res.statusCode = 200;
+    }
+);
+
+>>>>>>> parent of 3bf966f... Implements password replacement and fixes up ui
 //Login post request handles by passport
 router.post('/login', (req, res, next) => {
     const validationResult = validateLoginForm(req.body);
@@ -156,6 +172,7 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
+<<<<<<< HEAD
 function validateEmail(body) {
     const errors = {};
     let isFormValid = true;
@@ -246,6 +263,8 @@ router.post('/forgotpassword', (req, res, next) => {
 //Update password
 router.post('/updatepassword', updatePasswordHandler);
 
+=======
+>>>>>>> parent of 3bf966f... Implements password replacement and fixes up ui
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
 
