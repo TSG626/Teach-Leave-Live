@@ -6,34 +6,19 @@ const blogSchema = new Schema({
     title: {type: String, required: true},
     post: {type: String, required: true},
     username: {type: String, required: true},
-    date: {
-        day: {type: Number, required: true},
-        month: {type: Number, required: true},
-        year: {type: Number, required: true},
-        required: true
-    },
+    date: {type: Date, default: Date.now},
     replies: [
         {
             title: {type: String, required: true},
             post: {type: String, required: true},
             username: {type: String, required: true},
-            date: {
-                day: {type: Number, required: true},
-                month: {type: Number, required: true},
-                year: {type: Number, required: true},
-                required: true
-            },
+            date: {type: Date, default: Date.now},
             replies: [
             {
                 title: {type: String, required: true},
                 post: {type: String, required: true},
                 username: {type: String, required: true},
-                date: {
-                    day: {type: Number, required: true},
-                    month: {type: Number, required: true},
-                    year: {type: Number, required: true},
-                    required: true
-                },
+                date: {type: Date, default: Date.now}
             }]
         }
     ]
