@@ -2,54 +2,39 @@ const LocalStrategy = require('passport-local').Strategy,
     passport = require('passport'),
     bcrypt = require('bcrypt'),
     User = require('../models/UserModel.js'),
-    jwt = require('jsonwebtoken'),
-    config = require('./config');
+    config = require('./config'),
+    JWTStategy = require('passport-jwt').Strategy,
+    ExtractJWT = require('passport-jwt').ExtractJwt;
 
-function getUserById (id) {
-    return (User.findById(id));
-}
-
-const authenticateUser = (req, email, password, done) => {
+const login = (email, password, done) => {
     const userData = {
         email: email.trim(),
         password: password.trim()
     };
-
-    return User.findOne({ email: userData.email }, async (err, user) => {
+    User.findOne({ email: userData.email }, async (err, user) => {
         if (err) { return done(err); }
-
         if (!user) {
             const error = new Error('Incorrect email or password');
             error.name = 'IncorrectCredentialsError';
             return done(error);
         }
-
-        try {
-            if (await bcrypt.compare(password, user.password)){
-                const token = jwt.sign({
-                    sub: user._id
-                }, config.secret);
-                const data = {
-                    username: user.username
-                };
-
-                return done(null, token, data);
+        bcrypt.compare(password, user.password).then((response) => {
+            if (response === true){
+                return done(null, user);
             }else{
                 const error = new Error('Incorrect email or password');
                 error.name = 'IncorrectCredentialsError';
-                return done(null, error);
+                return done(error);
             }
-        } catch (error) {
-            return done(error);
-        }
+        }).catch(error => done(error));
     });
 }
 
-const createUser = async (req, email, password, done) => {
+const register = async (req, email, password, done) => {
     const userData = {
         email: email.trim(),
         password: password.trim(),
-        username: req.body.username.trim()
+        username: req.body.username.trim(),
     };
     const error = new Error('');
     await User.findOne({ email: userData.email }).then((user) => {
@@ -71,7 +56,10 @@ const createUser = async (req, email, password, done) => {
         const user = new User({
             username: userData.username,
             email: userData.email,
-            password: hashedPassword
+            password: hashedPassword,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            reference: req.body.reference,
         });
         user.save((err) => {
             if(err){
@@ -85,21 +73,38 @@ const createUser = async (req, email, password, done) => {
     }
 }
 
+const jwt = (jwt_payload, done) => {
+    User.findById(jwt_payload.id).then((user) => {
+        if(user){
+            done(null, user);
+        }else{
+            done(null, false);
+        }
+    }).catch((err) => {
+        done(err);
+    });
+}
+
 module.exports.init = () => {
     passport.use('local-login', new LocalStrategy({
         usernameField: 'email',
         passwordField: 'password',
-        passwordField: false,
-        passReqToCallback: true,
-    }, authenticateUser));
+        session: false,
+    }, login));
     passport.use('local-signup', new LocalStrategy({
         usernameField: 'email',
         passwordField: 'password',
-        passwordField: false,
         passReqToCallback: true,
-    }, createUser));
-    passport.serializeUser((user, done) => done(null, user.id));
-    passport.deserializeUser((id, done) => {
-        return done(null, getUserById(id));
-    })
+        session: false,
+    }, register));
+    passport.use('jwt', new JWTStategy({
+        jwtFromRequest: ExtractJWT.fromAuthHeaderWithScheme('JWT'),
+        secretOrKey: config.secret,
+    }, jwt))
+    // passport.serializeUser((user, done) => done(null, user.id));
+    // passport.deserializeUser((id, done) => {
+    //     User.findById(id, (err, user) => {
+    //         done(err, user);
+    //     })
+    // })
 }
