@@ -10,7 +10,7 @@ const blogSchema = new Schema({
         day: {type: Number, required: true},
         month: {type: Number, required: true},
         year: {type: Number, required: true},
-        required: true
+        //required: true
     },
     replies: [
         {
@@ -21,7 +21,7 @@ const blogSchema = new Schema({
                 day: {type: Number, required: true},
                 month: {type: Number, required: true},
                 year: {type: Number, required: true},
-                required: true
+                //required: true
             },
             replies: [
             {
@@ -32,7 +32,7 @@ const blogSchema = new Schema({
                     day: {type: Number, required: true},
                     month: {type: Number, required: true},
                     year: {type: Number, required: true},
-                    required: true
+                    //required: true
                 },
             }]
         }

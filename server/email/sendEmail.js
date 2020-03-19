@@ -55,6 +55,24 @@ module.exports = {
                 console.log(error);
             } else {
                 console.log('Forgot password email sent: ' + info.response);
+            }s
+        });
+    },
+    userAuthenticate: function(url, email) {
+        //const emailTemplate = fs.readFileSync('./authenticateEmail/authenticateEmail-inlined.html', 'utf-8')
+        //var compiledEmail = Hogan.compile(emailTemplate)
+
+        var mailOptions = {
+            from: config.username,
+            to: email,
+            subject: 'Teach Leave Live: Please verify your email',
+            html: '<h1>To verify your email, please click the URL below.</h1><br>'+url
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('User Email Authenticate email sent: ' + info.response);
             }
         });
     }
