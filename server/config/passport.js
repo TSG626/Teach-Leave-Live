@@ -12,7 +12,7 @@ const login = (email, password, done) => {
         password: password.trim()
     };
     User.findOne({ email: userData.email }, async (err, user) => {
-        if (err) { return done(err); }    
+        if (err) { return done(err); }
         if (!user) {
             const error = new Error('Incorrect email or password');
             error.name = 'IncorrectCredentialsError';
@@ -54,7 +54,7 @@ const register = async (req, email, password, done) => {
     try {
         const hashedPassword = await bcrypt.hash(userData.password, 10);
         const user = new User({
-            username: userData.username, 
+            username: userData.username,
             email: userData.email,
             password: hashedPassword,
             firstname: req.body.firstname,
