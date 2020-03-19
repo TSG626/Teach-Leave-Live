@@ -2,7 +2,6 @@ const express = require('express'),
     passport = require('passport'),
     validator = require('validator'),
     config = require('../config/config'),
-    const validator = require('validator'),
     User = require('../models/UserModel.js'),
     jwt = require('jsonwebtoken');
 
