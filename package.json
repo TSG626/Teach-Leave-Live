@@ -48,6 +48,7 @@
     "passport-local-mongoose": "^6.0.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
+    "react-use": "^13.27.0",
     "should": "^13.2.3",
     "supertest": "^4.0.2",
     "validator": "^12.2.0"
