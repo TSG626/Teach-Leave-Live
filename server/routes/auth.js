@@ -3,7 +3,6 @@ const express = require('express'),
     validator = require('validator'),
     config = require('../config/config'),
     User = require('../models/UserModel'),
-    validator = require('validator'),
     bcrypt = require('bcrypt'),
     jwt = require('jsonwebtoken');
 
