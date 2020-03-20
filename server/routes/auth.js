@@ -2,9 +2,13 @@ const express = require('express'),
     passport = require('passport'),
     validator = require('validator'),
     config = require('../config/config'),
+<<<<<<< HEAD
     User = require('../models/UserModel'),
     validator = require('validator'),
+=======
+>>>>>>> origin/Forgot-Password
     User = require('../models/UserModel.js'),
+    bcrypt = require('bcrypt'),
     jwt = require('jsonwebtoken');
 
 const router = express.Router();
@@ -214,16 +218,19 @@ function validateCode(body) {
     };
 }
 
-const updatePasswordHandler = async (req, res, next) => {
+const updatePasswordHandler = async (req, res, done) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        //console.log(User.findOne({email: req.body.email.trim()}).password);
         User.findOneAndUpdate(
-          { email: req.body.email.trim() },
-          { password: hashedPassword },
+            { 'email': req.body.email },
+            { 'password': hashedPassword },
+            {returnNewDocument: true}).then((user) => {
+                return res.status(200).json({
+                    success: true,
+                });
+            }
         );
     } catch (err) {
-        console.log(err);
         return done(err);
     }
 };

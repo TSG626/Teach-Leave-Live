@@ -1,8 +1,11 @@
 const LocalStrategy = require('passport-local').Strategy,
     passport = require('passport'),
     bcrypt = require('bcrypt'),
+<<<<<<< .merge_file_a15048
     crypto = require('crypto'),
     sendEmail = require('../email/sendEmail'),
+=======
+>>>>>>> .merge_file_a14196
     User = require('../models/UserModel.js'),
     config = require('./config'),
     JWTStategy = require('passport-jwt').Strategy,
@@ -13,6 +16,7 @@ const login = (email, password, done) => {
         email: email.trim(),
         password: password.trim()
     };
+<<<<<<< .merge_file_a15048
 <<<<<<< HEAD
     User.findOne({ email: userData.email}, async (err, user) => {
         if (err) { return done(err); }    
@@ -20,6 +24,10 @@ const login = (email, password, done) => {
     User.findOne({ email: userData.email }, async (err, user) => {
         if (err) { return done(err); }
 >>>>>>> origin/Forgot-Password
+=======
+    User.findOne({ email: userData.email }, async (err, user) => {
+        if (err) { return done(err); }
+>>>>>>> .merge_file_a14196
         if (!user) {
             const error = new Error('Incorrect email or password');
             error.name = 'IncorrectCredentialsError';
@@ -34,11 +42,14 @@ const login = (email, password, done) => {
                 return done(error);
             }
         }).catch(error => done(error));
+<<<<<<< .merge_file_a15048
         if (user.email_verified === false) {
             const error = new Error('Email has not been verified');
             error.name='Unverified Email';
             return done(error);
         }
+=======
+>>>>>>> .merge_file_a14196
     });
 }
 
@@ -65,6 +76,7 @@ const register = async (req, email, password, done) => {
     }
     try {
         const hashedPassword = await bcrypt.hash(userData.password, 10);
+<<<<<<< .merge_file_a15048
         var key_one = crypto.randomBytes(256).toString('hex').substr(100, 5);
         var key_two = crypto.randomBytes(256).toString('base64').substr(50, 5);
         var key_for_verify = key_one + key_two;
@@ -74,6 +86,8 @@ const register = async (req, email, password, done) => {
         sendEmail.userAuthenticate(url, userData.email);
         //****************************************************************
 
+=======
+>>>>>>> .merge_file_a14196
         const user = new User({
             username: userData.username,
             email: userData.email,
@@ -81,7 +95,10 @@ const register = async (req, email, password, done) => {
             firstname: req.body.firstname,
             lastname: req.body.lastname,
             reference: req.body.reference,
+<<<<<<< .merge_file_a15048
             key_for_verify: key_for_verify
+=======
+>>>>>>> .merge_file_a14196
         });
         user.save((err) => {
             if(err){
