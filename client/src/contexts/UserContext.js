@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import axios from 'axios';
+import API from '../modules/API'
 
 const UserContext = createContext();
 
@@ -31,21 +31,18 @@ const UserProvider = (props) => {
     useEffect(() => {
         let ignore = false;
         async function fetchData(){
-            const response = await axios.get('/api/user/', {
-                headers: {
-                    Authorization: `JWT ${localStorage.getItem('token')}`
+            API.get('/api/user/').then(res => {
+                if(res.status == 200){
+                    const {username, email, firstname, lastname, admin} = res.data;
+                    setUser({
+                        username: username,
+                        email: email,
+                        firstname: firstname,
+                        lastname: lastname,
+                        admin: admin,
+                    });
                 }
-            })
-            if(response.status == 200){
-                const {username, email, firstname, lastname, admin} = response.data;
-                setUser({
-                    username: username,
-                    email: email,
-                    firstname: firstname,
-                    lastname: lastname,
-                    admin: admin,
-                });
-            }
+            });
         }
         fetchData();
         return () => {ignore = true;}

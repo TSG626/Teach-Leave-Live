@@ -33,6 +33,11 @@ const userSchema = new Schema({
         type: String, 
         required: false
     },
+    //list of courses owned by the user
+    courses: [{
+        id: {type: String, required: true},
+        last_completed_module: {type: Number, default: 0}
+    }]
 });
 
 const User = mongoose.model('User', userSchema);
