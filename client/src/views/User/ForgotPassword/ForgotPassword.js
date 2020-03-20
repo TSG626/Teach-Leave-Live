@@ -39,16 +39,16 @@ const useStyles = makeStyles(theme => ({
 
 export default function ForgotPassword() {
     const classes = useStyles();
-    let email = '';
+    const [email, setEmail] = useState('');
     const [validEmail, setValidEmail] = useState(false);
     const [validCode, setValidCode] = useState(false);
     const [message, setMessage] = useState('');
     const [errors, setErrors] = useState({
         email: '',
         username: '',
-        passwordMismatch: '',
-        newPassword: ''
+        newPassword: '',
     });
+    const [passwordMismatchError, setPasswordMismatchError] = useState('');
 
     async function handleEmailSubmit(e){
         e.preventDefault();
@@ -62,7 +62,7 @@ export default function ForgotPassword() {
         }).then(res => {
             setMessage('Email sent to ' + document.getElementById('email').value + '. Please enter your 6-digit code.');
             setErrors({...errors, email: ''});
-            email = document.getElementById('email').value;
+            setEmail(document.getElementById('email').value);
             document.getElementById('email').value = ('');
             setValidEmail(true);
         }).catch(err => {
@@ -93,7 +93,7 @@ export default function ForgotPassword() {
 
     async function handleNewPassSubmit(e){
         e.preventDefault();
-        if (errors.newPassword === '' && errors.passwordMismatch === ''){
+        if (errors.newPassword === '' && passwordMismatchError === ''){
             axios.post('/api/updatepassword', JSON.stringify({
                 email: email,
                 password: document.getElementById("new password").value,
@@ -103,29 +103,24 @@ export default function ForgotPassword() {
                     "Content-Type" : "application/json"
                 },
             }).then(res => {
-                return <Redirect to='/' />;
+                document.location.href = '../';
             }).catch(err => {
                 console.log(err);
             });
         }
     }
 
-    function validatePassword(){
-        if(validEmail && validCode){
-            if(document.getElementById('new password').value.length < 8){
-                setErrors({...errors, newPassword: 'Password must be at least 8 characters long.'});
-            } else {
-                setErrors({...errors, newPassword: ''});
-            }
-        }
-    }
-
     function confirmPassword(){
         if(validEmail && validCode){
             if(document.getElementById('new password').value !== document.getElementById('confirm password').value){
-                setErrors({...errors, passwordMismatch: 'Passwords do not match.'});
+                setPasswordMismatchError('Passwords do not match.');
             } else {
-                setErrors({...errors, passwordMismatch: ''});
+                setPasswordMismatchError('');
+            }
+            if(document.getElementById('new password').value.length < 8){
+                setErrors({newPassword: 'Password must be at least 8 characters long.'});
+            } else {
+                setErrors({newPassword: ''});
             }
         }
     }
@@ -215,7 +210,6 @@ export default function ForgotPassword() {
                 name="new password"
                 autoComplete="new password"
                 onChange={() => {
-                    validatePassword();
                     confirmPassword();
                 }}
                 autoFocus
@@ -235,12 +229,11 @@ export default function ForgotPassword() {
                 name="confirm password"
                 autoComplete="confirm password"
                 onChange={() => {
-                    validatePassword();
                     confirmPassword();
                 }}
                 autoFocus
             />
-            <h5>{errors.passwordMismatch}</h5>
+            <h5>{passwordMismatchError}</h5>
             <h5 class="message">{message}</h5>
             <Button
                 type="submit"
