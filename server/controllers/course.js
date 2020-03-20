@@ -1,11 +1,18 @@
-const express = require('express'),
-    jwt = require('jsonwebtoken'),
-    Course = require('../models/CourseModel.js');
-
-const router = express.Router();
+const Course = require('../models/CourseModel.js');
 
 // Create course
-const create = (req, res) => {};
+const create = (req, res) => {
+    const course = new Course({
+        title: req.body.title,
+        author: req.body.author,
+        description: req.body.description,
+        free: req.body.free,
+        price: req.body.price,
+    });
+    course.save((err) => {
+        if(err) res.status(400).send(err);
+    })
+};
 
 // Read course
 const read = (req, res) => {
@@ -31,9 +38,4 @@ const remove = (req, res) => {
     });
 };
 
-router.get('/:id', read);
-router.post('/create', create);
-router.put('/:id/update', update);
-router.delete('/:id/delete', remove);
-
-module.exports = router;
+module.exports = {create, read, update, remove};
