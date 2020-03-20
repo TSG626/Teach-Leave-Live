@@ -4,7 +4,7 @@ const express = require('express'),
     config = require('../config/config'),
     User = require('../models/UserModel'),
     validator = require('validator'),
-    bcrypt = require('bcrypt'),
+    User = require('../models/UserModel.js'),
     jwt = require('jsonwebtoken');
 
 const router = express.Router();
@@ -214,19 +214,16 @@ function validateCode(body) {
     };
 }
 
-const updatePasswordHandler = async (req, res, done) => {
+const updatePasswordHandler = async (req, res, next) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        //console.log(User.findOne({email: req.body.email.trim()}).password);
         User.findOneAndUpdate(
-            { 'email': req.body.email },
-            { 'password': hashedPassword },
-            {returnNewDocument: true}).then((user) => {
-                return res.status(200).json({
-                    success: true,
-                });
-            }
+          { email: req.body.email.trim() },
+          { password: hashedPassword },
         );
     } catch (err) {
+        console.log(err);
         return done(err);
     }
 };

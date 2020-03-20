@@ -2,8 +2,12 @@ const express = require('express'),
     passport = require('passport'),
     validator = require('validator'),
     config = require('../config/config'),
+<<<<<<< HEAD
     User = require('../models/UserModel'),
     validator = require('validator'),
+=======
+>>>>>>> origin/Forgot-Password
+    User = require('../models/UserModel.js'),
     bcrypt = require('bcrypt'),
     jwt = require('jsonwebtoken');
 
