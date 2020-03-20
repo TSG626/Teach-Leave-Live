@@ -2,9 +2,8 @@ const express = require('express'),
     passport = require('passport'),
     validator = require('validator'),
     config = require('../config/config'),
-    User = require('../models/UserModel'),
-    validator = require('validator'),
-    bcrypt = require('bcrypt'),
+    const validator = require('validator'),
+    User = require('../models/UserModel.js'),
     jwt = require('jsonwebtoken');
 
 const router = express.Router();
@@ -90,7 +89,7 @@ const registerHandler = (req, res, next) => {
 
         return res.status(200).json({
             success: true,
-            message: 'You have successfully signed up! An email should be sent to verify your email'
+            message: 'You have successfully signed up! Now you should be able to log in.'
         });
     })(req, res, next);
 };
@@ -138,14 +137,7 @@ router.post('/login', (req, res, next) => {
                     success: false,
                     message: err.message
                 });
-            }
-            else if (err.name === 'Unverified Email') {
-                return res.status(400).json({
-                    success: false,
-                    message: err.message
-                })
-            }
-            else{
+            }else{
                 return res.status(400).json({
                     success: false,
                     message: 'Could not process the form.'
@@ -214,19 +206,16 @@ function validateCode(body) {
     };
 }
 
-const updatePasswordHandler = async (req, res, done) => {
+const updatePasswordHandler = async (req, res, next) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        //console.log(User.findOne({email: req.body.email.trim()}).password);
         User.findOneAndUpdate(
-            { 'email': req.body.email },
-            { 'password': hashedPassword },
-            {returnNewDocument: true}).then((user) => {
-                return res.status(200).json({
-                    success: true,
-                });
-            }
+          { email: req.body.email.trim() },
+          { password: hashedPassword },
         );
     } catch (err) {
+        console.log(err);
         return done(err);
     }
 };
@@ -262,21 +251,7 @@ router.post('/updatepassword', updatePasswordHandler);
 
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
-//confirm email
-router.get('/confirmEmail', (req, res) => {
-    user.updateOne({key_for_verify:req.query.key}, {$set: {email_verified: true}}, (err, user) => {
-        if (err) {
-            console.log(err);
-            res.status(400).json({message: err});
-        }
-        else if (user.n == 0) {
-            res.send('<script type="text/javascript">alert("Not verified"); window.location="/";</script>');
-        }
-        else {
-            res.send('<script type="text/javascript">alert("Successfully verified"); window.location="/";</script>');
-        }
-    })
-});
+
 //Authed users may access other routes of the site including homepage.
 router.use('/', (req, res, next) => {
     passport.authenticate('jwt', {session: false}, (err, user) => {

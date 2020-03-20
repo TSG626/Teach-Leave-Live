@@ -13,8 +13,13 @@ const login = (email, password, done) => {
         email: email.trim(),
         password: password.trim()
     };
+<<<<<<< HEAD
+    User.findOne({ email: userData.email}, async (err, user) => {
+        if (err) { return done(err); }    
+=======
     User.findOne({ email: userData.email }, async (err, user) => {
         if (err) { return done(err); }
+>>>>>>> origin/Forgot-Password
         if (!user) {
             const error = new Error('Incorrect email or password');
             error.name = 'IncorrectCredentialsError';
@@ -68,6 +73,7 @@ const register = async (req, email, password, done) => {
         var url = 'http://' + req.get('host')+'/api/confirmEmail'+'?key='+key_for_verify;
         sendEmail.userAuthenticate(url, userData.email);
         //****************************************************************
+
         const user = new User({
             username: userData.username,
             email: userData.email,
