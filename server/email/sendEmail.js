@@ -26,7 +26,7 @@ module.exports = {
             from: config.username,
             to: userInfo.email,
             subject: 'Welcome to Teach Leave Live',
-            html: compiledEmail.render({ firstName: userInfo.firstName })
+            html: compiledEmail.render({ firstname: userInfo.firstname })
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -47,7 +47,7 @@ module.exports = {
             from: config.username,
             to: userInfo.email,
             subject: 'Teach Leave Live: Forgot Password',
-            html: compiledEmail.render({ firstName: userInfo.firstName, code: key })
+            html: compiledEmail.render({ firstname: userInfo.firstname, code: key })
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -59,14 +59,17 @@ module.exports = {
         });
     },
     userAuthenticate: function (url, userInfo) {
-        const emailTemplate = fs.readFileSync('./authenticateEmail/authenticateEmail-inlined.html', 'utf-8')
+        console.log(url);
+        console.log(userInfo);
+        const emailTemplate = fs.readFileSync('./authenticateEmail/authenticateEmail-inlined.html', 'utf-8');
         var compiledEmail = Hogan.compile(emailTemplate)
+        console.log('compiled email set');
 
         var mailOptions = {
             from: config.username,
             to: userInfo.email,
             subject: 'Teach Leave Live: Please verify your email',
-            html: compiledEmail.render({ firstName: userInfo.firstName, url: url })
+            html: compiledEmail.render({ firstname: userInfo.firstname, url: url })
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
