@@ -66,7 +66,12 @@ const register = async (req, email, password, done) => {
 
         //send email *****************************************************
         var url = 'http://' + req.get('host')+'/api/confirmEmail'+'?key='+key_for_verify;
-        sendEmail.userAuthenticate(url, userData.email);
+        const userInfo = {
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: userData.email
+        }
+        sendEmail.userAuthenticate(url, userInfo);
         //****************************************************************
         const user = new User({
             username: userData.username,
