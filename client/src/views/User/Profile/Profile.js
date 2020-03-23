@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import { CssBaseline, TextField, Typography, makeStyles } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
+import API from '../../../modules/API'
 
 const useStyles = makeStyles(theme => ({
     marginStuff: {
@@ -15,9 +16,37 @@ const useStyles = makeStyles(theme => ({
 const ChangeUser = () => {
         //fix later for CRUD update to username on user
     const classes = useStyles();
-    const [edituser, isEditUser] = useState(false);
-    const handleChange = (event) => {isEditUser(!edituser)}
+    const [edituser, setEditUser] = useState(false);
     const userInfo = useContext(UserContext);
+    const [oldUser, setOldUser] = useState(userInfo.user.username);
+    const [changed, isChanged] = useState(false);
+    const handleChange = (event) => {
+        if(changed) {
+            alert("Username has been changed once! Please refersh the page to see your new username and to change it if needed.");
+        }
+        else {
+            if(edituser === false)
+            setEditUser(!edituser)
+        else {
+            console.log(oldUser);
+            if(oldUser === userInfo.user.username) {
+                alert("Username didn't change!");
+            }
+            else {
+                API.post('/api/updateusername', {
+                    email: userInfo.user.email,
+                    username: oldUser
+                }).then(res => {
+                    if(res.status == 200) {alert("Username changed! Please refresh the page to see your new username."); isChanged(true)};
+                }).catch(err =>{
+                    console.log(err.response.data);
+                })
+            }
+            setEditUser(!edituser);
+            setOldUser(userInfo.user.username);
+        }
+        }
+    }
 
     if(!edituser)
     {
@@ -31,7 +60,7 @@ const ChangeUser = () => {
     {
         return(
             <div>
-                <TextField label="Username" variant="standard" id="newuser" defaultValue={userInfo.user.username} autoFocus/>
+                <TextField label="Username" onChange={e => {setOldUser(e.target.value)}} variant="standard" id="newuser" defaultValue={userInfo.user.username} autoFocus/>
                 <div>
                     <TextField label="Password" variant="standard" id="confirmpass"/>
                 </div>
@@ -52,16 +81,51 @@ const ChangePass = () => {
         npassword: '',
         cpassword: ''
     })
+    const [oldpassword, setOldPassword] = useState("");
     const [npassword, setNPassword] = useState("");
     const [cpassword, setCPassword] = useState("");
-    const handleChange = (event) => {
+    const userInfo = useContext(UserContext);
+
+    const handleChange = () => {
+        //find how to get password
         if(editpass === false)
+        {
             isEditPass(!editpass)
+            setErrors({
+                ...errors,
+                cpassword: false,
+                npassword: false
+            })
+        }            
         else {
-            
+            if(errors.npassword || errors.cpassword) {
+                alert('Your new password or the confirmation password is incorrect!')
+            }
+            else {
+                API.post('/api/updatepassword',{
+                    email: userInfo.user.email,
+                    password: npassword
+                }).then(res => {
+                    if(res.status == 200) {isEditPass(!editpass)};
+                }).catch(err => {
+                    console.log(err.response.data);
+                    setErrors({
+                        ...errors, 
+                        email: err.response.data.errors.email, 
+                        username: err.response.data.errors.password
+                    });
+                });
+            }
+            isEditPass(!editpass);
         }}
     const handleNPassChange = (event) => {
         setNPassword(event.target.value);
+        if (event.target.value != cpassword && cpassword != "") {
+            setErrors({
+                ...errors,
+                cpassword: true
+            })
+        }
         if(event.target.value.length < 8) {
             setErrors({
                 ...errors,
@@ -76,9 +140,8 @@ const ChangePass = () => {
         }
     }
     const handleCPassChange = (event) => {
-        
         setCPassword(event.target.value);
-        if(cpassword == npassword) {
+        if(event.target.value == npassword) {
             setErrors( {
                 ...errors,
                 cpassword: false
@@ -90,7 +153,6 @@ const ChangePass = () => {
                 cpassword: true
             })
         }
-        console.log(cpassword);
     }
     if(!editpass)
         return(<Button className={classes.marginStuff} onClick={handleChange} variant="contained" color="secondary">Change Password</Button>)
@@ -99,9 +161,9 @@ const ChangePass = () => {
             <div>
             <table>
             <tr>
-                <td width="20%" align="center"><TextField className={classes.marginStuff} type="password" label="Old Password" id="oldpass" variant="filled" autoFocus/></td>
-                <td width="20%" align="center"><TextField onChange={handleNPassChange} type="password" className={classes.marginStuff} label="New Password" id="npass" variant="filled"/></td>
-                <td width="20%" align="center"><TextField onChange={handleCPassChange} className={classes.marginStuff} type="password" label="Confirm New Password" id="cpass" variant="filled"/></td>
+                <td width="30%" align="center"><TextField className={classes.marginStuff} onChange={e =>{setOldPassword(e.target.value)}} type="password" label="Old Password" id="oldpass" variant="filled" autoFocus/></td>
+                <td width="30%" align="center"><TextField onChange={handleNPassChange} type="password" className={classes.marginStuff} label="New Password" id="npass" variant="filled"/></td>
+                <td width="30%" align="center"><TextField onChange={handleCPassChange} className={classes.marginStuff} type="password" label="Confirm New Password" id="cpass" variant="filled"/></td>
                 <td><Button className={classes.marginStuff} onClick={handleChange} type="password" variant="contained" id="newpass" color="secondary">Confirm Password</Button></td>
             </tr>
             <tr>
@@ -117,8 +179,7 @@ const ChangePass = () => {
 const Profile = () => {
     const classes = useStyles();
     const userInfo = useContext(UserContext);
-    
-    return(
+        return(
         <UserContext.Consumer>{context => {
             if(context.isAuthenticated()) {
                 return (
@@ -128,6 +189,7 @@ const Profile = () => {
                                 <Button>
                                     <AccountCircleIcon fontSize='large'/>
                                 </Button>
+
                                 <ChangeUser />
                             </header>
                         </div>
@@ -138,13 +200,13 @@ const Profile = () => {
                         </div>
                         <div className="AccountSubHeader">
                             <Typography className={classes.marginStuff}>
-                                First Name:
+                                First Name: {context.user.firstname}
                             </Typography>
                             <Typography className={classes.marginStuff}>
-                                Last Name:
+                                Last Name: {context.user.lastname}
                             </Typography>
                             <Typography className={classes.marginStuff}>
-                                E-mail: {userInfo.user.email}
+                                E-mail: {context.user.email}
                             </Typography>
                             <ChangePass/>
                         </div>
