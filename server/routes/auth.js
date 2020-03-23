@@ -1,15 +1,16 @@
-const express = require('express'); 
-const passport = require('passport'); 
-const validator = require('validator');
+const express = require('express'),
+    passport = require('passport'),
+    validator = require('validator'),
+    config = require('../config/config'),
+    User = require('../models/UserModel'),
+    bcrypt = require('bcrypt'),
+    jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
 //Filters unauthed users to /login
 function checkAuthenticated (req, res, next) {
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect('/api/login');
+    // (req, res, next);
 }
 
 //Filters authed users to home page
@@ -88,11 +89,11 @@ const registerHandler = (req, res, next) => {
 
         return res.status(200).json({
             success: true,
-            message: 'You have successfully signed up! Now you should be able to log in.'
+            message: 'You have successfully signed up! An email should be sent to verify your email'
         });
     })(req, res, next);
 };
-  
+
 function validateLoginForm(body) {
     const errors = {};
     let isFormValid = true;
@@ -129,8 +130,7 @@ router.post('/login', (req, res, next) => {
             errors: validationResult.errors
         });
     }
-
-    return passport.authenticate('local-login', (err, token, userData) => {
+    passport.authenticate('local-login', (err, user) => {
         if (err) {
             if (err.name === 'IncorrectCredentialsError') {
                 return res.status(400).json({
@@ -138,26 +138,172 @@ router.post('/login', (req, res, next) => {
                     message: err.message
                 });
             }
-
-            return res.status(400).json({
-                success: false,
-                message: 'Could not process the form.'
-            });
+            else if (err.name === 'Unverified Email') {
+                return res.status(400).json({
+                    success: false,
+                    message: err.message
+                })
+            }
+            else{
+                return res.status(400).json({
+                    success: false,
+                    message: 'Could not process the form.'
+                });
+            }
         }
-
-        return res.json({
-            success: true,
-            message: 'You have successfully logged in!',
-            token,
-            user: userData
+        req.logIn(user, () => {
+            const token = jwt.sign({id: user.id}, config.secret, {expiresIn: 60 * 60 * 24 * 1});
+            return res.json({
+                auth: true,
+                success: true,
+                message: 'You have successfully logged in!',
+                token,
+            });
         });
     })(req, res, next);
 });
 
+function validateEmail(body) {
+    const errors = {};
+    let isFormValid = true;
+    let message = '';
+
+    if (!body || typeof body.email !== 'string' || body.email.trim().length === 0) {
+        isFormValid = false;
+        errors.form = 'Please provide your email address.';
+    }
+
+    if (!body.email.includes('@')) {
+        isFormValid = false;
+        errors.form = 'Please provide a valid email address.';
+    }
+
+    if (!isFormValid) {
+        message = 'Check the form for errors.';
+    }
+
+    return {
+        success: isFormValid,
+        message,
+        errors
+    };
+}
+
+function validateCode(body) {
+    const errors = {};
+    let authCode = '123456';
+    let isFormValid = true;
+    let message = '';
+
+    if (!body || typeof body.code !== 'string' || body.code.trim().length === 0) {
+        isFormValid = false;
+        errors.form = 'Please enter your code.';
+    } else if (body.code.trim().length !== 6) {
+        isFormValid = false;
+        errors.form = 'Code must be 6-digits.';
+    } else if (body.code.trim() !== authCode) {
+        isFormValid = false;
+        errors.form = 'Invalid code.';
+    }
+
+    return {
+        success: isFormValid,
+        message,
+        errors
+    };
+}
+
+const updatePasswordHandler = async (req, res, done) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        User.findOneAndUpdate(
+            { 'email': req.body.email },
+            { 'password': hashedPassword },
+            {returnNewDocument: true}).then((user) => {
+                return res.status(200).json({
+                    success: true,
+                });
+            }
+        );
+    } catch (err) {
+        return done(err);
+    }
+};
+
+const updateUsernameHandler = async (req, res, done) => {
+    try {
+        User.findOneAndUpdate(
+            { 'email': req.body.email },
+            { 'username': req.body.username },
+            {returnNewDocument: true}).then((user) => {
+                return res.status(200).json({
+                    success: true,
+                });
+            }
+        );
+    } catch (err) {
+        return done(err);
+    }
+};
+
+router.post('/forgotpassword', (req, res, next) => {
+    let validationResult;
+    if (req.body.mode === 'email') {
+        validationResult = validateEmail(req.body);
+    }
+    else if (req.body.mode === 'code') {
+        validationResult = validateCode(req.body);
+    }
+    else if (req.body.mode === 'password') {
+        validationResult = validateNewPassword(req.body);
+    }
+
+    if (!validationResult.success) {
+        return res.status(400).json({
+            success: false,
+            message: validationResult.message,
+            errors: validationResult.errors
+        });
+    } else {
+        return res.json({
+            success: true,
+            message: ''
+        });
+    }
+});
+
+//Update password
+router.post('/updatepassword', updatePasswordHandler);
+//Update username
+router.post('/updateusername', updateUsernameHandler);
+
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
-
+//confirm email
+router.get('/confirmEmail', (req, res) => {
+    user.updateOne({key_for_verify:req.query.key}, {$set: {email_verified: true}}, (err, user) => {
+        if (err) {
+            console.log(err);
+            res.status(400).json({message: err});
+        }
+        else if (user.n == 0) {
+            res.send('<script type="text/javascript">alert("Not verified"); window.location="/";</script>');
+        }
+        else {
+            res.send('<script type="text/javascript">alert("Successfully verified"); window.location="/";</script>');
+        }
+    })
+});
 //Authed users may access other routes of the site including homepage.
-router.use('/', checkAuthenticated);
+router.use('/', (req, res, next) => {
+    passport.authenticate('jwt', {session: false}, (err, user) => {
+        if(err){
+            return res.status(401).json({message: 'error'});
+        }else{
+            req.user = user;
+            next();
+        }
+    })(req, res, next);
+});
 
 module.exports = router;
