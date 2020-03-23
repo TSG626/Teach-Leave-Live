@@ -188,7 +188,6 @@ function validateEmail(body) {
         errors
     };
 }
-
 function validateCode(body) {
     const errors = {};
     let authCode = '123456';
@@ -230,6 +229,22 @@ const updatePasswordHandler = async (req, res, done) => {
     }
 };
 
+const updateUsernameHandler = async (req, res, done) => {
+    try {
+        User.findOneAndUpdate(
+            { 'email': req.body.email },
+            { 'username': req.body.username },
+            {returnNewDocument: true}).then((user) => {
+                return res.status(200).json({
+                    success: true,
+                });
+            }
+        );
+    } catch (err) {
+        return done(err);
+    }
+};
+
 router.post('/forgotpassword', (req, res, next) => {
     let validationResult;
     if (req.body.mode === 'email') {
@@ -258,6 +273,8 @@ router.post('/forgotpassword', (req, res, next) => {
 
 //Update password
 router.post('/updatepassword', updatePasswordHandler);
+//Update username
+router.post('/updateusername', updateUsernameHandler);
 
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
