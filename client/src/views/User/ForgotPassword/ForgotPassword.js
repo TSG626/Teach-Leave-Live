@@ -66,7 +66,6 @@ export default function ForgotPassword() {
             document.getElementById('email').value = ('');
             setValidEmail(true);
         }).catch(err => {
-            console.log(err);
             setErrors({...errors, email: err.response.data.errors.form});
         });
     }
@@ -75,7 +74,8 @@ export default function ForgotPassword() {
         e.preventDefault();
         axios.post('/api/forgotpassword', JSON.stringify({
             mode: 'code',
-            code: document.getElementById('code').value
+            code: document.getElementById('code').value,
+            email: email
         }),{
             headers: {
                 "Content-Type" : "application/json"
@@ -86,8 +86,14 @@ export default function ForgotPassword() {
             setErrors({...errors, code: ''});
             setValidCode(true);
         }).catch(err => {
-            console.log(err);
             setErrors({...errors, code: err.response.data.errors.form});
+            setMessage(err.response.data.message);
+            if (err.response.data.message === 'Too many attempts, please try again.') {
+                document.getElementById('code').value = ('');
+                setValidCode(false);
+                setValidEmail(false);
+                setErrors({code: ''});
+            }
         });
     }
 
