@@ -188,7 +188,6 @@ function validateEmail(body) {
         errors
     };
 }
-
 function validateCode(body) {
     const errors = {};
     let authCode = '123456';

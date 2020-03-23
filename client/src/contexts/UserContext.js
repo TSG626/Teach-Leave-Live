@@ -1,13 +1,11 @@
 import React, { createContext, useState, useEffect } from "react";
-import axios from 'axios';
-import User from "../views/User/User";
+import API from '../modules/API'
 
 const UserContext = createContext();
 
 const UserProvider = (props) => {
     const [authenticated, setAuthenticated] = useState(false);
     const [user, setUser] = useState({});
-    const [email, setEmail] = useState({});
 
     const deauthenticateUser = () => {
         localStorage.removeItem('token');
@@ -20,15 +18,40 @@ const UserProvider = (props) => {
     }
 
     const isAuthenticated = () => {
-        return (localStorage.getItem('token') !== null);
+        return authenticated;
     }
+
+    useEffect(() => {
+        if(user.username) return;
+        if(localStorage.getItem('token') !== null){
+            setAuthenticated(true);
+        }
+    }, [user]);
+
+    useEffect(() => {
+        let ignore = false;
+        async function fetchData(){
+            API.get('/api/user/').then(res => {
+                if(res.status == 200){
+                    const {username, email, firstname, lastname, admin} = res.data;
+                    setUser({
+                        username: username,
+                        email: email,
+                        firstname: firstname,
+                        lastname: lastname,
+                        admin: admin,
+                    });
+                }
+            });
+        }
+        fetchData();
+        return () => {ignore = true;}
+    }, [authenticated]);
 
     const data = {
         //data
         user,
         setUser,
-        email,
-        setEmail,
         authenticated,
         //functions
         authenticateUser,

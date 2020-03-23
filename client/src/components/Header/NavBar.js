@@ -7,6 +7,18 @@ import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
+const AdminOptions = () => {
+    return(
+        <UserContext.Consumer>{context => {
+            return(
+                <React.Fragment>
+                    {context.user.admin == true && <Link className = "nav-link" to='/Admin'>Admin Panel</Link>}
+                </React.Fragment>
+            )
+        }}</UserContext.Consumer>
+    )
+}
+
 const AccountOptions = () => {
     return(
         <UserContext.Consumer>{context => {
@@ -65,6 +77,7 @@ const NavBar = () => {
                     <Link className = "nav-link" to='/User/Profile'>Profile</Link>
                     <Link className = "nav-link" to='/Admin'>Admin</Link>
                     <AccountOptions/>
+                    <AdminOptions/>
                     <ShoppingCart/>
                 </div>
             </div>

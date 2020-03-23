@@ -189,7 +189,6 @@ const Profile = () => {
                                 <Button>
                                     <AccountCircleIcon fontSize='large'/>
                                 </Button>
-
                                 <ChangeUser />
                             </header>
                         </div>
