@@ -61,7 +61,7 @@ module.exports = {
     userAuthenticate: function (url, userInfo) {
         console.log(url);
         console.log(userInfo);
-        const emailTemplate = fs.readFileSync('./authenticateEmail/authenticateEmail-inlined.html', 'utf-8');
+        const emailTemplate = fs.readFileSync('../email/authenticateEmail/authenticateEmail-inlined.html', 'utf-8');
         console.log('emailTemplate went through');
         var compiledEmail = Hogan.compile(emailTemplate)
         console.log('compiled email set');
