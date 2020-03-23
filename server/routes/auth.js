@@ -233,7 +233,10 @@ const generateCode = () => {
 
 const sendCodeEmail = (email, code) => {
     const userInfo = User.findOne({ 'email': email });
+    console.log(code);
+    console.log(userInfo.get('email'));
     sendEmail.forgotPassword(code, userInfo);
+    return 'got here';
 };
 
 router.post('/forgotpassword', async (req, res, next) => {
