@@ -29,11 +29,11 @@ const login = (email, password, done) => {
                 return done(error);
             }
         }).catch(error => done(error));
-        /*if (user.email_verified === false) {
+        if (user.email_verified === false) {
             const error = new Error('Email has not been verified');
             error.name='Unverified Email';
             return done(error);
-        }*/
+        }
     });
 }
 
@@ -71,7 +71,7 @@ const register = async (req, email, password, done) => {
             lastname: req.body.lastname,
             email: userData.email
         }
-        //sendEmail.userAuthenticate(url, userInfo);
+        sendEmail.userAuthenticate(url, userInfo);
         //****************************************************************
         const user = new User({
             username: userData.username,
