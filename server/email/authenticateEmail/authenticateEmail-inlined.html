@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title> Welcome to Teach Leave Live</title>
+    <title>Teach Leave Live: Email Confirmation</title>
     <style>
         .container {
             padding: 10px;
@@ -22,13 +22,7 @@
             border-radius: 15px;
         }
 
-        .table {
-            background-clip: content-box;
-            margin: 10px;
-
-        }
-
-        .tableHeader {
+        .header {
             padding-bottom: 15px;
             min-width: 300px;
             width: 305px;
@@ -38,7 +32,7 @@
             padding-top: 15px;
         }
 
-        .tableBody {
+        .body {
             min-width: 450px;
             width: 455px;
             max-width: 455px;
@@ -47,19 +41,23 @@
             margin-left: 15px;
         }
 
-        .tableBody2 {
+        .url {
             min-width: 450px;
             width: 455px;
             max-width: 455px;
             padding-bottom: 20px;
             font-family: sans-serif;
             margin-left: 15px;
+            font-size: 40px;
         }
 
-        .tableBody li {
-            padding-top: 14px;
-            font-size: large;
+        .body2 {
+            min-width: 450px;
+            width: 455px;
+            max-width: 455px;
+            padding-bottom: 20px;
             font-family: sans-serif;
+            margin-left: 15px;
         }
     </style>
 </head>
@@ -67,30 +65,19 @@
 <body>
     <div class="container"
         style="padding: 10px;background: rgb(180, 180, 180);min-width: 525px;width: 530px;max-width: 530px;border-radius: 15px;border: solid black 2px;">
-        <center>
-            <div class="logo"><img img src="logo.png" alt="logo"></div>
-        </center>
+        <center><img img src="logo.png" alt="logo"></center>
         <div class="content"
             style="background: rgb(206, 206, 206);background-clip: content-box;border: solid rgb(123, 245, 219) 5px;border-radius: 15px;">
-            <div class="tableHeader"
+            <div class="header"
                 style="padding-bottom: 15px;min-width: 300px;width: 305px;max-width: 305px;font-family: sans-serif;margin-left: 15px;padding-top: 15px;">
-                Hello, {{data.firstname}} </div>
-            <div class="tableBody"
+                Hello {{firstname}},</div>
+            <div class="body"
                 style="min-width: 450px;width: 455px;max-width: 455px;padding-bottom: 20px;font-family: sans-serif;margin-left: 15px;">
-                Thank you for creating an account for Teach Leave Live! We are so excited
-                for you to join
-                our community and begin to take advantage of all of our great resources. Creating an account
-                allows you to:
-                <li style="padding-top: 14px;font-size: large;font-family: sans-serif;">Recieve newsletters from Teach
-                    Leave Live</li>
-                <li style="padding-top: 14px;font-size: large;font-family: sans-serif;">Read all past blog posts and
-                    leave comments</li>
-                <li style="padding-top: 14px;font-size: large;font-family: sans-serif;">Complete courses and earn
-                    certificates</li>
-                <li style="padding-top: 14px;font-size: large;font-family: sans-serif;">Buy courses from the course
-                    store</li>
-            </div>
-            <div class="tableBody2"
+                To verify your email, click the link below.</div>
+            <div class="url"
+                style="min-width: 450px;width: 455px;max-width: 455px;padding-bottom: 20px;font-family: sans-serif;margin-left: 15px;font-size: 24px;">
+                {{url}}</div>
+            <div class="body2"
                 style="min-width: 450px;width: 455px;max-width: 455px;padding-bottom: 20px;font-family: sans-serif;margin-left: 15px;">
                 Get started by signing into our website or visiting our socials. Click the
                 icons below to be directed to our website or instagram.</div>
