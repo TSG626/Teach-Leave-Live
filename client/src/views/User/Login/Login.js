@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import API from '../../../modules/API';
+import axios from 'axios';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -47,9 +47,13 @@ export default function Login() {
 
     async function handleSubmit(e, context){
         e.preventDefault();
-        API.post('/api/login', {
+        axios.post('/api/login', JSON.stringify({
             email: document.getElementById('email').value,
             password: document.getElementById('password').value,
+        }),{
+            headers: {
+                "Content-Type" : "application/json"
+            },
         }).then(res => {
             if(res.status == 200){
                 context.authenticateUser(res.data.token);

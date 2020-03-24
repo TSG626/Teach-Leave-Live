@@ -42,12 +42,16 @@ const Store = ({match}) => {
                 return (
                     <CssBaseline>
                         <DefaultStore/>
-                        <Switch>
-                            <Route exact path={`${match.path}/Cart`} component={Cart} />
-                            <Route exact path={`${match.path}/Checkout`} component={Checkout} />
-                            <Route exact path={`${match.path}/Confirmation`} component={Confirmation} />
-                            <Route exact path={`${match.path}/Summary`} component={Summary} />
-                        </Switch>
+                        <div>
+                            <header>
+                                <Switch>
+                                    <Route exact path={`${match.path}/Cart`} component={Cart} />
+                                    <Route exact path={`${match.path}/Checkout`} component={Checkout} />
+                                    <Route exact path={`${match.path}/Confirmation`} component={Confirmation} />
+                                    <Route exact path={`${match.path}/Summary`} component={Summary} />
+                                </Switch>
+                            </header>
+                        </div>
                     </CssBaseline>
                 ); 
             }

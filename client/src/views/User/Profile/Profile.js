@@ -1,11 +1,10 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import './Profile.css';
 import { UserContext } from '../../../contexts/UserContext';
 import { Redirect } from 'react-router-dom';
 import { CssBaseline, TextField, Typography, makeStyles } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
-import API from '../../../modules/API'
 
 const useStyles = makeStyles(theme => ({
     marginStuff: {
@@ -13,8 +12,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const ChangeUser = () => {
-        //fix later for CRUD update to username on user
+export default function Profile() {
     const classes = useStyles();
     const [edituser, setEditUser] = useState(false);
     const userInfo = useContext(UserContext);
@@ -188,7 +186,9 @@ const Profile = () => {
                                 <Button>
                                     <AccountCircleIcon fontSize='large'/>
                                 </Button>
-                                <ChangeUser />
+                                <Button>
+                                    <Typography variant="h3" component="h3">{context.user.username}</Typography>
+                                </Button>
                             </header>
                         </div>
                         <div className="AccountHeader">
@@ -206,7 +206,6 @@ const Profile = () => {
                             <Typography className={classes.marginStuff}>
                                 E-mail: {context.user.email}
                             </Typography>
-                            <ChangePass/>
                         </div>
                     </CssBaseline>
                 );
@@ -220,4 +219,3 @@ const Profile = () => {
         </UserContext.Consumer>
     );
 }
-export default Profile
