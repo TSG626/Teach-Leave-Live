@@ -231,11 +231,15 @@ const generateCode = () => {
     return Math.random().toString(36).slice(-6).toUpperCase();
 };
 
-const sendCodeEmail = (email, code) => {
-    const userInfo = User.findOne({ 'email': email });
+const sendCodeEmail = async (email, code) => {
+    const userInfo = await User.findOne({ 'email': email });
+    const sendInfo = {
+        email: userInfo.get('email'),
+        firstname: userInfo.get('firstname'),
+    };
     console.log(code);
-    console.log(userInfo.get('email'));
-    sendEmail.forgotPassword(code, userInfo);
+    console.log(sendInfo);
+    sendEmail.forgotPassword(code, sendInfo);
     return 'got here';
 };
 
