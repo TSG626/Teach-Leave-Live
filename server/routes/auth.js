@@ -241,7 +241,6 @@ const sendCodeEmail = async (email, code) => {
         email: userInfo.get('email'),
         firstname: userInfo.get('firstname'),
     };
-    console.log(code);
     sendEmail.forgotPassword(code, sendInfo);
     return 'got here';
 };
@@ -253,7 +252,7 @@ router.post('/forgotpassword', async (req, res, next) => {
         if (validationResult.exists) {
             const code = await generateCode();
             const hashedCode = await bcrypt.hash(code, 10);
-            console.log(await sendCodeEmail(req.body.email, code));
+            await sendCodeEmail(req.body.email, code);
             await passwordmaster.storePasswordResetData(req.body, hashedCode);
         }
         else {
