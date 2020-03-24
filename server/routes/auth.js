@@ -231,19 +231,45 @@ const updatePasswordHandler = async (req, res, done) => {
 
 const updateUsernameHandler = async (req, res, done) => {
     try {
-        User.findOneAndUpdate(
-            { 'email': req.body.email },
-            { 'username': req.body.username },
-            {returnNewDocument: true}).then((user) => {
-                return res.status(200).json({
-                    success: true,
-                });
+        User.findOne({'username': req.body.oldUsername}, async (err, user) => {
+            if(err) {return done(err);}
+            if (!user) {
+                const error = new Error('Something went wrong!');
+                error.name = 'UpdatingUsernameError';
+                return done(error);
             }
-        );
+            bcrypt.compare(req.body.password, user.password).then((response) => {
+                if (response === true) {
+                    User.findOneAndUpdate(
+                        { 'email': req.body.email },
+                        { 'username': req.body.username },
+                        {returnNewDocument: true}).then((user) => {
+                            return res.status(200).json({
+                                success: true,
+                            });
+                        }
+                    );
+                } else {
+                    const error = new Error('Incorrect password');
+                    error.name = 'IncorrectCredentialsError';
+                    return done(error);
+                }
+            }).catch(error => done(error));
+            }
+        )
     } catch (err) {
         return done(err);
     }
 };
+
+const updatePasswordUser = async (req, res, done) => {
+    try {
+
+    }
+    catch (err) {
+        return done(err);
+    }
+}
 
 router.post('/forgotpassword', (req, res, next) => {
     let validationResult;
@@ -275,6 +301,8 @@ router.post('/forgotpassword', (req, res, next) => {
 router.post('/updatepassword', updatePasswordHandler);
 //Update username
 router.post('/updateusername', updateUsernameHandler);
+//Update password on User Page
+router.post('/updatepassworduser', updatePasswordUser);
 
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
