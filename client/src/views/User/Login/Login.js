@@ -44,6 +44,7 @@ export default function Login() {
 
     const [authed, setAuthed] = useState(false);
     const [message, setMessage] = useState('');
+    const [email_message, setEmail_message] = useState('');
 
     async function handleSubmit(e, context){
         e.preventDefault();
@@ -56,6 +57,9 @@ export default function Login() {
                 setAuthed(true);
             }
         }).catch(err => {
+            if (err.response.data.message === 'Email has not been verified') {
+                setEmail_message();
+            }
             setMessage(err.response.data.message);
         });
     }
