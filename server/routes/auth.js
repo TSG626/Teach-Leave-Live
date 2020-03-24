@@ -231,21 +231,49 @@ const updatePasswordHandler = async (req, res, done) => {
     }
 };
 
-const generateCode = () => {
-    return Math.random().toString(36).slice(-6).toUpperCase();
+const updateUsernameHandler = async (req, res, done) => {
+    try {
+        User.findOne({'username': req.body.oldUsername}, async (err, user) => {
+            if(err) {return done(err);}
+            if (!user) {
+                const error = new Error('Something went wrong!');
+                error.name = 'UpdatingUsernameError';
+                return done(error);
+            }
+            bcrypt.compare(req.body.password, user.password).then((response) => {
+                if (response === true) {
+                    User.findOneAndUpdate(
+                        { 'email': req.body.email },
+                        { 'username': req.body.username },
+                        {returnNewDocument: true}).then((user) => {
+                            return res.status(200).json({
+                                success: true,
+                            });
+                        }
+                    );
+                } else {
+                    const error = new Error('Incorrect password');
+                    error.name = 'IncorrectCredentialsError';
+                    return done(error);
+                }
+            }).catch(error => done(error));
+            }
+        )
+    } catch (err) {
+        return done(err);
+    }
 };
 
-const sendCodeEmail = async (email, code) => {
-    const userInfo = await User.findOne({ 'email': email });
-    const sendInfo = {
-        email: userInfo.get('email'),
-        firstname: userInfo.get('firstname'),
-    };
-    sendEmail.forgotPassword(code, sendInfo);
-    return 'got here';
-};
+const updatePasswordUser = async (req, res, done) => {
+    try {
 
-router.post('/forgotpassword', async (req, res, next) => {
+    }
+    catch (err) {
+        return done(err);
+    }
+}
+
+router.post('/forgotpassword', (req, res, next) => {
     let validationResult;
     if (req.body.mode === 'email') {
         validationResult = await validateEmail(req.body);
@@ -300,7 +328,11 @@ router.post('/forgotpassword', async (req, res, next) => {
 //Update password
 router.post('/updatepassword', updatePasswordHandler);
 //Update username
-//router.post('/updateusername', updateUsernameHandler);
+
+router.post('/updateusername', updateUsernameHandler);
+//Update password on User Page
+router.post('/updatepassworduser', updatePasswordUser);
+
 
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
