@@ -172,7 +172,6 @@ async function validateEmail(body) {
     let isFormValid = true;
     let doesEmailExist = false;
     let message = '';
-
     await User.findOne({ 'email': body.email.trim() }, function (err, user) {
         if (user) {
           doesEmailExist = true;
@@ -189,7 +188,6 @@ async function validateEmail(body) {
     if (!isFormValid) {
         message = 'Check the form for errors.';
     }
-
     return {
         success: isFormValid,
         exists: doesEmailExist,
@@ -244,7 +242,6 @@ const sendCodeEmail = async (email, code) => {
         firstname: userInfo.get('firstname'),
     };
     console.log(code);
-    console.log(sendInfo);
     sendEmail.forgotPassword(code, sendInfo);
     return 'got here';
 };
