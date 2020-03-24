@@ -1,18 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
-import axios from 'axios';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import './ForgotPassword.css';
 import { Redirect } from 'react-router-dom';
 import {UserContext} from '../../../contexts/UserContext';
 
@@ -39,16 +34,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function ForgotPassword() {
     const classes = useStyles();
-    const [email, setEmail] = useState('');
+
     const [validEmail, setValidEmail] = useState(false);
     const [validCode, setValidCode] = useState(false);
     const [message, setMessage] = useState('');
-    const [errors, setErrors] = useState({
-        email: '',
-        username: '',
-        newPassword: '',
-    });
-    const [passwordMismatchError, setPasswordMismatchError] = useState('');
 
     async function handleEmailSubmit(e){
         e.preventDefault();
@@ -99,36 +88,12 @@ export default function ForgotPassword() {
 
     async function handleNewPassSubmit(e){
         e.preventDefault();
-        if (errors.newPassword === '' && passwordMismatchError === ''){
-            axios.post('/api/updatepassword', JSON.stringify({
-                email: email,
-                password: document.getElementById("new password").value,
-                confirm_password: document.getElementById("confirm password").value
-            }),{
-                headers: {
-                    "Content-Type" : "application/json"
-                },
-            }).then(res => {
-                document.location.href = '../';
-            }).catch(err => {
-                console.log(err);
-            });
+        if (document.getElementById("new password").value !== document.getElementById("confirm password").value) {
+            alert("Passwords do not match.");
         }
-    }
+        //TODO: Set new password
 
-    function confirmPassword(){
-        if(validEmail && validCode){
-            if(document.getElementById('new password').value !== document.getElementById('confirm password').value){
-                setPasswordMismatchError('Passwords do not match.');
-            } else {
-                setPasswordMismatchError('');
-            }
-            if(document.getElementById('new password').value.length < 8){
-                setErrors({newPassword: 'Password must be at least 8 characters long.'});
-            } else {
-                setErrors({newPassword: ''});
-            }
-        }
+        return <Redirect to='/' />
     }
 
     const formSelection = (
@@ -149,12 +114,11 @@ export default function ForgotPassword() {
                   autoComplete="email"
                   autoFocus
               />
-              <h5>{errors.email}</h5>
-              <h5 class="message">{message}</h5>
+              <h5>{message}</h5>
               <Button
                   type="submit"
                   fullWidth
-                  variant="contained"
+                  varient="contained"
                   color="primary"
                   className={classes.submit}
               >
@@ -179,16 +143,15 @@ export default function ForgotPassword() {
                 autoComplete="code"
                 autoFocus
             />
-            <h5>{errors.code}</h5>
-            <h5 class="message">{message}</h5>
+            <h5>{message}</h5>
             <Button
                 type="submit"
                 fullWidth
-                variant="contained"
+                varient="contained"
                 color="primary"
                 className={classes.submit}
             >
-                Confirm code
+                Send password-reset code
             </Button>
             <p>
                 {"We sent a 6-digit code to your email. If you don't receive it soon, "}
@@ -210,17 +173,12 @@ export default function ForgotPassword() {
                 margin="normal"
                 required
                 fullWidth
-                type="password"
                 id="new password"
                 label="New Password"
                 name="new password"
                 autoComplete="new password"
-                onChange={() => {
-                    confirmPassword();
-                }}
                 autoFocus
             />
-            <h5>{errors.newPassword}</h5>
             <Typography component="h1" variant="h5">
                 Confirm password
             </Typography>
@@ -229,22 +187,17 @@ export default function ForgotPassword() {
                 margin="normal"
                 required
                 fullWidth
-                type="password"
                 id="confirm password"
                 label="Confirm Password"
                 name="confirm password"
                 autoComplete="confirm password"
-                onChange={() => {
-                    confirmPassword();
-                }}
                 autoFocus
             />
-            <h5>{passwordMismatchError}</h5>
-            <h5 class="message">{message}</h5>
+            <h5>{message}</h5>
             <Button
                 type="submit"
                 fullWidth
-                variant="contained"
+                varient="contained"
                 color="primary"
                 className={classes.submit}
             >

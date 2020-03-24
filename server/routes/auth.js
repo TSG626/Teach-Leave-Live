@@ -93,7 +93,7 @@ const registerHandler = (req, res, next) => {
 
         return res.status(200).json({
             success: true,
-            message: 'You have successfully signed up! Now you should be able to log in.'
+            message: 'You have successfully signed up! An email should be sent to verify your email'
         });
     })(req, res, next);
 };
@@ -141,7 +141,14 @@ router.post('/login', (req, res, next) => {
                     success: false,
                     message: err.message
                 });
-            }else{
+            }
+            else if (err.name === 'Unverified Email') {
+                return res.status(400).json({
+                    success: false,
+                    message: err.message
+                })
+            }
+            else{
                 return res.status(400).json({
                     success: false,
                     message: 'Could not process the form.'
@@ -190,7 +197,6 @@ async function validateEmail(body) {
         errors
     };
 }
-
 function validateCode(body) {
     const errors = {};
     let isFormValid = true;
@@ -297,10 +303,26 @@ router.post('/forgotpassword', async (req, res, next) => {
 
 //Update password
 router.post('/updatepassword', updatePasswordHandler);
+//Update username
+router.post('/updateusername', updateUsernameHandler);
 
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
-
+//confirm email
+router.get('/confirmEmail', (req, res) => {
+    user.updateOne({key_for_verify:req.query.key}, {$set: {email_verified: true}}, (err, user) => {
+        if (err) {
+            console.log(err);
+            res.status(400).json({message: err});
+        }
+        else if (user.n == 0) {
+            res.send('<script type="text/javascript">alert("Not verified"); window.location="/";</script>');
+        }
+        else {
+            res.send('<script type="text/javascript">alert("Successfully verified"); window.location="/";</script>');
+        }
+    })
+});
 //Authed users may access other routes of the site including homepage.
 router.use('/', (req, res, next) => {
     passport.authenticate('jwt', {session: false}, (err, user) => {
