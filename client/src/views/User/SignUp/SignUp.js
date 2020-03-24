@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Redirect } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -9,8 +9,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {UserContext} from '../../../contexts/UserContext';
-import API from '../../../modules/API';
+import axios from 'axios';
 import './SignUp.css';
+import { useScrollTrigger } from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -37,7 +39,7 @@ const useStyles = makeStyles(theme => ({
   
 export default function SignUp() {
     const classes = useStyles();
-    const [authed, setAuthed] = useState(false);
+
     const [registered, setRegistered] = useState(false);
     const [errors, setErrors] = useState({
         email: '',
@@ -55,15 +57,19 @@ export default function SignUp() {
     function handleSubmit(e){
         e.preventDefault();
         if (!errors.passwordMismatch && !errors.password){
-            API.post('/api/register', {
+            axios.post('/api/register', JSON.stringify({
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
                 username: document.getElementById('username').value,
                 firstname: document.getElementById('firstname').value,
                 lastname: document.getElementById('lastname').value,
                 reference: document.getElementById('reference').value
+            }),{
+                headers: {
+                    "Content-Type" : "application/json"
+                },
             }).then(res => {
-                if(res.status == 200) setRegistered(true);
+                setRegistered(true);
             }).catch(err => {
                 console.log(err.response.data);
                 setErrors({
@@ -75,17 +81,12 @@ export default function SignUp() {
         }
     }
 
-    if(authed === true) {
-        return(<Redirect to='/Home'/>);
-    };
-
     if(registered) {
         return(<Redirect to='/User/Login'/>);
     };
 
     return (
         <UserContext.Consumer>{(context) => {
-            setAuthed(context.isAuthenticated());
             return(
                 <Container component="main" maxWidth="xs">
                 <CssBaseline/>
