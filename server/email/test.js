@@ -6,6 +6,5 @@ const userInfo = {
     lastName: "Frank"
 }
 
-//sendEmail.forgotPassword('abcd1234', userInfo);
-//sendEmail.welcomeEmail(userInfo);
-sendEmail.userAuthenticate('https://www.espn.com/', userInfo);
+sendEmail.forgotPassword('abcd1234', userInfo);
+sendEmail.welcomeEmail(userInfo);
