@@ -75,6 +75,7 @@ const NavBar = () => {
                     <Link className = "nav-link" to='/Blog'>Blog</Link>
                     <Link className = "nav-link" to='/Store'>Course Store</Link>
                     <Link className = "nav-link" to='/User/Profile'>Profile</Link>
+                    <Link className = "nav-link" to='/Admin'>Admin</Link>
                     <AccountOptions/>
                     <AdminOptions/>
                     <ShoppingCart/>
