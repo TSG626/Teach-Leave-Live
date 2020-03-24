@@ -17,7 +17,6 @@ const transporter = nodemailer.createTransport({
 
 module.exports = {
     welcomeEmail: function (userInfo) {
-      console.log('here');
         const emailTemplate = fs.readFileSync('./welcomeEmail/welcomeEmail-inlined.html', 'utf-8')
         var compiledEmail = Hogan.compile(emailTemplate)
 
@@ -39,7 +38,7 @@ module.exports = {
         });
     },
     forgotPassword: function (key, userInfo) {
-        const emailTemplate = fs.readFileSync('../email/forgotPassword/forgotPassword-inlined.html', 'utf-8')
+        const emailTemplate = fs.readFileSync('./forgotPassword/forgotPassword-inlined.html', 'utf-8')
         var compiledEmail = Hogan.compile(emailTemplate)
 
 

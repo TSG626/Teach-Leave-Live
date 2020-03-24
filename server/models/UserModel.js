@@ -33,14 +33,6 @@ const userSchema = new Schema({
         type: String,
         required: false
     },
-    email_verified: {
-        type: Boolean,
-        default: false
-    },
-    key_for_verify: {
-        type: String,
-        required: true
-    }
 });
 
 const User = mongoose.model('User', userSchema);
