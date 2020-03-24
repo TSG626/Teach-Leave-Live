@@ -19,11 +19,14 @@ const login = (email, password, done) => {
             return done(error);
         }
         bcrypt.compare(password, user.password).then((response) => {
-            if (response === true){
-                return done(null, user);
-            }else{
+            if (response === false) {
                 const error = new Error('Incorrect email or password');
                 error.name = 'IncorrectCredentialsError';
+                return done(error);
+            }
+            if (user.email_verified === false) {
+                const error = new Error('Email has not been verified');
+                error.name = 'UnverifiedEmail';
                 return done(error);
             }
         }).catch(error => done(error));
