@@ -1,10 +1,14 @@
 const express = require('express'),
     passport = require('passport'),
+    passwordmaster = require('../config/passwordreset.js'),
     validator = require('validator'),
     config = require('../config/config'),
-    User = require('../models/UserModel'),
+    User = require('../models/UserModel.js'),
+    PasswordReset = require('../models/PasswordResetModel.js'),
     bcrypt = require('bcrypt'),
-    jwt = require('jsonwebtoken');
+    jwt = require('jsonwebtoken'),
+    crypto = require('crypto'),
+    sendEmail = require('../email/sendEmail.js');
 
 const router = express.Router();
 
@@ -163,34 +167,36 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-function validateEmail(body) {
+async function validateEmail(body) {
     const errors = {};
     let isFormValid = true;
+    let doesEmailExist = false;
     let message = '';
-
+    await User.findOne({ 'email': body.email.trim() }, function (err, user) {
+        if (user) {
+          doesEmailExist = true;
+        }
+    });
     if (!body || typeof body.email !== 'string' || body.email.trim().length === 0) {
         isFormValid = false;
         errors.form = 'Please provide your email address.';
     }
-
     if (!body.email.includes('@')) {
         isFormValid = false;
         errors.form = 'Please provide a valid email address.';
     }
-
     if (!isFormValid) {
         message = 'Check the form for errors.';
     }
-
     return {
         success: isFormValid,
+        exists: doesEmailExist,
         message,
         errors
     };
 }
 function validateCode(body) {
     const errors = {};
-    let authCode = '123456';
     let isFormValid = true;
     let message = '';
 
@@ -200,11 +206,7 @@ function validateCode(body) {
     } else if (body.code.trim().length !== 6) {
         isFormValid = false;
         errors.form = 'Code must be 6-digits.';
-    } else if (body.code.trim() !== authCode) {
-        isFormValid = false;
-        errors.form = 'Invalid code.';
     }
-
     return {
         success: isFormValid,
         message,
@@ -283,10 +285,36 @@ const updatePasswordUser = async (req, res, done) => {
 router.post('/forgotpassword', (req, res, next) => {
     let validationResult;
     if (req.body.mode === 'email') {
-        validationResult = validateEmail(req.body);
+        validationResult = await validateEmail(req.body);
+        if (validationResult.exists) {
+            const code = await generateCode();
+            const hashedCode = await bcrypt.hash(code, 10);
+            await sendCodeEmail(req.body.email, code);
+            await passwordmaster.storePasswordResetData(req.body, hashedCode);
+        }
+        else {
+            //This is just to buy time so timing attacks are ineffective
+            const code = await generateCode();
+            const hashedCode = await bcrypt.hash(code, 10);
+        }
     }
     else if (req.body.mode === 'code') {
         validationResult = validateCode(req.body);
+        if (validationResult.success) {
+            let matchResult = await passwordmaster.tryCode(req.body);
+            if (!matchResult) {
+                await passwordmaster.decrementPasswordResetAttempts(req.body);
+                validationResult.success = false;
+                validationResult.errors.form = 'Incorrect code, make sure the code matches exactly.';
+                if (!await passwordmaster.checkCodeStillValid(req.body)) {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Too many attempts, please try again.',
+                        errors: validationResult.errors,
+                    });
+                }
+            }
+        }
     }
     else if (req.body.mode === 'password') {
         validationResult = validateNewPassword(req.body);
@@ -309,9 +337,11 @@ router.post('/forgotpassword', (req, res, next) => {
 //Update password
 router.post('/updatepassword', updatePasswordHandler);
 //Update username
+
 router.post('/updateusername', updateUsernameHandler);
 //Update password on User Page
 router.post('/updatepassworduser', updatePasswordUser);
+
 
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
