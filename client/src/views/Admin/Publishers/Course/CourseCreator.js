@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import './CoursePublisher.css';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -9,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import DeleteIcon from '@material-ui/icons/Delete'
 import {UserContext} from '../../../../contexts/UserContext';
-import { Checkbox, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 import API from '../../../../modules/API';
 import { Redirect } from 'react-router-dom';
 
@@ -146,7 +145,7 @@ export default function CourseCreator() {
     const [errors, setErrors] = useState({});
 
     function handleSubmit(){
-        API.post('/api/admin/course/create', {
+        API.post('/api/course/', {
             title: document.getElementById('title').value,
             author: authors,
             description: document.getElementById('description').value,
