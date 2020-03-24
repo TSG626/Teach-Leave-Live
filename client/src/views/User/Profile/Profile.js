@@ -1,11 +1,10 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import './Profile.css';
 import { UserContext } from '../../../contexts/UserContext';
 import { Redirect } from 'react-router-dom';
 import { CssBaseline, TextField, Typography, makeStyles } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
-import API from '../../../modules/API'
 
 const useStyles = makeStyles(theme => ({
     marginStuff: {
@@ -13,36 +12,40 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const ChangeUser = () => {
-        //fix later for CRUD update to username on user
+export default function Profile() {
     const classes = useStyles();
     const [edituser, setEditUser] = useState(false);
     const userInfo = useContext(UserContext);
     const [oldUser, setOldUser] = useState(userInfo.user.username);
     const [changed, isChanged] = useState(false);
+    const [password, setPassword] = useState("");
     const handleChange = (event) => {
         if(changed) {
             alert("Username has been changed once! Please refersh the page to see your new username and to change it if needed.");
         }
         else {
-            if(edituser === false)
+        if(edituser === false)
             setEditUser(!edituser)
         else {
-            console.log(oldUser);
-            if(oldUser === userInfo.user.username) {
+            console.log(userInfo.user.username);
+            console.log(password);
+            if(oldUser === userInfo.user.username || oldUser === "") {
                 alert("Username didn't change!");
             }
             else {
                 API.post('/api/updateusername', {
-                    email: userInfo.user.email,
-                    username: oldUser
-                }).then(res => {
-                    if(res.status == 200) {alert("Username changed! Please refresh the page to see your new username."); isChanged(true)};
+                    password: password,
+                    username: oldUser,
+                    oldUsername: userInfo.user.username,
+                    email: userInfo.user.email
+                }).then(res => {    
+                    if(res.status == 200) {alert("Username changed! Please refresh the page or re-log in to see your new username."); isChanged(true)};
                 }).catch(err =>{
                     console.log(err.response.data);
                 })
             }
             setEditUser(!edituser);
+            setPassword("");
             setOldUser(userInfo.user.username);
         }
         }
@@ -62,7 +65,7 @@ const ChangeUser = () => {
             <div>
                 <TextField label="Username" onChange={e => {setOldUser(e.target.value)}} variant="standard" id="newuser" defaultValue={userInfo.user.username} autoFocus/>
                 <div>
-                    <TextField label="Password" variant="standard" id="confirmpass"/>
+                    <TextField label="Password" type="password" onChange={e => {setPassword(e.target.value)}} variant="standard" id="confirmpass"/>
                 </div>
                 <div>
                     <Button className={classes.marginStuff} onClick={handleChange} variant="contained" color="secondary">Change Username</Button>
@@ -120,12 +123,6 @@ const ChangePass = () => {
         }}
     const handleNPassChange = (event) => {
         setNPassword(event.target.value);
-        if (event.target.value != cpassword && cpassword != "") {
-            setErrors({
-                ...errors,
-                cpassword: true
-            })
-        }
         if(event.target.value.length < 8) {
             setErrors({
                 ...errors,
@@ -142,7 +139,7 @@ const ChangePass = () => {
     const handleCPassChange = (event) => {
         setCPassword(event.target.value);
         if(event.target.value == npassword) {
-            setErrors( {
+            setErrors({
                 ...errors,
                 cpassword: false
             })
@@ -189,7 +186,9 @@ const Profile = () => {
                                 <Button>
                                     <AccountCircleIcon fontSize='large'/>
                                 </Button>
-                                <ChangeUser />
+                                <Button>
+                                    <Typography variant="h3" component="h3">{context.user.username}</Typography>
+                                </Button>
                             </header>
                         </div>
                         <div className="AccountHeader">
@@ -207,7 +206,6 @@ const Profile = () => {
                             <Typography className={classes.marginStuff}>
                                 E-mail: {context.user.email}
                             </Typography>
-                            <ChangePass/>
                         </div>
                     </CssBaseline>
                 );
@@ -221,4 +219,3 @@ const Profile = () => {
         </UserContext.Consumer>
     );
 }
-export default Profile

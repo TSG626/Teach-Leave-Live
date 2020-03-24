@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import API from '../../../modules/API';
+import axios from 'axios';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -44,18 +44,26 @@ export default function Login() {
 
     const [authed, setAuthed] = useState(false);
     const [message, setMessage] = useState('');
+    const [email_message, setEmail_message] = useState('');
 
     async function handleSubmit(e, context){
         e.preventDefault();
-        API.post('/api/login', {
+        axios.post('/api/login', JSON.stringify({
             email: document.getElementById('email').value,
             password: document.getElementById('password').value,
+        }),{
+            headers: {
+                "Content-Type" : "application/json"
+            },
         }).then(res => {
             if(res.status == 200){
                 context.authenticateUser(res.data.token);
                 setAuthed(true);
             }
         }).catch(err => {
+            if (err.response.data.message === 'Email has not been verified') {
+                setEmail_message();
+            }
             setMessage(err.response.data.message);
         });
     }
