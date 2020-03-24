@@ -1,12 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import './CoursePublisher.css';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {UserContext} from '../../../../contexts/UserContext';
 import API from '../../../../modules/API';
-import { Typography, ListItem, List, Button, Link} from '@material-ui/core';
-import { Switch, Route, useLocation, Redirect } from 'react-router-dom';
+import { Typography, ListItem, List, Button, CircularProgress} from '@material-ui/core';
+import { Switch, Route, Redirect, Link } from 'react-router-dom';
 import CourseCreator from './CourseCreator';
 import CourseEditor from './CourseEditor';
 import EditIcon from '@material-ui/icons/Edit';
@@ -35,16 +34,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Course = (props) => {
-  // function handlePublish(){
-  //   API.post(`/api/admin/course/${props.course.id}/`, {
-  //     published: true
-  //   }).then(res => {
-  //     if(res.status === 200){
-  //       setPublished(true);
-  //     }
-  //   })
-  // }
-
   const [redirect, setRedirect] = useState('');
 
   if(redirect !== ''){
@@ -75,7 +64,7 @@ export default function CourseList({match}) {
     useEffect(() => {
       let ignore = false;
       async function fetchData(){
-        API.get('/api/admin/course/').then(res => {
+        API.get('/api/course/').then(res => {
           if(res.status === 200){
             setCourses(res.data);
           }
@@ -87,35 +76,31 @@ export default function CourseList({match}) {
       return () => {ignore = true;}
     }, []);
 
+    if(!courses){
+      return <CircularProgress/>
+    }
+
     return (
       <Switch>
         <Route exact path={`${match.path}/`} component={function(){
           return(
-            <UserContext.Consumer>{(context) => {
-              return(
-                  <Container component="main" maxWidth="xl">
-                  <CssBaseline/>
-                  <div className={classes.paper}>
-                    <Typography>
-                      Courses
-                    </Typography>
-                    <List>
-                      {courses.map((course, index) => {
-                        return(
-                          <Course course={course} key={index}/>
-                        )
-                      })}
-                    </List>
-                    <Link to='/Admin/Course/Create'>Create a new course</Link>
-                  </div>
-                  </Container>
-              )}}</UserContext.Consumer>
-          )
+            <Container component="main" maxWidth={false}>
+              <Typography>
+                Courses
+              </Typography>
+              <List>
+                {courses.map((course, index) => {
+                  return(
+                    <Course course={course} key={index}/>
+                  )
+                })}
+              </List>
+              <Link to='/Admin/Course/Create'>Create a new course</Link>
+            </Container>
+            )
         }}/>
         <Route path={`${match.path}/Create`} component={CourseCreator} />
-        <Route path={`${match.path}/Edit/:id`}>
-          <CourseEditor/>
-        </Route>
+        <Route path={`${match.path}/Edit/:id`} component ={CourseEditor}/>
       </Switch>
     );
 }
