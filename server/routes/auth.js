@@ -263,16 +263,16 @@ router.post('/updatepassword', updatePasswordHandler);
 router.post('/register', checkNotAuthenticated, registerHandler);
 //confirm email
 router.get('/confirmEmail', (req, res) => {
-    user.updateOne({key_for_verify:req.query.key}, {$set: {email_verified: true}}, (err, user) => {
+    User.updateOne({key_for_verify:req.query.key}, {$set: {email_verified: true}}, (err, user) => {
         if (err) {
             console.log(err);
             res.status(400).json({message: err});
         }
         else if (user.n == 0) {
-            res.send('<script type="text/javascript">alert("Not verified"); window.location="/";</script>');
+            res.send('<script type="text/javascript">alert("Not verified"); window.close();</script>');
         }
         else {
-            res.send('<script type="text/javascript">alert("Successfully verified"); window.location="/";</script>');
+            res.send('<script type="text/javascript">alert("Successfully verified"); window.close();</script>');
         }
     })
 });
