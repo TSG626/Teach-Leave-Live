@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import {UserContext, UserProvider} from "./contexts/UserContext";
+import { UserContext, UserProvider } from "./contexts/UserContext";
 
 import NavBar from "./components/Header/NavBar";
 import Landing from "./views/Landing/Landing";
@@ -14,42 +14,44 @@ import Store from "./views/Store/Store";
 import NotFound from "./views/NotFound";
 import Login from './views/User/Login/Login';
 import SignUp from './views/User/SignUp/SignUp';
+import ForgotPassword from './views/User/ForgotPassword/ForgotPassword';
 
 //Checks if user is signed in. If not, only allow them to access landing and signup/login
 //Redirect everything else to login.
 const Authorization = () => {
-  return(
+  return (
     <UserContext.Consumer>{(context) => {
-      if(context.isAuthenticated() === false){
-        return(
+      if (context.isAuthenticated() === false) {
+        return (
           <Switch>
-            <Route exact path="/" component={Landing}/>
-            <Route exact path="/User/SignUp" component={SignUp}/>
-            <Route exact path="/User/Login" component={Login}/>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/User/SignUp" component={SignUp} />
+            <Route exact path="/User/Login" component={Login} />
+            <Route exact path="/User/ForgotPassword" component={ForgotPassword} />
             <Route path="/" component={() => {
-              return(<Redirect to='/User/Login'/>)
-            }}/>
+              return (<Redirect to='/User/Login' />)
+            }} />
           </Switch>
         )
-      }else{
-        return(<Routes/>);
+      } else {
+        return (<Routes />);
       }
     }}</UserContext.Consumer>
   )
 }
 
 const Routes = () => {
-  return(
+  return (
     <Switch>
       <Route exact path="/" component={Landing} />
       <Route exact path="/Home" component={Home} />
       <Route path="/Admin" component={Admin} />
-      <Route path="/User" component={User}/>
+      <Route path="/User" component={User} />
       <Route exact path="/Blog" component={Blog} />
       <Route exact path="/Catalogue" component={Catalogue} />
       <Route exact path="/Course" component={Course} />
       <Route path="/Store" component={Store} />
-      <Route component={NotFound}/>
+      <Route component={NotFound} />
     </Switch>
   )
 }
@@ -57,8 +59,8 @@ const Routes = () => {
 const App = (props) => {
   return (
     <UserProvider>
-      <NavBar/>
-      <Authorization/>
+      <NavBar />
+      <Authorization />
     </UserProvider>
   );
 }
