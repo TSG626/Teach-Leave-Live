@@ -264,7 +264,16 @@ const updateUsernameHandler = async (req, res, done) => {
 
 const updatePasswordUser = async (req, res, done) => {
     try {
-
+        const hashedPassword = await bcrypt.hash(req.body.Oldpassword, 10);
+        User.findOne({'password': hashedPassword}, async (err, user) => {
+            if(err) {return done(err);}
+            if(!user) {
+                const error = new Error('Something went wrong!');
+                error.name = 'UpdatingUsernameError';
+                return done(error);
+            }
+            console.log(user);
+        })
     }
     catch (err) {
         return done(err);

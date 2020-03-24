@@ -107,9 +107,8 @@ const ChangePass = () => {
                 alert('Your new password or the confirmation password is incorrect!')
             }
             else {
-                API.post('/api/updatepassword',{
-                    email: userInfo.user.email,
-                    password: npassword
+                API.post('/api/updatepassworduser',{
+                    oldPassword: oldpassword
                 }).then(res => {
                     if(res.status == 200) {isEditPass(!editpass)};
                 }).catch(err => {
