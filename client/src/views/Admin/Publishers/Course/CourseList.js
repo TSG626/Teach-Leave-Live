@@ -1,8 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {UserContext} from '../../../../contexts/UserContext';
 import API from '../../../../modules/API';
 import { Typography, ListItem, List, Button, CircularProgress} from '@material-ui/core';
 import { Switch, Route, Redirect, Link } from 'react-router-dom';
@@ -47,9 +45,7 @@ const Course = (props) => {
       >
         {props.course.title}
       </Button>
-      <Button
-        onClick={() => setRedirect(`/Admin/Course/Edit/${props.course._id}`)}
-      >
+      <Button onClick={() => setRedirect(`/Admin/Course/Edit/${props.course._id}`)}>
         <EditIcon/>
       </Button>
     </ListItem>
