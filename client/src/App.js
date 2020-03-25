@@ -14,6 +14,7 @@ import Store from "./views/Store/Store";
 import NotFound from "./views/NotFound";
 import Login from './views/User/Login/Login';
 import SignUp from './views/User/SignUp/SignUp';
+import ForgotPassword from './views/User/ForgotPassword/ForgotPassword'
 
 //Checks if user is signed in. If not, only allow them to access landing and signup/login
 //Redirect everything else to login.
@@ -26,6 +27,7 @@ const Authorization = () => {
             <Route exact path="/" component={Landing}/>
             <Route exact path="/User/SignUp" component={SignUp}/>
             <Route exact path="/User/Login" component={Login}/>
+            <Route exact path="/User/ForgotPassword" component={ForgotPassword}/>
             <Route path="/" component={() => {
               return(<Redirect to='/User/Login'/>)
             }}/>
