@@ -93,7 +93,7 @@ const registerHandler = (req, res, next) => {
 
         return res.status(200).json({
             success: true,
-            message: 'You have successfully signed up! An email should be sent to verify your email'
+            message: 'You have successfully signed up! Now you should be able to log in.'
         });
     })(req, res, next);
 };
@@ -142,7 +142,7 @@ router.post('/login', (req, res, next) => {
                     message: err.message
                 });
             }
-            else if (err.name === 'Unverified Email') {
+            else if (err.name === 'UnverifiedEmail') {
                 return res.status(400).json({
                     success: false,
                     message: err.message
@@ -172,6 +172,7 @@ async function validateEmail(body) {
     let isFormValid = true;
     let doesEmailExist = false;
     let message = '';
+
     await User.findOne({ 'email': body.email.trim() }, function (err, user) {
         if (user) {
           doesEmailExist = true;
@@ -195,6 +196,7 @@ async function validateEmail(body) {
         errors
     };
 }
+
 function validateCode(body) {
     const errors = {};
     let isFormValid = true;
@@ -231,6 +233,58 @@ const updatePasswordHandler = async (req, res, done) => {
     }
 };
 
+const updateUsernameHandler = async (req, res, done) => {
+    try {
+        User.findOne({'username': req.body.oldUsername}, async (err, user) => {
+            if(err) {return done(err);}
+            if (!user) {
+                const error = new Error('Something went wrong!');
+                error.name = 'UpdatingUsernameError';
+                return done(error);
+            }
+            bcrypt.compare(req.body.password, user.password).then((response) => {
+                if (response === true) {
+                    User.findOneAndUpdate(
+                        { 'email': req.body.email },
+                        { 'username': req.body.username },
+                        {returnNewDocument: true}).then((user) => {
+                            return res.status(200).json({
+                                success: true,
+                            });
+                        }
+                    );
+                } else {
+                    const error = new Error('Incorrect password');
+                    error.name = 'IncorrectCredentialsError';
+                    return done(error);
+                }
+            }).catch(error => done(error));
+            }
+        )
+    } catch (err) {
+        return done(err);
+    }
+};
+
+const updatePasswordUser = async (req, res, done) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.Oldpassword, 10);
+        User.findOne({'password': hashedPassword}, async (err, user) => {
+            if(err) {return done(err);}
+            if(!user) {
+                const error = new Error('Something went wrong!');
+                error.name = 'UpdatingUsernameError';
+                return done(error);
+            }
+            console.log(user);
+        })
+    }
+    catch (err) {
+        return done(err);
+    }
+}
+
+
 const generateCode = () => {
     return Math.random().toString(36).slice(-6).toUpperCase();
 };
@@ -241,6 +295,8 @@ const sendCodeEmail = async (email, code) => {
         email: userInfo.get('email'),
         firstname: userInfo.get('firstname'),
     };
+    console.log(code);
+    console.log(sendInfo);
     sendEmail.forgotPassword(code, sendInfo);
     return 'got here';
 };
@@ -300,22 +356,24 @@ router.post('/forgotpassword', async (req, res, next) => {
 //Update password
 router.post('/updatepassword', updatePasswordHandler);
 //Update username
-//router.post('/updateusername', updateUsernameHandler);
+router.post('/updateusername', updateUsernameHandler);
+//Update password on User Page
+router.post('/updatepassworduser', updatePasswordUser);
 
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
 //confirm email
 router.get('/confirmEmail', (req, res) => {
-    user.updateOne({key_for_verify:req.query.key}, {$set: {email_verified: true}}, (err, user) => {
+    User.updateOne({key_for_verify:req.query.key}, {$set: {email_verified: true}}, (err, user) => {
         if (err) {
             console.log(err);
             res.status(400).json({message: err});
         }
         else if (user.n == 0) {
-            res.send('<script type="text/javascript">alert("Not verified"); window.location="/";</script>');
+            res.send('<script type="text/javascript">alert("Not verified"); window.close();</script>');
         }
         else {
-            res.send('<script type="text/javascript">alert("Successfully verified"); window.location="/";</script>');
+            res.send('<script type="text/javascript">alert("Successfully verified"); window.close();</script>');
         }
     })
 });
