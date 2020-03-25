@@ -1,10 +1,11 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import './Profile.css';
 import { UserContext } from '../../../contexts/UserContext';
 import { Redirect } from 'react-router-dom';
 import { CssBaseline, TextField, Typography, makeStyles } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
+import API from '../../../modules/API'
 
 const useStyles = makeStyles(theme => ({
     marginStuff: {
@@ -12,7 +13,8 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-export default function Profile() {
+const ChangeUser = () => {
+        //fix later for CRUD update to username on user
     const classes = useStyles();
     const [edituser, setEditUser] = useState(false);
     const userInfo = useContext(UserContext);
@@ -33,15 +35,21 @@ export default function Profile() {
                 alert("Username didn't change!");
             }
             else {
-                API.post('/api/updateusername', {
-                    password: password,
-                    username: oldUser,
-                    oldUsername: userInfo.user.username,
-                    email: userInfo.user.email
+                API.post('/api/checkusernamenotexist', {
+                    username: oldUser
                 }).then(res => {
-                    if(res.status == 200) {alert("Username changed! Please refresh the page or re-log in to see your new username."); isChanged(true)};
-                }).catch(err =>{
-                    console.log(err.response.data);
+                    API.post('/api/updateusername', {
+                        password: password,
+                        username: oldUser,
+                        oldUsername: userInfo.user.username,
+                        email: userInfo.user.email
+                    }).then(res => {
+                        if(res.status == 200) {alert("Username changed! Please refresh the pageto see your new username."); isChanged(true)};
+                    }).catch(err =>{
+                        console.log(err.response.data);
+                    })
+                }).catch(err => {
+                    alert("Username already exists! Please use a different username");
                 })
             }
             setEditUser(!edituser);
@@ -88,10 +96,14 @@ const ChangePass = () => {
     const [npassword, setNPassword] = useState("");
     const [cpassword, setCPassword] = useState("");
     const userInfo = useContext(UserContext);
+    const [changed, isChanged] = useState(false);
 
     const handleChange = () => {
         //find how to get password
-        if(editpass === false)
+        if(changed === true) {
+            alert('Password has been changed once! Please refresh the page.');
+        }
+        else if(editpass === false)
         {
             isEditPass(!editpass)
             setErrors({
@@ -104,19 +116,17 @@ const ChangePass = () => {
             if(errors.npassword || errors.cpassword) {
                 alert('Your new password or the confirmation password is incorrect!')
             }
+
             else {
-                API.post('/api/updatepassword',{
+                API.post('/api/updatepassworduser',{
                     email: userInfo.user.email,
-                    password: npassword
+                    password: npassword,
+                    oldPassword: oldpassword,
                 }).then(res => {
-                    if(res.status == 200) {isEditPass(!editpass)};
+                    if(res.status == 200) {isEditPass(!editpass); isChanged(true);
+                    alert("Your password has been reset!")};
                 }).catch(err => {
-                    console.log(err.response.data);
-                    setErrors({
-                        ...errors,
-                        email: err.response.data.errors.email,
-                        username: err.response.data.errors.password
-                    });
+                    alert("Password is incorrect!");
                 });
             }
             isEditPass(!editpass);
@@ -186,9 +196,7 @@ const Profile = () => {
                                 <Button>
                                     <AccountCircleIcon fontSize='large'/>
                                 </Button>
-                                <Button>
-                                    <Typography variant="h3" component="h3">{context.user.username}</Typography>
-                                </Button>
+                                <ChangeUser />
                             </header>
                         </div>
                         <div className="AccountHeader">
@@ -206,6 +214,7 @@ const Profile = () => {
                             <Typography className={classes.marginStuff}>
                                 E-mail: {context.user.email}
                             </Typography>
+                            <ChangePass/>
                         </div>
                     </CssBaseline>
                 );
@@ -219,3 +228,4 @@ const Profile = () => {
         </UserContext.Consumer>
     );
 }
+export default Profile
