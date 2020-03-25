@@ -31,12 +31,8 @@ const login = (email, password, done) => {
                 error.name = 'UnverifiedEmail';
                 return done(error);
             }
+            return done(null, user);
         }).catch(error => done(error));
-        if (user.email_verified === false) {
-            const error = new Error('Email has not been verified');
-            error.name='Unverified Email';
-            return done(error);
-        }
     });
 }
 

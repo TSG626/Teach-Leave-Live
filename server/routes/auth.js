@@ -138,7 +138,7 @@ router.post('/login', (req, res, next) => {
                     message: err.message
                 });
             }
-            else if (err.name === 'UnverfiedEmail') {
+            else if (err.name === 'UnverifiedEmail') {
                 return res.status(400).json({
                     success: false,
                     message: err.message
