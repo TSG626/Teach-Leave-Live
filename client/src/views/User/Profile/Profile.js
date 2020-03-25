@@ -35,15 +35,21 @@ const ChangeUser = () => {
                 alert("Username didn't change!");
             }
             else {
-                API.post('/api/updateusername', {
-                    password: password,
-                    username: oldUser,
-                    oldUsername: userInfo.user.username,
-                    email: userInfo.user.email
-                }).then(res => {    
-                    if(res.status == 200) {alert("Username changed! Please refresh the page or re-log in to see your new username."); isChanged(true)};
-                }).catch(err =>{
-                    console.log(err.response.data);
+                API.post('/api/checkusernamenotexist', {
+                    username: oldUser
+                }).then(res => {
+                    API.post('/api/updateusername', {
+                        password: password,
+                        username: oldUser,
+                        oldUsername: userInfo.user.username,
+                        email: userInfo.user.email
+                    }).then(res => {    
+                        if(res.status == 200) {alert("Username changed! Please refresh the pageto see your new username."); isChanged(true)};
+                    }).catch(err =>{
+                        console.log(err.response.data);
+                    })
+                }).catch(err => {
+                    alert("Username already exists! Please use a different username");
                 })
             }
             setEditUser(!edituser);
@@ -90,10 +96,14 @@ const ChangePass = () => {
     const [npassword, setNPassword] = useState("");
     const [cpassword, setCPassword] = useState("");
     const userInfo = useContext(UserContext);
+    const [changed, isChanged] = useState(false);
 
     const handleChange = () => {
         //find how to get password
-        if(editpass === false)
+        if(changed === true) {
+            alert('Password has been changed once! Please refresh the page.');
+        }
+        else if(editpass === false)
         {
             isEditPass(!editpass)
             setErrors({
@@ -106,19 +116,17 @@ const ChangePass = () => {
             if(errors.npassword || errors.cpassword) {
                 alert('Your new password or the confirmation password is incorrect!')
             }
+
             else {
-                API.post('/api/updatepassword',{
+                API.post('/api/updatepassworduser',{
                     email: userInfo.user.email,
-                    password: npassword
+                    password: npassword,
+                    oldPassword: oldpassword,
                 }).then(res => {
-                    if(res.status == 200) {isEditPass(!editpass)};
+                    if(res.status == 200) {isEditPass(!editpass); isChanged(true);
+                    alert("Your password has been reset!")};
                 }).catch(err => {
-                    console.log(err.response.data);
-                    setErrors({
-                        ...errors, 
-                        email: err.response.data.errors.email, 
-                        username: err.response.data.errors.password
-                    });
+                    alert("Password is incorrect!");
                 });
             }
             isEditPass(!editpass);
