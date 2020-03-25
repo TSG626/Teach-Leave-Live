@@ -158,7 +158,7 @@ const ChangePass = () => {
     else
         return( 
             <div>
-            <table>
+            <table> 
             <tr>
                 <td width="30%" align="center"><TextField className={classes.marginStuff} onChange={e =>{setOldPassword(e.target.value)}} type="password" label="Old Password" id="oldpass" variant="filled" autoFocus/></td>
                 <td width="30%" align="center"><TextField onChange={handleNPassChange} type="password" className={classes.marginStuff} label="New Password" id="npass" variant="filled"/></td>
