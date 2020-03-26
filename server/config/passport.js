@@ -1,6 +1,8 @@
 const LocalStrategy = require('passport-local').Strategy,
     passport = require('passport'),
     bcrypt = require('bcrypt'),
+    crypto = require('crypto'),
+    sendEmail = require('../email/sendEmail'),
     User = require('../models/UserModel.js'),
     config = require('./config'),
     JWTStategy = require('passport-jwt').Strategy,
@@ -57,6 +59,19 @@ const register = async (req, email, password, done) => {
     }
     try {
         const hashedPassword = await bcrypt.hash(userData.password, 10);
+        var key_one = crypto.randomBytes(256).toString('hex').substr(100, 5);
+        var key_two = crypto.randomBytes(256).toString('base64').substr(50, 5);
+        var key_for_verify = key_one + key_two;
+
+        //send email *****************************************************
+        var url = 'http://' + req.get('host')+'/api/confirmEmail'+'?key='+key_for_verify;
+        const userInfo = {
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: userData.email
+        }
+        sendEmail.userAuthenticate(url, userInfo);
+        //****************************************************************
         const user = new User({
             username: userData.username,
             email: userData.email,
@@ -64,6 +79,7 @@ const register = async (req, email, password, done) => {
             firstname: req.body.firstname,
             lastname: req.body.lastname,
             reference: req.body.reference,
+            key_for_verify: key_for_verify
         });
         user.save((err) => {
             if(err){

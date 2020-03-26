@@ -1,8 +1,8 @@
 var nodemailer = require('nodemailer');
-const fs = require('fs');
-const Hogan = require('hogan.js');
-const config = require('./config');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
+const Hogan = require('hogan.js')
+const config = require('./config')
 
 
 const transporter = nodemailer.createTransport({
@@ -18,7 +18,6 @@ const transporter = nodemailer.createTransport({
 
 module.exports = {
     welcomeEmail: function (userInfo) {
-      console.log('here');
         const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/authenticateEmail/authenticateEmail-inlined.html', 'utf-8')
         var compiledEmail = Hogan.compile(emailTemplate)
 
@@ -40,7 +39,7 @@ module.exports = {
         });
     },
     forgotPassword: function (key, userInfo) {
-        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/forgotPassword/forgotPassword-inlined.html', 'utf-8')
+        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/authenticateEmail/authenticateEmail-inlined.html', 'utf-8')
         var compiledEmail = Hogan.compile(emailTemplate)
 
 
@@ -61,11 +60,8 @@ module.exports = {
         });
     },
     userAuthenticate: function (url, userInfo) {
-        console.log(url);
-        console.log(userInfo);
-        const emailTemplate = fs.readFileSync('./authenticateEmail/authenticateEmail-inlined.html', 'utf-8');
-        var compiledEmail = Hogan.compile(emailTemplate)
-        console.log('compiled email set');
+        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/authenticateEmail/authenticateEmail-inlined.html', 'utf-8');
+        var compiledEmail = Hogan.compile(emailTemplate);
 
         var mailOptions = {
             from: config.username,
