@@ -233,6 +233,26 @@ const updatePasswordHandler = async (req, res, done) => {
     }
 };
 
+const checkUsernameNotExist = async (req, res, done) => {
+    try {
+        User.findOne({'username': req.body.username}).then((user) => {
+            if (!user)  {
+                return res.status(200).json({
+                    success: true,
+                });
+            }
+            else {
+                const error = new Error('User Exists');
+                error.name = 'UserExistsError';
+                return done(error);
+            }
+        })
+    }
+    catch (err) {
+        return done(err);
+    }
+}
+
 const updateUsernameHandler = async (req, res, done) => {
     try {
         User.findOne({'username': req.body.oldUsername}, async (err, user) => {
@@ -268,18 +288,35 @@ const updateUsernameHandler = async (req, res, done) => {
 
 const updatePasswordUser = async (req, res, done) => {
     try {
-        const hashedPassword = await bcrypt.hash(req.body.Oldpassword, 10);
-        User.findOne({'password': hashedPassword}, async (err, user) => {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        User.findOne({'email': req.body.email}, async (err, user) => {
             if(err) {return done(err);}
-            if(!user) {
+            if (!user) {
                 const error = new Error('Something went wrong!');
-                error.name = 'UpdatingUsernameError';
+                error.name = 'UpdatingPasswordError';
                 return done(error);
             }
-            console.log(user);
-        })
-    }
-    catch (err) {
+            
+            bcrypt.compare(req.body.oldPassword, user.password).then((response) => {
+                if (response === true) {
+                    User.findOneAndUpdate(
+                        { 'email': req.body.email },
+                        { 'password': hashedPassword },
+                        {returnNewDocument: true}).then((user) => {
+                            return res.status(200).json({
+                                success: true,
+                            });
+                        }
+                    );
+                } else {
+                    const error = new Error('Incorrect password');
+                    error.name = 'IncorrectCredentialsError';
+                    return done(error);
+                }
+            }).catch(error => done(error));
+            }
+        )
+    } catch (err) {
         return done(err);
     }
 }
@@ -359,6 +396,8 @@ router.post('/updatepassword', updatePasswordHandler);
 router.post('/updateusername', updateUsernameHandler);
 //Update password on User Page
 router.post('/updatepassworduser', updatePasswordUser);
+//Check to see if username exists
+router.post('/checkusernamenotexist', checkUsernameNotExist);
 
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
