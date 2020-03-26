@@ -4,6 +4,7 @@ import { UserContext } from '../../contexts/UserContext';
 import { Redirect } from 'react-router-dom';
 import { CssBaseline, Box, Typography } from '@material-ui/core';
 import { borders } from '@material-ui/system';
+import BlogPublisher from '../Admin/Publishers/Blog/BlogPublisher'
 
 
 const ShowingComments = (props) => {
@@ -22,44 +23,7 @@ const ShowingComments = (props) => {
 const ShowingBlogs = () => {
     //const [blogs, setBlogs] = useState("No blogs available!")
     //TEMPORARY! For the purpose of presenting in Sprint 1
-    const [blogs, setBlogs] = useState([
-        {
-            title: "First Course Up!",
-            date: "March 9, 2020",
-            post: "The first course is available! I hope you enjoy it!",
-            comments: [
-                {
-                    username: "john123",
-                    text: "Awesome! Can't wait!"
-                },
-                {
-                    username: "simon32",
-                    text: "I'm excited!"
-                }
-            ],
-        },{
-        title: "Welcome!",
-        date: "March 8, 2020",
-        post: "Welcome to TLL! Have fun!",
-        comments: [
-            {
-                username: "bob7",
-                text: "Thanks!"
-            },
-            {
-                username: "maryC",
-                text: "Very cool!"
-            },
-            {
-                username: "john123",
-                text: "Hi!"
-            },
-            {
-                username: "simon32",
-                text: "This is helpful!"
-            }
-        ],
-    }, ]);
+    const [blogs, setBlogs] = useState([]);
     return(
         blogs.map((blog) => {
             return (
