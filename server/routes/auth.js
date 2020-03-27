@@ -189,7 +189,6 @@ async function validateEmail(body) {
     if (!isFormValid) {
         message = 'Check the form for errors.';
     }
-
     return {
         success: isFormValid,
         exists: doesEmailExist,
@@ -346,7 +345,7 @@ router.post('/forgotpassword', async (req, res, next) => {
         if (validationResult.exists) {
             const code = await generateCode();
             const hashedCode = await bcrypt.hash(code, 10);
-            console.log(await sendCodeEmail(req.body.email, code));
+            await sendCodeEmail(req.body.email, code);
             await passwordmaster.storePasswordResetData(req.body, hashedCode);
         }
         else {
