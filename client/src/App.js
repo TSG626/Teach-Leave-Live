@@ -59,22 +59,10 @@ const Routes = () => {
 
 const App = (props) => {
   return (
-    <div>
-      <UserProvider>
-        <NavBar/>
-        <Switch>
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/Home" component={Home} />
-          <Route path="/Admin" component={Admin} />
-          <Route path="/User" component={User}/>
-          <Route exact path="/Blog" component={Blog} />
-          <Route exact path="/Catalogue" component={Catalogue} />
-          <Route exact path="/Course" component={Course} />
-          <Route path="/Store" component={Store} />
-          <Route component={NotFound}/>
-        </Switch>
-      </UserProvider>
-    </div>
+    <UserProvider>
+      <NavBar/>
+      <Authorization/>
+    </UserProvider>
   );
 }
 

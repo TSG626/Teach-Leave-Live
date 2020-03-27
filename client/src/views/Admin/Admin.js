@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Route, Switch, Redirect, Link, useLocation} from 'react-router-dom';
 import './Admin.css';
+import {UserContext} from "../../contexts/UserContext"
 import BlogPublisher from "./Publishers/Blog/BlogPublisher";
-import CoursePublisher from "./Publishers/Course/CoursePublisher";
+import CourseList from "./Publishers/Course/CourseList";
 import NewsletterPublisher from "./Publishers/Newsletter/NewsletterPublisher";
 import UserEditor from "./Publishers/User/UserEditor";
 import {CssBaseline, Button, Typography } from '@material-ui/core';
@@ -33,18 +34,31 @@ const AdminLinks = (props) => {
 }
 
 const Admin = ({match}) => {
+    const [admin, setAdmin] = useState(true);
+
+    function checkAdmin(context){
+        if(context.user){
+            setAdmin(context.user.admin);
+        }
+    }
+
+    if(admin === false) {
+        return(<Redirect to='/Home'/>);
+    };
+
     return (
-        <div>
-            <header>
+        <UserContext.Consumer>{(context) => {
+            checkAdmin(context);
+            return(
                 <Switch>
                     <Route path={`${match.path}/Blog`} component={BlogPublisher} />
-                    <Route path={`${match.path}/Course`} component={CoursePublisher} />
+                    <Route path={`${match.path}/Course`} component={CourseList} />
                     <Route path={`${match.path}/Newsletter`} component={NewsletterPublisher} />
                     <Route path={`${match.path}/User`} component={UserEditor} />
                     <AdminLinks match={`${match.path}`}/>
                 </Switch>
-            </header>
-        </div>
+            )
+        }}</UserContext.Consumer>
     );
 }
 export default Admin
