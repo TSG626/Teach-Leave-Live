@@ -49,7 +49,7 @@ const Store = ({match}) => {
                             <Route exact path={`${match.path}/Summary`} component={Summary} />
                         </Switch>
                     </CssBaseline>
-                ); 
+                );
             }
             else {
                 return(
