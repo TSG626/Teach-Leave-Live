@@ -43,7 +43,7 @@ const ChangeUser = () => {
                         username: oldUser,
                         oldUsername: userInfo.user.username,
                         email: userInfo.user.email
-                    }).then(res => {    
+                    }).then(res => {
                         if(res.status == 200) {alert("Username changed! Please refresh the pageto see your new username."); isChanged(true)};
                     }).catch(err =>{
                         console.log(err.response.data);
@@ -77,8 +77,8 @@ const ChangeUser = () => {
                 </div>
                 <div>
                     <Button className={classes.marginStuff} onClick={handleChange} variant="contained" color="secondary">Change Username</Button>
-                </div>  
-            </div>      
+                </div>
+            </div>
             )
     }
 
@@ -111,7 +111,7 @@ const ChangePass = () => {
                 cpassword: false,
                 npassword: false
             })
-        }            
+        }
         else {
             if(errors.npassword || errors.cpassword) {
                 alert('Your new password or the confirmation password is incorrect!')
@@ -164,9 +164,9 @@ const ChangePass = () => {
     if(!editpass)
         return(<Button className={classes.marginStuff} onClick={handleChange} variant="contained" color="secondary">Change Password</Button>)
     else
-        return( 
+        return(
             <div>
-            <table> 
+            <table>
             <tr>
                 <td width="30%" align="center"><TextField className={classes.marginStuff} onChange={e =>{setOldPassword(e.target.value)}} type="password" label="Old Password" id="oldpass" variant="filled" autoFocus/></td>
                 <td width="30%" align="center"><TextField onChange={handleNPassChange} type="password" className={classes.marginStuff} label="New Password" id="npass" variant="filled"/></td>
