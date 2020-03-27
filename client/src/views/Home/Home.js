@@ -26,18 +26,14 @@ const ListCourses = () => {
         }
     ])
     return(
-        courses.map((course, index) => {
+        courses.map(course => {
             return(
-                <Box p={5} m={3} border={1} key={index}>
+                <Box p={5} m={3} border={1}>
                 <table>
-                    <tbody>
-                        <tr>
-                            <td className="left"><Typography component="h1" variant="h5">{course.title}:</Typography></td> 
-                            <td align="right"><CircularProgress variant="static" value={course.progress}/></td>
-                        </tr>
-                    </tbody>
+                <td className="left"><Typography component="h1" variant="h5">{course.title}:</Typography></td> 
+                <td align="right"><CircularProgress variant="static" value={course.progress}/></td>
                 </table>
-                </Box>
+            </Box>
             )
         })
     )
@@ -87,17 +83,13 @@ const ListBlogs = () => {
         ],
     }, ]);
     return(
-        blogs.map((blog, index) => {
+        blogs.map((blog) => {
             return (
-                <div key={index}>
+                <div>
                     <Box p={5} m={4.5} border={1}>
                         <table>
-                            <tbody>
-                                <tr>
-                                    <td className="left"><Typography component="h1" variant="h5">{blog.user}: </Typography></td>
-                                    <td className="right"><Typography component="h1" variant="h5">{blog.title}</Typography></td>
-                                </tr>
-                            </tbody>
+                        <td className="left"><Typography component="h1" variant="h5">{blog.user}: </Typography></td>
+                            <td className="right"><Typography component="h1" variant="h5">{blog.title}</Typography></td>
                         </table>
                     </Box>
                 </div> 
@@ -117,7 +109,7 @@ const Home = () => {
             <CssBaseline>
             <div className="App">
             <header>
-                <Grow in={true} mountOnEnter timeout={1000}>
+                <Grow in="true" mountOnEnter timeout={1000}>
                     <Box p={4}>
                     <Typography component="h1" variant="h2">
                         Welcome back, {context.user.firstname}!
@@ -126,72 +118,58 @@ const Home = () => {
                 </Grow>
             </header>
             <header className="App-table">
-            <Slide direction="up" in={true} mountOnEnter timeout={1000}>                       
+            <Slide direction="up" in="true" mountOnEnter timeout={1000}>                       
                 <table align="center" width="100%">
-                    <thead>
-                        <tr>
-                            <th align="center"><Typography component="h1" variant="h4">Recent Blogs</Typography></th>
-                            <th align="center"><Typography component="h1" variant="h4">Recent Courses</Typography></th> 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <Box border={1} m={2} p={1}>
-                                    <ListBlogs/>
-                                </Box>
-                            </td> 
-                            <td>
-                                <Box border={1} m={2} p={1}>
-                                    <ListCourses/>
-                                </Box>
-                            </td>
-                            <td right="1">
-                                <table className= "App-socials" width="100%" align="center">
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <Link2 target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/">
-                                                    <InstagramIcon fontSize="large" color="inherit"/>
-                                                </Link2>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <Link2 target="_blank" rel="noopener" href="https://www.facebook.com">
-                                                    <FacebookIcon fontSize="large" color="inherit"/>
-                                                </Link2>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <Link2 target="_blank" rel="noopener" href="https://www.twitter.com">
-                                                    <TwitterIcon fontSize="large" color="inherit"/>
-                                                </Link2>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <Link2 target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live">
-                                                    <StoreIcon fontSize="large" color="inherit"/>
-                                                </Link2>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td align="center">
-                                    <Button color="default" variant="contained" color="primary" component={Link} to="/Store">
-                                        Course Store
-                                    </Button>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <tr>
+                        <th align="center"><Typography component="h1" variant="h4">Recent Blogs</Typography></th>
+                        <th align="center"><Typography component="h1" variant="h4">Recent Courses</Typography></th> 
+                    </tr>
+                    <tr>
+                     <td>
+                         <Box border={1} m={2} p={1}>
+                            <ListBlogs/>
+                         </Box>
+                    </td> 
+                        <td>
+                        <Box border={1} m={2} p={1}>
+                            <ListCourses/>
+                        </Box>
+                        </td>
+                        <td right="1">
+                        <table className= "App-socials" width="100%" align="center">
+                            <tr>
+                                <Link2 target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/">
+                                    <InstagramIcon fontSize="large" color="inherit"/>
+                                </Link2>
+                            </tr>
+                            <tr>
+                                <Link2 target="_blank" rel="noopener" href="https://www.facebook.com">
+                                    <FacebookIcon fontSize="large" color="inherit"/>
+                                </Link2>
+                            </tr>
+                            <tr>
+                                <Link2 target="_blank" rel="noopener" href="https://www.twitter.com">
+                                    <TwitterIcon fontSize="large" color="inherit"/>
+                                </Link2>
+                            </tr>
+                            <tr>
+                                <Link2 target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live">
+                                    <StoreIcon fontSize="large" color="inherit"/>
+                                </Link2>
+                            </tr>
+                        </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td align="center">
+                                <Button color="default" variant="contained" color="primary" component={Link} to="/Store">
+                                    Course Store
+                                </Button>
+                        </td>
+                    </tr>
                 </table>
-            </Slide>
+                </Slide>
             </header>
         </div>
         </CssBaseline>
