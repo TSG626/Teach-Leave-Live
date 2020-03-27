@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { Redirect } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -9,10 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {UserContext} from '../../../contexts/UserContext';
-import axios from 'axios';
+import API from '../../../modules/API';
 import './SignUp.css';
-import { useScrollTrigger } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -36,10 +34,10 @@ const useStyles = makeStyles(theme => ({
         color: 'red',
     }
 }));
-  
+
 export default function SignUp() {
     const classes = useStyles();
-
+    const [authed, setAuthed] = useState(false);
     const [registered, setRegistered] = useState(false);
     const [errors, setErrors] = useState({
         email: '',
@@ -48,7 +46,7 @@ export default function SignUp() {
     //Add error handling here
     function validatePassword(){
         setErrors({
-            ...errors, 
+            ...errors,
             password: (document.getElementById('password').value.length < 8),
             passwordMismatch: document.getElementById('password').value !== document.getElementById('cpassword').value
         });
@@ -57,29 +55,29 @@ export default function SignUp() {
     function handleSubmit(e){
         e.preventDefault();
         if (!errors.passwordMismatch && !errors.password){
-            axios.post('/api/register', JSON.stringify({
+            API.post('/api/register', {
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
                 username: document.getElementById('username').value,
                 firstname: document.getElementById('firstname').value,
                 lastname: document.getElementById('lastname').value,
                 reference: document.getElementById('reference').value
-            }),{
-                headers: {
-                    "Content-Type" : "application/json"
-                },
             }).then(res => {
-                setRegistered(true);
+                if(res.status == 200) setRegistered(true);
             }).catch(err => {
                 console.log(err.response.data);
                 setErrors({
-                    ...errors, 
-                    email: err.response.data.errors.email, 
+                    ...errors,
+                    email: err.response.data.errors.email,
                     username: err.response.data.errors.username
                 });
             });
         }
     }
+
+    if(authed === true) {
+        return(<Redirect to='/Home'/>);
+    };
 
     if(registered) {
         return(<Redirect to='/User/Login'/>);
@@ -87,6 +85,7 @@ export default function SignUp() {
 
     return (
         <UserContext.Consumer>{(context) => {
+            setAuthed(context.isAuthenticated());
             return(
                 <Container component="main" maxWidth="xs">
                 <CssBaseline/>

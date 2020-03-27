@@ -3,5 +3,9 @@
 }
 .AccountSubHeader {
     padding-left: 100px;
-    
+
+}
+table {
+    table-layout: auto;
+    width: 50%;
 }

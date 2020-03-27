@@ -6,11 +6,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';    //Baseline of look f
 import TextField from '@material-ui/core/TextField';
 
 export default function Course() {
-    const[courses, setCourses] = useState("No courses listed!");
+    const[courses] = useState("No courses listed!");
     return(
     <UserContext.Consumer>{context => {
         if(context.isAuthenticated()) {
-            return (      
+            return (
                 <CssBaseline>
                     <div className="App">
                         <header className="App-header">
