@@ -2,10 +2,11 @@ import React, {useContext, useState, useEffect} from 'react';
 import './Profile.css';
 import { UserContext } from '../../../contexts/UserContext';
 import { Redirect } from 'react-router-dom';
-import { CssBaseline, TextField, Typography, makeStyles } from '@material-ui/core';
+import { CssBaseline, TextField, Typography, makeStyles, Box } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
 import API from '../../../modules/API'
+import Avatar from 'react-avatar';
 
 const useStyles = makeStyles(theme => ({
     marginStuff: {
@@ -19,13 +20,8 @@ const ChangeUser = () => {
     const [edituser, setEditUser] = useState(false);
     const userInfo = useContext(UserContext);
     const [oldUser, setOldUser] = useState(userInfo.user.username);
-    const [changed, isChanged] = useState(false);
     const [password, setPassword] = useState("");
     const handleChange = (event) => {
-        if(changed) {
-            alert("Username has been changed once! Please refersh the page to see your new username and to change it if needed.");
-        }
-        else {
         if(edituser === false)
             setEditUser(!edituser)
         else {
@@ -44,7 +40,9 @@ const ChangeUser = () => {
                         oldUsername: userInfo.user.username,
                         email: userInfo.user.email
                     }).then(res => {
-                        if(res.status == 200) {alert("Username changed! Please refresh the pageto see your new username."); isChanged(true)};
+                        if(res.status == 200) {alert("Username changed!");};
+                        window.location.reload(false); 
+                        return false;
                     }).catch(err =>{
                         console.log(err.response.data);
                     })
@@ -55,7 +53,6 @@ const ChangeUser = () => {
             setEditUser(!edituser);
             setPassword("");
             setOldUser(userInfo.user.username);
-        }
         }
     }
 
@@ -96,14 +93,11 @@ const ChangePass = () => {
     const [npassword, setNPassword] = useState("");
     const [cpassword, setCPassword] = useState("");
     const userInfo = useContext(UserContext);
-    const [changed, isChanged] = useState(false);
 
     const handleChange = () => {
         //find how to get password
-        if(changed === true) {
-            alert('Password has been changed once! Please refresh the page.');
-        }
-        else if(editpass === false)
+
+        if(editpass === false)
         {
             isEditPass(!editpass)
             setErrors({
@@ -123,8 +117,10 @@ const ChangePass = () => {
                     password: npassword,
                     oldPassword: oldpassword,
                 }).then(res => {
-                    if(res.status == 200) {isEditPass(!editpass); isChanged(true);
+                    if(res.status == 200) {isEditPass(!editpass);
                     alert("Your password has been reset!")};
+                    window.location.reload(false); 
+                    return false;
                 }).catch(err => {
                     alert("Password is incorrect!");
                 });
@@ -166,7 +162,7 @@ const ChangePass = () => {
     else
         return(
             <div>
-            <table>
+            <table align="center">
             <tr>
                 <td width="30%" align="center"><TextField className={classes.marginStuff} onChange={e =>{setOldPassword(e.target.value)}} type="password" label="Old Password" id="oldpass" variant="filled" autoFocus/></td>
                 <td width="30%" align="center"><TextField onChange={handleNPassChange} type="password" className={classes.marginStuff} label="New Password" id="npass" variant="filled"/></td>
@@ -193,28 +189,22 @@ const Profile = () => {
                     <CssBaseline>
                         <div className="App">
                             <header className="App-header">
+                                <Box p={1}>
                                 <Button>
-                                    <AccountCircleIcon fontSize='large'/>
+                                    <Avatar round={true} color={Avatar.getRandomColor('sitebase', ['#2BCED6', '#222831', '#393E46','#00ADB5'])} name={`${context.user.firstname}` + " " + `${context.user.lastname}`}/>
                                 </Button>
+                                </Box>
                                 <ChangeUser />
+                                <Box mu={1}>
+                                    <Typography>
+                                        {context.user.firstname} {context.user.lastname}
+                                    </Typography>  
+                                    <Typography>
+                                        {context.user.email}
+                                    </Typography>
+                                </Box>
+                                <ChangePass/>
                             </header>
-                        </div>
-                        <div className="AccountHeader">
-                            <Typography variant="h4" component="h4">
-                                Account Information
-                            </Typography>
-                        </div>
-                        <div className="AccountSubHeader">
-                            <Typography className={classes.marginStuff}>
-                                First Name: {context.user.firstname}
-                            </Typography>
-                            <Typography className={classes.marginStuff}>
-                                Last Name: {context.user.lastname}
-                            </Typography>
-                            <Typography className={classes.marginStuff}>
-                                E-mail: {context.user.email}
-                            </Typography>
-                            <ChangePass/>
                         </div>
                     </CssBaseline>
                 );
