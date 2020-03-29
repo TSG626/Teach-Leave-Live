@@ -1,12 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import Grid from '@material-ui/core/Grid'
 import { Typography, Button, TextField, Input, Container, Tooltip, Box, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, ListItemIcon, ListItem, List, ListSubheader, ListItemText, Divider, Collapse} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import {Delete as DeleteIcon, ExpandMore, ExpandLess, SaveTwoTone as SaveIcon} from '@material-ui/icons/';
-import Hoverable from '../../../../components/Hoverable'
+import Hoverable from '../../../../components/Interface/Hoverable'
 import API from '../../../../modules/API';
 import EditorJs from 'react-editor-js';
 import {COURSE_TOOLS} from '../../../../config/tools'
@@ -313,10 +313,10 @@ export default function CourseEditor() {
     const [selectedModule, setSelectedModule] = useState(0);
     const [selectedSection, setSelectedSection] = useState(0);
     const [increment, setStillIncrement] = useState(true);
+    let {id} = useParams();
 
     useEffect(()=>{console.log(course)}, [course])
 
-    let {id} = useParams();
 
     useEffect(() => {
         let ignore = false;
@@ -433,7 +433,7 @@ export default function CourseEditor() {
                             </Box>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12} style={{padding: 20}}>
+                    <Grid item container xs={12} style={{padding: 20}} justify='center'>
                             <Button startIcon={<SaveIcon/>} color='primary' variant='outlined' size='large'>Save</Button>
                     </Grid>
                 </div>

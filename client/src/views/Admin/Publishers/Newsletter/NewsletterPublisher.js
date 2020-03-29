@@ -8,46 +8,42 @@ import TextField from '@material-ui/core/TextField';
 
 export default function NewsletterPublisher() {
     return (
-        <div className="App">
-            <header className="App-header">
-            </header>
-            <Grid container>
-                <Paper className="Paper">
-                    <TextField
-                        variant="outlined"
-                        required
-                        id="enterEmail"
-                        label="Email Title"
-                        autoFocus
-                        margin="normal"
-                        className="enterTitle"
-                    />
-                    <TextField
-                        variant="outlined"
-                        required
-                        id="enterEmailBody"
-                        label="Email Body"
-                        autoFocus
-                        margin="normal"
-                        className="enterBody"
-                    />
-                </Paper>
-                <div className="Divider"></div>
-                <Paper className="Paper">
-                    <div class="container">
+        <Grid container>
+            <Paper className="Paper">
+                <TextField
+                    variant="outlined"
+                    required
+                    id="enterEmail"
+                    label="Email Title"
+                    autoFocus
+                    margin="normal"
+                    className="enterTitle"
+                />
+                <TextField
+                    variant="outlined"
+                    required
+                    id="enterEmailBody"
+                    label="Email Body"
+                    autoFocus
+                    margin="normal"
+                    className="enterBody"
+                />
+            </Paper>
+            <div className="Divider"></div>
+            <Paper className="Paper">
+                <div class="container">
 
-                        <div class="content">
-                            <div class="emailHeader">Hello ,</div>
-                            <div class="body"> To verify your email, click the link below.</div>
-                            <div class="url">url</div>
-                            <div class="body2">Get started by signing into our website or visiting our socials. Click the
-                            icons below to be directed to our website or instagram.</div>
+                    <div class="content">
+                        <div class="emailHeader">Hello ,</div>
+                        <div class="body"> To verify your email, click the link below.</div>
+                        <div class="url">url</div>
+                        <div class="body2">Get started by signing into our website or visiting our socials. Click the
+                        icons below to be directed to our website or instagram.</div>
 
-                        </div>
                     </div>
-                </Paper>
+                </div>
+            </Paper>
 
-            </Grid>
-        </div >
+        </Grid>
     );
 }
