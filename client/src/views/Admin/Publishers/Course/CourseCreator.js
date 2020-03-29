@@ -8,9 +8,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import DeleteIcon from '@material-ui/icons/Delete'
 import {UserContext} from '../../../../contexts/UserContext';
-import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Grid } from '@material-ui/core';
+import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Grid, Tooltip } from '@material-ui/core';
 import API from '../../../../modules/API';
 import { Redirect } from 'react-router-dom';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete'
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -59,26 +60,24 @@ function AuthorForm(props){
 
     return(
         <Grid container>
-            <Grid item xs={12}>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="author"
-                    label="Authors"
-                    name="author"
-                    value={author}
-                    onChange={(event) => setAuthor(event.target.value)}
-                    onKeyPress={handleAuthorSubmit}
-                />
-            </Grid>
-            <Grid item container xs={12}>
+            <Tooltip arrow title="Type a name and press Enter">
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="author"
+                label="Authors"
+                name="author"
+                value={author}
+                onChange={(event) => setAuthor(event.target.value)}
+                onKeyPress={handleAuthorSubmit}
+            />
+            </Tooltip>
+            <Grid container>
                 {props.authors.map((author, index) => {
                     return(
-                        <Grid item xs={12} sm={2}
-                            style={{paddingRight: 5, paddingBottom: 5}}
-                        >
+                        <Grid item style={{paddingRight: 5, paddingBottom: 5}}>
                             <Button
                                 key={index}
                                 variant="contained"
@@ -146,12 +145,55 @@ function PriceForm(props){
     )
 }
 
-export default function CourseCreator() {
+function SubjectForm(props){
+    const filter = createFilterOptions();
+
+    return(
+        <Autocomplete
+            value={props.subject}
+            onChange={(event, newValue) => {
+                if (newValue && newValue.inputValue) {
+                  props.setSubject(newValue.inputValue);
+                  return;
+                }
+                props.setSubject(newValue);
+            }}
+            options={props.context.subjectList}
+            filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+                if (params.inputValue !== '') {
+                    filtered.push({
+                    inputValue: params.inputValue,
+                    title: `Add "${params.inputValue}"`,
+                    });
+                }
+                return filtered;
+            }}
+            getOptionLabel={(option) => {
+                if (option.inputValue) {
+                  return option.inputValue;
+                }
+                return option;
+            }}
+            renderOption={(option) => {
+                if (option.inputValue) {
+                  return option.title;
+                }
+                return option;
+            }}
+            renderInput={(params) => (
+                <TextField {...params} label="Subject" variant="outlined" />
+            )}
+        />
+    )
+}
+
+export default function CourseCreator(props) {
     const classes = useStyles();
     
     const [authors, setAuthors] = useState([]);
     const [price, setPrice] = useState(0);
-    const [id, setId] = useState('');
+    const [subject, setSubject] = useState(null);
 
     const [errors, setErrors] = useState({});
 
@@ -162,72 +204,64 @@ export default function CourseCreator() {
             description: document.getElementById('description').value,
             free: (price == 0),
             price: price,
+            subject: subject
         }).then(res => {
             if(res.status == 200){
-                setId(res.data.id);
+                props.setAdding(false);
             }
         }).catch(err => {
             setErrors(err);
         })
     }
-
-    if(id != ''){
-        return(
-            <Redirect to={`/Admin/Course/Edit/${id}/`}/>
-        )
-    }
     
     return (
-        <UserContext.Consumer>{(context) => {
-            return(
-                <Container component="main" maxWidth="xl">
-                    <Grid container>
-                        <Grid item xs={12}>
-                            <Typography component="h1" variant="h5">
-                                Course Creator
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="title"
-                                label="Course Title"
-                                name="title"
-                                autoFocus
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                fullWidth
-                                multiline
-                                id="description"
-                                label="Description"
-                                name="description"
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <AuthorForm authors={authors} setAuthors={setAuthors}/>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <PriceForm price={price} setPrice={setPrice}/>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button
-                                color='primary'
-                                variant='outlined'
-                                onClick={handleSubmit}
-                            >
-                                Submit
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Container>
-            )}}
-        </UserContext.Consumer>
-    );
+        <Grid container>
+            <Grid item xs={12}>
+                <Typography variant="h5">
+                    Course Creator
+                </Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="title"
+                    label="Course Title"
+                    name="title"
+                    autoFocus
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <SubjectForm context={props.context} subject={subject} setSubject={setSubject}/>
+            </Grid>
+            <Grid item xs={12}>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    multiline
+                    id="description"
+                    label="Description"
+                    name="description"
+                />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <AuthorForm authors={authors} setAuthors={setAuthors}/>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <PriceForm price={price} setPrice={setPrice}/>
+            </Grid>
+            <Grid item xs={12}>
+                <Button
+                    color='primary'
+                    variant='outlined'
+                    onClick={handleSubmit}
+                >
+                    Submit
+                </Button>
+            </Grid>
+        </Grid>
+    )
 }
