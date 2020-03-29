@@ -350,6 +350,13 @@ router.post('/makeAdmin', async (req, res, next) => {
     );
 })
 
+router.post('/deleteUser', async (req, res, next) => {
+    User.remove({'username': req.body.username}).then((user) => {
+        return res.status(200).json({
+            success: true,
+        });
+    })
+})
 
 router.post('/forgotpassword', async (req, res, next) => {
     let validationResult;

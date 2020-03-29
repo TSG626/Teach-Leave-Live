@@ -9,8 +9,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import AddIcon from '@material-ui/icons/Add';
 import { UserContext } from '../../../../contexts/UserContext'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles({
     table: {
@@ -33,14 +37,26 @@ const GetUsers = () => {
         setCounter(1);
         setChange(true);
     }
+    const [open, setOpen] = React.useState(false);
 
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
     const makeAdmin = (user, popupState) => {
+        
         var confirmed;
         if(!user.admin) {
             confirmed = window.confirm("Would you like to make " + user.firstname + " " + user.lastname + " an admin?");
             if(confirmed) {
                 API.post('/api/makeAdmin', {email: user.email, admin: true}).then(res => {
                     alert(user.firstname + " " + user.lastname + " is an admin!");
+                    popupState.close();
+                    window.location.reload(false); 
+                    return false;
                 })
             }
         }
@@ -49,18 +65,29 @@ const GetUsers = () => {
             if(confirmed) {
                 API.post('/api/makeAdmin', {email: user.email, admin: false}).then(res => {
                     alert(user.firstname + " " + user.lastname + " is not an admin!");
+                    popupState.close();
+                    window.location.reload(false); 
+                    return false;
                 })
             }
         }
-        popupState.close();
 
     }
     const deleteUser = (user, popupState) => {
+        var confirmed = window.confirm("Would you like to delete " + user.firstname + " " + user.lastname + "'s account?\nNOTE: Confirming this would mean that the user's information is lost.");
+        if(confirmed) {
+            var firstname = user.firstname;
+            var lastname = user.lastname;
+            API.post('/api/deleteUser',{username: user.username}).then(res => {
+                alert(firstname + " " + lastname + " was deleted!");
+            })
+        }
         popupState.close();
     }
     const classes = useStyles();
     const userInfo = useContext(UserContext);
     return(
+        <div>
             <Box ml="15%" mr="15%">
             <TableContainer component={Paper} >
             <Table className={classes.table} aria-label="simple table">
@@ -91,7 +118,6 @@ const GetUsers = () => {
                                         <Menu {...bindMenu(popupState)}>
                                             {userInfo.user.username === user.username ? <div><MenuItem onClick={() => {makeAdmin(user, popupState);}}>View Account</MenuItem></div>: <div>{user.admin ? <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Remove Admin</MenuItem> : <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Approve Admin</MenuItem>}
                                             <MenuItem onClick={() => {deleteUser(user, popupState);}}>Delete User</MenuItem></div>}
-                                        
                                         </Menu>
                                         </React.Fragment>
                                     )}
@@ -104,23 +130,11 @@ const GetUsers = () => {
             </Table>
         </TableContainer>
             </Box>
+        </div>
     );
 }
 
-const AddUser = () => {
-    return(
-        <Box ml={200}>
-        <Grid container alignItems="flex-start" justify="flex-end" direction="row" >
-            <Tooltip aria-label="add" title="Add User">
-                <Fab aria-label="add">
-                    <AddIcon />
-                </Fab> 
-            </Tooltip>
-        </Grid>
-        </Box>
 
-    )
-}
 
 const UserEditor = () => {
     
@@ -128,8 +142,7 @@ const UserEditor = () => {
         <CssBaseline>
             <div className="App">
                 <header className="App-header">
-                    Users
-                    <AddUser/>
+                    User Management
                 </header>
                 <GetUsers/>
             </div>
