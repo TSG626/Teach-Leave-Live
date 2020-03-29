@@ -122,11 +122,11 @@ const Admin = ({match}) => {
                                 <Container maxWidth='lg'>
                                     <Switch>
                                         <Route path={`${match.path}/Blog`} component={BlogPublisher} />
+                                        <Route path={`${match.path}/Newsletter`} component={NewsletterPublisher} />
+                                        <Route path={`${match.path}/User`} component={UserEditor} />
                                         <CourseProvider>
                                             <Route path={`${match.path}/Course`} component={Course} />
                                         </CourseProvider>
-                                        <Route path={`${match.path}/Newsletter`} component={NewsletterPublisher} />
-                                        <Route path={`${match.path}/User`} component={UserEditor} />
                                     </Switch>
                                 </Container>
                             </Grid>
