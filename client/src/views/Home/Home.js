@@ -32,7 +32,7 @@ const ListCourses = () => {
                 <table>
                     <tbody>
                         <tr>
-                            <td className="left"><Typography component="h1" variant="h5">{course.title}:</Typography></td> 
+                            <td className="left"><Typography component="h1" variant="h5">{course.title}:</Typography></td>
                             <td align="right"><CircularProgress variant="static" value={course.progress}/></td>
                         </tr>
                     </tbody>
@@ -100,10 +100,10 @@ const ListBlogs = () => {
                             </tbody>
                         </table>
                     </Box>
-                </div> 
+                </div>
             )
         })
-    ) 
+    )
 
 }
 
@@ -121,17 +121,17 @@ const Home = () => {
                     <Box p={4}>
                     <Typography component="h1" variant="h2">
                         Welcome back, {context.user.firstname}!
-                    </Typography> 
-                    </Box>  
+                    </Typography>
+                    </Box>
                 </Grow>
             </header>
             <header className="App-table">
-            <Slide direction="up" in={true} mountOnEnter timeout={1000}>                       
+            <Slide direction="up" in={true} mountOnEnter timeout={1000}>
                 <table align="center" width="100%">
                     <thead>
                         <tr>
                             <th align="center"><Typography component="h1" variant="h4">Recent Blogs</Typography></th>
-                            <th align="center"><Typography component="h1" variant="h4">Recent Courses</Typography></th> 
+                            <th align="center"><Typography component="h1" variant="h4">Recent Courses</Typography></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -140,7 +140,7 @@ const Home = () => {
                                 <Box border={1} m={2} p={1}>
                                     <ListBlogs/>
                                 </Box>
-                            </td> 
+                            </td>
                             <td>
                                 <Box border={1} m={2} p={1}>
                                     <ListCourses/>
@@ -197,7 +197,7 @@ const Home = () => {
         </CssBaseline>
             )
         }
-        else {  
+        else {
             return(
                 <Redirect to="/User/Login"/>
             );

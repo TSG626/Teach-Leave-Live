@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
         color: 'red',
     }
 }));
-  
+
 export default function SignUp() {
     const classes = useStyles();
     const [authed, setAuthed] = useState(false);
@@ -46,7 +46,7 @@ export default function SignUp() {
     //Add error handling here
     function validatePassword(){
         setErrors({
-            ...errors, 
+            ...errors,
             password: (document.getElementById('password').value.length < 8),
             passwordMismatch: document.getElementById('password').value !== document.getElementById('cpassword').value
         });
@@ -67,8 +67,8 @@ export default function SignUp() {
             }).catch(err => {
                 console.log(err.response.data);
                 setErrors({
-                    ...errors, 
-                    email: err.response.data.errors.email, 
+                    ...errors,
+                    email: err.response.data.errors.email,
                     username: err.response.data.errors.username
                 });
             });
