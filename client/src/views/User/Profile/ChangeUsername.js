@@ -63,7 +63,7 @@ const ChangeUsername = () => {
                     oldUsername: userInfo.user.username,
                     email: userInfo.user.email
                 }).then(res => {
-                    if(res.status == 200) {alert("Username changed!"); isChanged(true); };
+                    if(res.status == 200) {alert("Username changed!"); setMessage(''); isChanged(true); };
                 }).catch(err =>{
                     setMessage("Incorrect password.")
                 })
