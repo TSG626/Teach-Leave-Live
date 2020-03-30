@@ -1,12 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import Grid from '@material-ui/core/Grid'
 import { Typography, Button, TextField, Input, Container, Tooltip, Box, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, ListItemIcon, ListItem, List, ListSubheader, ListItemText, Divider, Collapse} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import {Delete as DeleteIcon, ExpandMore, ExpandLess, SaveTwoTone as SaveIcon} from '@material-ui/icons/';
-import Hoverable from '../../../../components/Hoverable'
+import Hoverable from '../../../../components/Interface/Hoverable'
 import API from '../../../../modules/API';
 import EditorJs from 'react-editor-js';
 import {COURSE_TOOLS} from '../../../../config/tools'
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     moduleText: {
         width: 200,
         height: 50
-        
+
     }
 }));
 
@@ -87,11 +87,11 @@ function ModuleEditor(props){
                         </Link>
                         <Typography color="textPrimary">{props.course.modules[props.selectedModule]}</Typography>
                     </Breadcrumbs> */}
-                    <EditorJs 
-                        // data={} 
-                        tools={{ 
-                            // linkTool: { 
-                            //     class: LinkTool, 
+                    <EditorJs
+                        // data={}
+                        tools={{
+                            // linkTool: {
+                            //     class: LinkTool,
                             //     config: { endpoint: 'http://localhost:5000/api/course/' + props.id}
                             // },
                             ...COURSE_TOOLS
@@ -112,7 +112,7 @@ function Section(props){
     }
 
     useEffect(()=>{
-        setName(props.section.name);      
+        setName(props.section.name);
     },[props.section.name])
 
     return(
@@ -138,8 +138,8 @@ function Section(props){
                     <Box visibility={hovering ? 'visible' : 'hidden'}>
                         <ListItemIcon>
                             <Tooltip arrow title='Edit Section'>
-                                <EditIcon onClick={() => { 
-                                    props.selectSection(props.index) 
+                                <EditIcon onClick={() => {
+                                    props.selectSection(props.index)
                                 }}/>
                             </Tooltip>
                         </ListItemIcon>
@@ -223,7 +223,7 @@ function Module(props){
                     <Box visibility={hovering ? 'visible' : 'hidden'}>
                         <ListItemIcon>
                             <Tooltip arrow title='Add Section'>
-                                <AddIcon onClick={() => { 
+                                <AddIcon onClick={() => {
                                     props.selectModule(props.index)
                                     props.addSection(props.index, props.increment)
                                 }}/>
@@ -245,7 +245,7 @@ function Module(props){
                         module={props.module}
                         moduleIndex={props.index}
                         increment={props.increment}
-                        removeSection={props.removeSection} 
+                        removeSection={props.removeSection}
                         renameSection={props.renameSection}
                         isSectionSelected={props.isSectionSelected}
                         selectSection={props.selectSection}
@@ -271,7 +271,7 @@ function ModuleList(props){
                 {props.course.modules.map((module, index) => {
                     return(
                         <React.Fragment key={index}>
-                            <Module 
+                            <Module
                                 index={index}
                                 module={module}
                                 addSection={props.addSection}
@@ -310,13 +310,13 @@ export default function CourseEditor() {
         title: '',
         description: '',
     });
-    const [selectedModule, setSelectedModule] = useState(0); 
-    const [selectedSection, setSelectedSection] = useState(0); 
+    const [selectedModule, setSelectedModule] = useState(0);
+    const [selectedSection, setSelectedSection] = useState(0);
     const [increment, setStillIncrement] = useState(true);
+    let {id} = useParams();
 
     useEffect(()=>{console.log(course)}, [course])
 
-    let {id} = useParams();
 
     useEffect(() => {
         let ignore = false;
@@ -326,7 +326,7 @@ export default function CourseEditor() {
                 if(res.status === 200){
                     setCourse(res.data);
                 }
-            });   
+            });
         }
         fetchData();
         return () => {ignore = true;}
@@ -391,7 +391,7 @@ export default function CourseEditor() {
             return {...module, sections: [...module.sections].filter((section, i) => i !== sectionIndex)};
         })});
     }
-    
+
     return (
         <Container maxWidth={false} style={{padding:25}}>
             <Box border={1}>
@@ -407,7 +407,7 @@ export default function CourseEditor() {
                         </Grid>
                         <Grid item xs={12} sm={4} style={{padding:15}}>
                             <Box component='div' border={1} overflow='visible'>
-                                <ModuleList 
+                                <ModuleList
                                     course={course}
                                     addModule={addModule}
                                     renameModule={renameModule}
@@ -425,7 +425,7 @@ export default function CourseEditor() {
                         <Grid item xs={12} sm={8} style={{padding:15}}>
                             <Box>
                                 <ModuleEditor
-                                    course={course} 
+                                    course={course}
                                     setCourse={setCourse}
                                     selectedModule={selectedModule}
                                     selectedSection={selectedSection}
@@ -433,7 +433,7 @@ export default function CourseEditor() {
                             </Box>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12} style={{padding: 20}}>
+                    <Grid item container xs={12} style={{padding: 20}} justify='center'>
                             <Button startIcon={<SaveIcon/>} color='primary' variant='outlined' size='large'>Save</Button>
                     </Grid>
                 </div>

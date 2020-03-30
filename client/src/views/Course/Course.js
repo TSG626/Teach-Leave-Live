@@ -10,7 +10,7 @@ export default function Course() {
     return(
     <UserContext.Consumer>{context => {
         if(context.isAuthenticated()) {
-            return (      
+            return (
                 <CssBaseline>
                     <div className="App">
                         <header className="App-header">
