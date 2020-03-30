@@ -1,101 +1,234 @@
-import React, { useEffect } from 'react';
-import { Link , useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useLocation, Redirect, Link as RouterLink } from 'react-router-dom';
 import './NavBar.css';
+import { fade, makeStyles } from '@material-ui/core/styles';
 import {UserContext} from '../../contexts/UserContext';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
-import { Typography } from '@material-ui/core';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import { Typography, Menu, MenuItem, Badge, IconButton, AppBar, Toolbar, InputBase, Grid, Box, Collapse, TextField, Link, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
+import { Mail as MailIcon, Search as SearchIcon, AccountCircle, More as MoreIcon, Menu as MenuIcon, Notifications as NotificationsIcon} from '@material-ui/icons';
+import Hoverable from '../Interface/Hoverable';
+import Avatar from 'react-avatar';
 
-const AdminOptions = () => {
-    return(
-        <UserContext.Consumer>{context => {
-            return(
-                <React.Fragment>
-                    {context.user.admin == true && <Link className = "nav-link" to='/Admin'>Admin Panel</Link>}
-                </React.Fragment>
-            )
-        }}</UserContext.Consumer>
-    )
-}
+const useStyles = makeStyles(theme => ({
+    grow: {
+      flexGrow: 1,
+    },
+    search: {
+        position: 'relative',
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: fade(theme.palette.common.white, 0.15),
+        '&:hover': {
+            backgroundColor: fade(theme.palette.common.white, 0.25),
+        },
+        marginLeft: 0,
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+          marginLeft: theme.spacing(1),
+          width: 'auto',
+        },
+      },
+      searchIcon: {
+        padding: theme.spacing(0, 2),
+        height: '100%',
+        position: 'absolute',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      inputRoot: {
+        color: 'inherit',
+      },
+      inputInput: {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+        width: '100%',
+      },
+      appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+      },
+}));
 
 const AccountOptions = () => {
+    let admin = false;
+
     return(
         <UserContext.Consumer>{context => {
+            admin = true;
             if(!context.isAuthenticated()){
                 return(
-                    <React.Fragment>
-                        <Link className = "nav-link" to='/User/Login'>Login</Link>
-                        <Link className = "nav-link" to='/User/SignUp'>Sign Up</Link>
-                    </React.Fragment>
+                    <Grid container>
+                        <Grid item xs={12} sm={6}>
+                            <Link href='/User/Login' color='inherit'>Login</Link>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Link href='/User/SignUp' color='inherit'>Sign Up</Link>
+                        </Grid>
+                    </Grid>
                 )
             }else{
                 return(
-                    <React.Fragment>
-                        <Link className = "nav-link" to='/User/Logout'>Log Out</Link>
-                        <Link className="nav-link" to='/User/Profile'>
-                            <Button>
-                                <AccountCircleIcon />
-                            </Button>
-                        </Link>
-                    </React.Fragment>
+                    <Grid container>
+                        <Grid item xs={12} sm={6}>
+                            <Link href='/User/Logout' color='inherit'>Log Out</Link>
+                        </Grid>
+                        {admin && <Grid item xs={12} sm={6}>
+                            <Link href='/Admin/' color='inherit'>Admin Panel</Link>
+                        </Grid>}
+                    </Grid>
                 )
             }
         }}</UserContext.Consumer>
     )
 }
 
-const ShoppingCart = () => {
-    const current = useLocation().pathname
-    if(current === "/Store" || current === "/Store/Cart" || current === "/Store/Checkout" || current === "/Store/Confirmation" || current === "/Store/Summary")
-    {
-        return(
-            <Button component={Link} to="/Store/Cart">
-                <ShoppingCartIcon/>
-            </Button>
-        )
-    }
-    else {
-        return(<div></div>);
-    }
+const SimpleDialog = (props) => {
+    const classes = useStyles();
+    const { onClose, selectedValue, open } = props;
+  
+    const handleClose = () => {
+      onClose(selectedValue);
+    };
+  
+    const handleListItemClick = value => {
+      onClose(value);
+    };
+
+    return (
+      <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} style={{textAlign: "center"}}>
+          
+        <DialogTitle id="simple-dialog-title">
+            <div><Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#2BCED6', '#222831', '#393E46','#00ADB5'])} name={`${props.user.firstname}` + " " + `${props.user.lastname}`}/></div>
+            {props.user.username}</DialogTitle>
+        <DialogContent>
+            <div>{props.user.firstname} {props.user.lastname}</div>
+            <div>{props.user.email}</div>
+            <Box mt={3}>
+                <Grid container direction="row" justify="center">
+                    <Grid item xs={8} sm={4}>
+                        <Button color="primary" component={RouterLink} to={'/User/ChangeUsername'} onClick={handleClose}>Change Username</Button>
+                    </Grid>
+                    <Grid item xs={8} sm={4}>
+                        <Button color="primary" component={RouterLink} to={'/User/ChangePassword'} onClick={handleClose}>Change Password</Button>
+                    </Grid>
+                </Grid>
+            </Box>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+function SearchBar(){
+    const classes = useStyles();
+
+    return(
+        <div className={classes.search}>
+            <div className={classes.searchIcon}>
+                <SearchIcon fontSize='small'/>
+            </div>
+            <InputBase
+                placeholder="Search…"
+                classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                }}
+                inputProps={{ style: {fontSize: 12} }}
+            />
+        </div>
+    )
 }
 
-const NavBar = () => {
-    return(
-<UserContext.Consumer>{context => {
-    if(context.isAuthenticated()) {
-        return (
-            <div className = "header">
-                <Link className = "nav-title" to="/">
-                    <Typography component="h1" variant="h5">Teach. Leave. Live.</Typography>
-                </Link>
-                <div className = "nav-items">
-                    <Link className = "nav-link" to='/Home'>Home</Link>
-                    <Link className = "nav-link" to='/Course'>Courses</Link>
-                    <Link className = "nav-link" to='/Blog'>Blog</Link>
-                    <Link className = "nav-link" to='/Store'>Course Store</Link>
-                    <Link className = "nav-link" to='/User/Profile'>Profile</Link>
-                    <Link className = "nav-link" to='/Admin'>Admin</Link>
-                    <AccountOptions/>
-                    <AdminOptions/>
-                    <ShoppingCart/>
-                </div>
-            </div>
-        )
-    }
-    else {
-        return(
-            <div className = "header">
-            <Link className = "nav-title" to="/">
-                <Typography component="h1" variant="h5">Teach. Leave. Live.</Typography>
-            </Link>
-            <div className = "nav-items">
-                <AccountOptions/>
-            </div>
-        </div>
-        )
-    }
-}}</UserContext.Consumer>);
-};
+function LogoIcon(){
 
-export default NavBar;
+}
+
+function Logo(){
+    return (
+        <Hoverable>{hovering => <div>
+            <Button component={RouterLink} to={'/Home'}>
+                <Box 
+                    display="flex" 
+                    justifyContent="center"
+                    bgcolor='white' m={1} 
+                    style={ {width: '3rem', height: '3rem'} } 
+                    borderRadius="50%"
+                    boxShadow={hovering ? 7 : 2}
+                    borderColor='secondary'
+                >
+                    <Typography style={{color: 'black', fontSize: 32, fontFamily: 'Georgia', paddingTop: 0}}>T</Typography>
+                </Box>
+            </Button>
+        </div>}</Hoverable>
+    );
+}
+
+export default function NavBar() {
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+    const [selectedValue, setSelectedValue] = React.useState();
+  
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = value => {
+      setOpen(false);
+      setSelectedValue(value);
+    };
+
+    return(
+        <div className={classes.grow}>
+            <AppBar position="fixed" className={classes.appBar}>
+                <Toolbar variant='dense'>
+                    <Grid container alignItems='center'>
+                        {['Course', 'Blog'].map((route, index) =>{
+                            return(
+                                <Grid key={index} item xs={11} sm={1} container justify='center'>
+                                    <Link href={`/${route}/`} color='inherit'>
+                                        {route + 's'}
+                                    </Link>
+                                </Grid>
+                            )
+                        })}
+                        {/* <Grid item xs={11} sm={3} container justify='center'>
+                            <SearchBar/>
+                        </Grid> */}
+                        <Grid item container xs={11} sm={2}>
+                            {['Store'].map((route, index) => {
+                                return(
+                                    <Grid key={index} item xs={13} sm={6} container justify='center'>
+                                        <Link href={`/${route}/`} color='inherit'>
+                                            {route}
+                                        </Link>
+                                    </Grid>
+                                )
+                            })}
+                        </Grid>
+                        <Grid item xs={11} sm={4} container justify='center'>
+                            <Logo/>
+                        </Grid>
+                        <Grid item xs={11} sm={2}>
+                            <AccountOptions/>
+                        </Grid>
+                        <Grid item xs={11} sm={2} justify='center'>
+                            <UserContext.Consumer>{context => {
+                                if(context.isAuthenticated()) {
+                                    return(
+                                        <div>
+                                        <Button onClick={handleClickOpen}>
+                                            <Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#2BCED6', '#222831', '#393E46','#00ADB5'])} name={`${context.user.firstname}` + " " + `${context.user.lastname}`}/>
+                                        </Button>    
+                                        <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} user={context.user}/>
+                                        </div>
+        
+                                    )
+                                }
+                            }}</UserContext.Consumer>
+                        </Grid>
+                    </Grid>
+                </Toolbar>
+            </AppBar>
+        </div>
+        );
+}

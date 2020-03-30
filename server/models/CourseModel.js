@@ -26,7 +26,23 @@ const courseSchema = new Schema({
         required: true,
         default: 0
     },
-    modules: [Object],
+    subject: {
+        type: String,
+        required: true,
+        default: "Miscellaneous"
+    },
+    //For ordering courses within subjects 
+    subject_index: Number,
+    modules: [{
+        type: Object,
+        required: true,
+        default: {
+            sections: [{
+                title: String,
+                content: {},
+            }]
+        }
+    }],
     last_updated: {
         type: Date,
         default: Date.now

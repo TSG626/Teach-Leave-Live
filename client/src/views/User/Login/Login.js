@@ -25,14 +25,21 @@ const useStyles = makeStyles(theme => ({
     },
     avatar: {
       margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
+      backgroundColor: theme.palette.secondary.light,
     },
     form: {
       width: '100%', // Fix IE 11 issue.
       marginTop: theme.spacing(1),
     },
+    formField: {
+        color: theme.palette.primary.light,
+    },
     submit: {
       margin: theme.spacing(3, 0, 2),
+      backgroundColor: theme.palette.secondary.dark,
+      "&:hover":{
+          backgroundColor: theme.palette.secondary.light,
+      }
     },
     error: {
         color: 'red'
@@ -83,14 +90,14 @@ export default function Login() {
                 <CssBaseline/>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon/>
+                        <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
                     <form className={classes.form} onSubmit={(e) => handleSubmit(e, context)}>
                     <TextField
-                        variant="outlined"
+                        variant='filled'
                         margin="normal"
                         required
                         fullWidth
@@ -99,9 +106,10 @@ export default function Login() {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        className={classes.formField}
                     />
                     <TextField
-                        variant="outlined"
+                        variant="filled"
                         margin="normal"
                         required
                         fullWidth
@@ -110,6 +118,7 @@ export default function Login() {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        className={classes.formField}
                     />
                     {message ? <Typography className={classes.error}>
                         {message}
@@ -146,9 +155,7 @@ export default function Login() {
                         </Link>
                         </Grid>
                         <Grid item>
-                        <Link href="/User/SignUp" variant="body2">
-                            {"Don't have an account? Sign Up"}
-                        </Link>
+                            <Link href="/User/SignUp" variant="body2">Don't have an account? Sign Up"</Link>
                         </Grid>
                     </Grid>
                     </form>
