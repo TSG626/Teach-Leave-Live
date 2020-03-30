@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /client/node_modules
+/server/email/node_modules
 /.pnp
 .pnp.js
 
@@ -56,3 +57,5 @@ yarn-error.log*
 .idea/*
 server/config/config.js
 *.node
+client/package-lock.json
+package-lock.json
