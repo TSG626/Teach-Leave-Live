@@ -77,21 +77,24 @@ module.exports = {
         const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/newsletterPublisher/newsletterPublisher-inlined.html', 'utf-8');
         var compiledEmail = Hogan.compile(emailTemplate);
 
-        const test = User.find({ 'verified': 'true' });
-        console.log("DB Users", test);
+        User.find({ 'email_verified': true, 'email': 'frank.simon20@gmail.com' }, (err, users) => {
+            users.forEach(user => {
+                var mailOptions = {
+                    from: config.username,
+                    to: user.email,
+                    subject: title,
+                    html: compiledEmail.render({ firstname: user.firstname, body: body, link: link })
+                };
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Newsletter email sent: ' + user.email);
+                    }
+                });
+            })
 
-        var mailOptions = {
-            from: config.username,
-            to: "frank.simon20@gmail.com",
-            subject: title,
-            html: compiledEmail.render({ title: title, body: body, link: link })
-        };
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Newsletter email sent: ' + info.response);
-            }
         });
+
     }
 }
