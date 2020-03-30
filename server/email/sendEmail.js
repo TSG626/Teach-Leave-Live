@@ -2,8 +2,8 @@ var nodemailer = require('nodemailer');
 const fs = require('fs')
 const path = require('path')
 const Hogan = require('hogan.js')
-const config = require('./config')
-
+const config = require('./config.js')
+const User = require('../models/UserModel.js');
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -20,8 +20,6 @@ module.exports = {
     welcomeEmail: function (userInfo) {
         const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/authenticateEmail/authenticateEmail-inlined.html', 'utf-8')
         var compiledEmail = Hogan.compile(emailTemplate)
-
-
 
         var mailOptions = {
             from: config.username,
@@ -41,8 +39,6 @@ module.exports = {
     forgotPassword: function (key, userInfo) {
         const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/authenticateEmail/authenticateEmail-inlined.html', 'utf-8')
         var compiledEmail = Hogan.compile(emailTemplate)
-
-
 
         var mailOptions = {
             from: config.username,
@@ -76,5 +72,29 @@ module.exports = {
                 console.log('User Email Authenticate email sent: ' + info.response);
             }
         });
+    },
+    newsletterPublisher: function (title, body, link) {
+        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/newsletterPublisher/newsletterPublisher-inlined.html', 'utf-8');
+        var compiledEmail = Hogan.compile(emailTemplate);
+
+        User.find({ 'email_verified': true, 'email': 'frank.simon20@gmail.com' }, (err, users) => {
+            users.forEach(user => {
+                var mailOptions = {
+                    from: config.username,
+                    to: user.email,
+                    subject: title,
+                    html: compiledEmail.render({ firstname: user.firstname, body: body, link: link })
+                };
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Newsletter email sent: ' + user.email);
+                    }
+                });
+            })
+
+        });
+
     }
 }
