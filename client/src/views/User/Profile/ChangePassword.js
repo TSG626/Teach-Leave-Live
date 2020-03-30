@@ -44,11 +44,26 @@ const ChangePassword = () => {
     const [changed, isChanged] = useState(false);
     const [oldpassword, setOldPassword] = useState("");
     const [newpassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmedPassword] = useState("");
+    const [confirmpassword, setConfirmedPassword] = useState("");
 
 
     const handleSubmit = () => {
-
+        if (newpassword != confirmpassword) {
+            setMessage('The new and confirmation password do not match.')
+        }
+        else {
+            API.post('/api/updatepassworduser',{
+                email: userInfo.user.email,
+                password: newpassword,
+                oldPassword: oldpassword,
+            }).then(res => {
+                if(res.status == 200) {
+                alert("Your password has been reset!")};
+                isChanged(true);
+            }).catch(err => {
+                setMessage("Password is incorrect!");
+            });
+        }
     }
 
     if(changed) {
@@ -90,6 +105,9 @@ const ChangePassword = () => {
                             className={classes.formField}
                             onChange={(e) => {setNewPassword(e.target.value)}}
                         />
+                        {newpassword.length !== 8 ? <Typography className={classes.error}>
+                            Password must be 8 characters.
+                        </Typography>: <React.Fragment/>}
                         <TextField
                             variant="filled"
                             margin="normal"
