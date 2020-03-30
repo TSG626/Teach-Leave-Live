@@ -2,6 +2,8 @@ const express = require('express');
 const passport = require('passport');
 const Course = require('../models/CourseModel');
 const sendEmail = require('../email/sendEmail')
+const mongoose = require('mongoose');
+const config = require('../config/config');
 
 const router = express.Router();
 
@@ -15,8 +17,8 @@ router.use('/', (req, res, next) => {
 });
 
 router.post('/newsletter/', (req, res, next) => {
-    const {title, body, link} = req.body;
-    sendEmail.newsletterPublisher(title, body, link);
+    const { text, text1, text2 } = req.body;
+    sendEmail.newsletterPublisher(text, text1, text2);
 })
 
 
