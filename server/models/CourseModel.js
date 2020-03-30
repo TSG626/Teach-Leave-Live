@@ -1,24 +1,24 @@
 const mongoose = require('mongoose');
 
-var {Schema, Number} = mongoose; 
+var {Schema, Number} = mongoose;
 
 const courseSchema = new Schema({
     title: {
-        type: String, 
+        type: String,
         required: true,
         unique: true,
     },
     author: [{
-        type: String, 
+        type: String,
         required: true
     }],
     description: {
-        type: String, 
+        type: String,
         required: true
     },
     free: {
-        type: Boolean, 
-        required: true, 
+        type: Boolean,
+        required: true,
         default: true
     },
     price: {
@@ -26,13 +26,29 @@ const courseSchema = new Schema({
         required: true,
         default: 0
     },
-    modules: [Object],
+    subject: {
+        type: String,
+        required: true,
+        default: "Miscellaneous"
+    },
+    //For ordering courses within subjects 
+    subject_index: Number,
+    modules: [{
+        type: Object,
+        required: true,
+        default: {
+            sections: [{
+                title: String,
+                content: {},
+            }]
+        }
+    }],
     last_updated: {
-        type: Date, 
+        type: Date,
         default: Date.now
     },
     published: {
-        type: Boolean, 
+        type: Boolean,
         default: false
     }
 });

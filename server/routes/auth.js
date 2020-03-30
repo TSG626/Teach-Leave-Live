@@ -1,13 +1,13 @@
 const express = require('express'),
     passport = require('passport'),
     passwordmaster = require('../config/passwordreset.js'),
+    authEmail = require('../config/authEmail'),
     validator = require('validator'),
     config = require('../config/config'),
     User = require('../models/UserModel.js'),
     PasswordReset = require('../models/PasswordResetModel.js'),
     bcrypt = require('bcrypt'),
     jwt = require('jsonwebtoken'),
-    crypto = require('crypto'),
     sendEmail = require('../email/sendEmail.js');
 
 const router = express.Router();
@@ -139,18 +139,21 @@ router.post('/login', (req, res, next) => {
             if (err.name === 'IncorrectCredentialsError') {
                 return res.status(400).json({
                     success: false,
+                    name: err.name,
                     message: err.message
                 });
             }
             else if (err.name === 'UnverifiedEmail') {
                 return res.status(400).json({
                     success: false,
+                    name: err.name,
                     message: err.message
                 })
             }
             else{
                 return res.status(400).json({
                     success: false,
+                    name: err.name,
                     message: 'Could not process the form.'
                 });
             }
@@ -189,7 +192,6 @@ async function validateEmail(body) {
     if (!isFormValid) {
         message = 'Check the form for errors.';
     }
-
     return {
         success: isFormValid,
         exists: doesEmailExist,
@@ -234,6 +236,26 @@ const updatePasswordHandler = async (req, res, done) => {
     }
 };
 
+const checkUsernameNotExist = async (req, res, done) => {
+    try {
+        User.findOne({'username': req.body.username}).then((user) => {
+            if (!user)  {
+                return res.status(200).json({
+                    success: true,
+                });
+            }
+            else {
+                const error = new Error('User Exists');
+                error.name = 'UserExistsError';
+                return done(error);
+            }
+        })
+    }
+    catch (err) {
+        return done(err);
+    }
+}
+
 const updateUsernameHandler = async (req, res, done) => {
     try {
         User.findOne({'username': req.body.oldUsername}, async (err, user) => {
@@ -269,18 +291,35 @@ const updateUsernameHandler = async (req, res, done) => {
 
 const updatePasswordUser = async (req, res, done) => {
     try {
-        const hashedPassword = await bcrypt.hash(req.body.Oldpassword, 10);
-        User.findOne({'password': hashedPassword}, async (err, user) => {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        User.findOne({'email': req.body.email}, async (err, user) => {
             if(err) {return done(err);}
-            if(!user) {
+            if (!user) {
                 const error = new Error('Something went wrong!');
-                error.name = 'UpdatingUsernameError';
+                error.name = 'UpdatingPasswordError';
                 return done(error);
             }
-            console.log(user);
-        })
-    }
-    catch (err) {
+            
+            bcrypt.compare(req.body.oldPassword, user.password).then((response) => {
+                if (response === true) {
+                    User.findOneAndUpdate(
+                        { 'email': req.body.email },
+                        { 'password': hashedPassword },
+                        {returnNewDocument: true}).then((user) => {
+                            return res.status(200).json({
+                                success: true,
+                            });
+                        }
+                    );
+                } else {
+                    const error = new Error('Incorrect password');
+                    error.name = 'IncorrectCredentialsError';
+                    return done(error);
+                }
+            }).catch(error => done(error));
+            }
+        )
+    } catch (err) {
         return done(err);
     }
 }
@@ -302,6 +341,26 @@ const sendCodeEmail = async (email, code) => {
     return 'got here';
 };
 
+router.post('/makeAdmin', async (req, res, next) => {
+    User.findOneAndUpdate(
+        { 'email': req.body.email },
+        { 'admin': req.body.admin },
+        {returnNewDocument: true}).then((user) => {
+            return res.status(200).json({
+                success: true,
+            });
+        }
+    );
+})
+
+router.post('/deleteUser', async (req, res, next) => {
+    User.remove({'username': req.body.username}).then((user) => {
+        return res.status(200).json({
+            success: true,
+        });
+    })
+})
+
 router.post('/forgotpassword', async (req, res, next) => {
     let validationResult;
     if (req.body.mode === 'email') {
@@ -309,7 +368,7 @@ router.post('/forgotpassword', async (req, res, next) => {
         if (validationResult.exists) {
             const code = await generateCode();
             const hashedCode = await bcrypt.hash(code, 10);
-            console.log(await sendCodeEmail(req.body.email, code));
+            await sendCodeEmail(req.body.email, code);
             await passwordmaster.storePasswordResetData(req.body, hashedCode);
         }
         else {
@@ -360,11 +419,24 @@ router.post('/updatepassword', updatePasswordHandler);
 router.post('/updateusername', updateUsernameHandler);
 //Update password on User Page
 router.post('/updatepassworduser', updatePasswordUser);
+//Check to see if username exists
+router.post('/checkusernamenotexist', checkUsernameNotExist);
+router.post('/authEmail', authEmail.resendEmail);
 
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
+
+router.get('/getAllUsers', async (req, res) => {
+    User.find({}, function(err, data) {
+        if(err)
+            return err;
+        return res.json(data);
+    })
+})
+
 //confirm email
 router.get('/confirmEmail', (req, res) => {
+    console.log(req.query.key);
     User.updateOne({key_for_verify:req.query.key}, {$set: {email_verified: true}}, (err, user) => {
         if (err) {
             console.log(err);

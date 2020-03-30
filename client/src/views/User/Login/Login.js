@@ -25,14 +25,21 @@ const useStyles = makeStyles(theme => ({
     },
     avatar: {
       margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
+      backgroundColor: theme.palette.secondary.light,
     },
     form: {
       width: '100%', // Fix IE 11 issue.
       marginTop: theme.spacing(1),
     },
+    formField: {
+        color: theme.palette.primary.light,
+    },
     submit: {
       margin: theme.spacing(3, 0, 2),
+      backgroundColor: theme.palette.secondary.dark,
+      "&:hover":{
+          backgroundColor: theme.palette.secondary.light,
+      }
     },
     error: {
         color: 'red'
@@ -46,6 +53,11 @@ export default function Login() {
     const [message, setMessage] = useState('');
     const [email_message, setEmail_message] = useState('');
 
+    async function handleClick(e) {
+        API.post('/api/authEmail', {
+            email: document.getElementById('email').value
+        })
+    }
     async function handleSubmit(e, context){
         e.preventDefault();
         API.post('/api/login', {
@@ -57,10 +69,12 @@ export default function Login() {
                 setAuthed(true);
             }
         }).catch(err => {
-            if (err.response.data.message === 'Email has not been verified') {
-                setEmail_message();
+            if (err.response.data.name == "UnverifiedEmail") {
+                setEmail_message(err.response.data.message);
             }
-            setMessage(err.response.data.message);
+            else {
+                setMessage(err.response.data.message);
+            }
         });
     }
 
@@ -76,14 +90,14 @@ export default function Login() {
                 <CssBaseline/>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon/>
+                        <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
                     <form className={classes.form} onSubmit={(e) => handleSubmit(e, context)}>
                     <TextField
-                        variant="outlined"
+                        variant='filled'
                         margin="normal"
                         required
                         fullWidth
@@ -92,9 +106,10 @@ export default function Login() {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        className={classes.formField}
                     />
                     <TextField
-                        variant="outlined"
+                        variant="filled"
                         margin="normal"
                         required
                         fullWidth
@@ -103,10 +118,23 @@ export default function Login() {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        className={classes.formField}
                     />
                     {message ? <Typography className={classes.error}>
                         {message}
                     </Typography> : <React.Fragment/>}
+                    {email_message ? 
+                        <React.Fragment>
+                            <Typography className={classes.error}>
+                                {email_message} Check your inbox.
+                                To resend the email, click the button below.
+                            </Typography>
+                            <Button color = "primary" component={Link} href = '/User/Login' onClick = {(e) => handleClick(e)}>
+                                Resend Authentication Email
+                            </Button>
+                        </React.Fragment>
+                    : null}
+
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
@@ -127,9 +155,7 @@ export default function Login() {
                         </Link>
                         </Grid>
                         <Grid item>
-                        <Link href="/User/SignUp" variant="body2">
-                            {"Don't have an account? Sign Up"}
-                        </Link>
+                            <Link href="/User/SignUp" variant="body2">Don't have an account? Sign Up"</Link>
                         </Grid>
                     </Grid>
                     </form>
