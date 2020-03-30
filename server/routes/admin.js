@@ -15,8 +15,8 @@ router.use('/', (req, res, next) => {
 });
 
 router.post('/newsletter/', (req, res, next) => {
-    [data1, data2, data3] = req.body;
-    sendEmail.newsletterPublisher(data1, data2, data3);
+    const {title, body, link} = req.body;
+    sendEmail.newsletterPublisher(title, body, link);
 })
 
 

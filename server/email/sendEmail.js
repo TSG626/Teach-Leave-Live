@@ -83,7 +83,7 @@ module.exports = {
 
         var mailOptions = {
             from: config.username,
-            to: "frank.simon20@gmail.com",
+            to: "spencerbass1001@gmail.com",
             subject: 'Newsletter Publisher Test',
             html: compiledEmail.render({ title: title, body: body, link: link })
         };
