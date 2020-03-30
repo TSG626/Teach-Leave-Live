@@ -3,11 +3,11 @@ import { useLocation, Redirect, Link as RouterLink } from 'react-router-dom';
 import './NavBar.css';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import {UserContext} from '../../contexts/UserContext';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
-import { Typography, Menu, MenuItem, Badge, IconButton, AppBar, Toolbar, InputBase, Avatar, Grid, Box, Collapse, TextField, Link } from '@material-ui/core';
+import { Typography, Menu, MenuItem, Badge, IconButton, AppBar, Toolbar, InputBase, Grid, Box, Collapse, TextField, Link, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
 import { Mail as MailIcon, Search as SearchIcon, AccountCircle, More as MoreIcon, Menu as MenuIcon, Notifications as NotificationsIcon} from '@material-ui/icons';
 import Hoverable from '../Interface/Hoverable';
+import Avatar from 'react-avatar';
 
 const useStyles = makeStyles(theme => ({
     grow: {
@@ -83,9 +83,41 @@ const AccountOptions = () => {
     )
 }
 
-const UserBar = () => {
+const SimpleDialog = (props) => {
+    const classes = useStyles();
+    const { onClose, selectedValue, open } = props;
+  
+    const handleClose = () => {
+      onClose(selectedValue);
+    };
+  
+    const handleListItemClick = value => {
+      onClose(value);
+    };
 
-}
+    return (
+      <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} style={{textAlign: "center"}}>
+          
+        <DialogTitle id="simple-dialog-title">
+            <div><Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#2BCED6', '#222831', '#393E46','#00ADB5'])} name={`${props.user.firstname}` + " " + `${props.user.lastname}`}/></div>
+            {props.user.username}</DialogTitle>
+        <DialogContent>
+            <div>{props.user.firstname} {props.user.lastname}</div>
+            <div>{props.user.email}</div>
+            <Box mt={3}>
+                <Grid container direction="row" justify="center">
+                    <Grid item xs={8} sm={4}>
+                        <Button color="primary" component={RouterLink} to={'/User/ChangeUsername'} onClick={handleClose}>Change Username</Button>
+                    </Grid>
+                    <Grid item xs={8} sm={4}>
+                        <Button color="primary" component={RouterLink} to={'/User/ChangePassword'} onClick={handleClose}>Change Password</Button>
+                    </Grid>
+                </Grid>
+            </Box>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
 function SearchBar(){
     const classes = useStyles();
@@ -133,6 +165,17 @@ function Logo(){
 
 export default function NavBar() {
     const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+    const [selectedValue, setSelectedValue] = React.useState();
+  
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = value => {
+      setOpen(false);
+      setSelectedValue(value);
+    };
 
     return(
         <div className={classes.grow}>
@@ -141,23 +184,20 @@ export default function NavBar() {
                     <Grid container alignItems='center'>
                         {['Course', 'Blog'].map((route, index) =>{
                             return(
-                                <Grid key={index} item xs={12} sm={1} container justify='center'>
+                                <Grid key={index} item xs={11} sm={1} container justify='center'>
                                     <Link href={`/${route}/`} color='inherit'>
                                         {route + 's'}
                                     </Link>
                                 </Grid>
                             )
                         })}
-                        <Grid item xs={12} sm={3} container justify='center'>
+                        {/* <Grid item xs={11} sm={3} container justify='center'>
                             <SearchBar/>
-                        </Grid>
-                        <Grid item xs={12} sm={2} container justify='center'>
-                            <Logo/>
-                        </Grid>
-                        <Grid item container xs={12} sm={3}>
-                            {['Donate', 'Store'].map((route, index) => {
+                        </Grid> */}
+                        <Grid item container xs={11} sm={2}>
+                            {['Store'].map((route, index) => {
                                 return(
-                                    <Grid key={index} item xs={12} sm={6} container justify='center'>
+                                    <Grid key={index} item xs={13} sm={6} container justify='center'>
                                         <Link href={`/${route}/`} color='inherit'>
                                             {route}
                                         </Link>
@@ -165,8 +205,26 @@ export default function NavBar() {
                                 )
                             })}
                         </Grid>
-                        <Grid item xs={12} sm={2}>
+                        <Grid item xs={11} sm={4} container justify='center'>
+                            <Logo/>
+                        </Grid>
+                        <Grid item xs={11} sm={2}>
                             <AccountOptions/>
+                        </Grid>
+                        <Grid item xs={11} sm={2} justify='center'>
+                            <UserContext.Consumer>{context => {
+                                if(context.isAuthenticated()) {
+                                    return(
+                                        <div>
+                                        <Button onClick={handleClickOpen}>
+                                            <Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#2BCED6', '#222831', '#393E46','#00ADB5'])} name={`${context.user.firstname}` + " " + `${context.user.lastname}`}/>
+                                        </Button>    
+                                        <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} user={context.user}/>
+                                        </div>
+        
+                                    )
+                                }
+                            }}</UserContext.Consumer>
                         </Grid>
                     </Grid>
                 </Toolbar>

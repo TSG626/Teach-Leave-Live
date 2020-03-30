@@ -3,7 +3,6 @@ import './Profile.css';
 import { UserContext } from '../../../contexts/UserContext';
 import { Redirect } from 'react-router-dom';
 import { CssBaseline, TextField, Typography, makeStyles, Box } from '@material-ui/core';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Button from '@material-ui/core/Button';
 import API from '../../../modules/API'
 import Avatar from 'react-avatar';
@@ -68,7 +67,7 @@ const ChangeUser = () => {
     {
         return(
             <div>
-                <TextField label="Username" onChange={e => {setOldUser(e.target.value)}} variant="standard" id="newuser" defaultValue={userInfo.user.username} autoFocus/>
+                <TextField label="Username" onChange={e => {setOldUser(e.target.value)}} variant="standard" id="newuser"  autoFocus/>
                 <div>
                     <TextField label="Password" type="password" onChange={e => {setPassword(e.target.value)}} variant="standard" id="confirmpass"/>
                 </div>
