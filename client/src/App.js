@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import {UserContext, UserProvider} from "./contexts/UserContext";
+import { CircularProgress, MuiThemeProvider, makeStyles } from '@material-ui/core';
 
 import NavBar from "./components/Header/NavBar";
 import Landing from "./views/Landing/Landing";
@@ -15,7 +16,11 @@ import NotFound from "./views/NotFound";
 import Login from './views/User/Login/Login';
 import SignUp from './views/User/SignUp/SignUp';
 import ForgotPassword from './views/User/ForgotPassword/ForgotPassword';
-import { CircularProgress } from '@material-ui/core';
+import themes from './themes'
+
+const useStyles = makeStyles(theme => ({
+  toolbar: theme.mixins.toolbar,
+}));
 
 //Checks if user is signed in. If not, only allow them to access landing and signup/login
 //Redirect everything else to login.
@@ -58,10 +63,14 @@ const Routes = () => {
 }
 
 const App = (props) => {
+  const classes = useStyles();
   return (
     <UserProvider>
-      <NavBar/>
-      <Authorization/>
+      <MuiThemeProvider theme={themes.default}>
+        <NavBar/>
+        <div className={classes.toolbar}/>
+        <Authorization/>
+      </MuiThemeProvider>
     </UserProvider>
   );
 }

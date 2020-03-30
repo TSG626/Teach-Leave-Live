@@ -57,7 +57,7 @@ const UserProvider = (props) => {
         authenticateUser,
         deauthenticateUser,
         isAuthenticated
-    }; 
+    };
 
     return (
         <UserContext.Provider value={data}>
