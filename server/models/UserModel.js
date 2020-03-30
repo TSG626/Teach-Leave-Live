@@ -1,36 +1,36 @@
 const mongoose = require('mongoose');
 
-var {Schema, Number} = mongoose; 
+var {Schema, Number} = mongoose;
 
 const userSchema = new Schema({
     username: {
-        type: String, 
+        type: String,
         required: true,
         unique: true
     },
     email: {
-        type: String, 
+        type: String,
         required: true,
         unique: true
     },
     password: {
-        type: String, 
+        type: String,
         required: true
     },
     admin: {
-        type: Boolean, 
+        type: Boolean,
         default: false
     },
     firstname: {
-        type: String, 
+        type: String,
         required: true
     },
     lastname: {
-        type: String, 
+        type: String,
         required: true
     },
     reference: {
-        type: String, 
+        type: String,
         required: false
     },
     email_verified: {
