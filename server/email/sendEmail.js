@@ -76,5 +76,23 @@ module.exports = {
                 console.log('User Email Authenticate email sent: ' + info.response);
             }
         });
+    },
+    newsletterPublisher: function (title, body, link) {
+        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/newsletterPublisher/newsletterPublisher-inlined.html', 'utf-8');
+        var compiledEmail = Hogan.compile(emailTemplate);
+
+        var mailOptions = {
+            from: config.username,
+            to: "frank.simon20@gmail.com",
+            subject: 'Newsletter Publisher Test',
+            html: compiledEmail.render({ title: title, body: body, link: link })
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Newsletter email sent: ' + info.response);
+            }
+        });
     }
 }
