@@ -2,8 +2,8 @@ var nodemailer = require('nodemailer');
 const fs = require('fs')
 const path = require('path')
 const Hogan = require('hogan.js')
-const config = require('./config')
-
+const config = require('./config.js')
+const User = require('../models/UserModel.js');
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -20,8 +20,6 @@ module.exports = {
     welcomeEmail: function (userInfo) {
         const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/authenticateEmail/authenticateEmail-inlined.html', 'utf-8')
         var compiledEmail = Hogan.compile(emailTemplate)
-
-
 
         var mailOptions = {
             from: config.username,
@@ -41,8 +39,6 @@ module.exports = {
     forgotPassword: function (key, userInfo) {
         const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/authenticateEmail/authenticateEmail-inlined.html', 'utf-8')
         var compiledEmail = Hogan.compile(emailTemplate)
-
-
 
         var mailOptions = {
             from: config.username,
@@ -81,10 +77,13 @@ module.exports = {
         const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/newsletterPublisher/newsletterPublisher-inlined.html', 'utf-8');
         var compiledEmail = Hogan.compile(emailTemplate);
 
+        const test = User.find({ 'verified': 'true' });
+        console.log("DB Users", test);
+
         var mailOptions = {
             from: config.username,
-            to: "spencerbass1001@gmail.com",
-            subject: 'Newsletter Publisher Test',
+            to: "frank.simon20@gmail.com",
+            subject: title,
             html: compiledEmail.render({ title: title, body: body, link: link })
         };
         transporter.sendMail(mailOptions, function (error, info) {
