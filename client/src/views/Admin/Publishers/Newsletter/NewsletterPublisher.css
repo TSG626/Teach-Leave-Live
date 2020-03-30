@@ -1,5 +1,5 @@
 .Paper {
-    width: 48%;
+    width: 98%;
     margin-left: 0.5%;
     margin-right: 0.5%;
     height: 100%;
@@ -10,11 +10,14 @@
 }
 
 .enterBody {
-    width: 98%;
+    width: 70%;
     margin-left: 0.5%;
     margin-right: 0.5%;
     margin-top: 0.5%;
     margin-bottom: 0.5%;
+}
+
+.arrows {
 }
 
 .container {

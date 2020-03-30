@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './NewsletterPublisher.css';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid';
 import { Paper } from '@material-ui/core';
@@ -8,7 +7,9 @@ import TextField from '@material-ui/core/TextField';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import Grow from '@material-ui/core/Grow';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import IconButton from '@material-ui/core/IconButton';
 
 const options = [
     "Header",
@@ -17,31 +18,18 @@ const options = [
     "Footer"
 ]
 
-
-
 export default function NewsletterPublisher() {
-    const [parts, set_parts] = useState([reactCode(0, "Title")]);
-    const [email, set_email] = useState([]);
+    const [parts, set_parts] = useState([]);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
     const [index, setIndex] = React.useState(1);
+    const [bool, setBool] = React.useState(false);
 
     const handleMenuItemClick = (event, index, popupState) => {
         setSelectedIndex(index);
         setAnchorEl(null);
         popupState.close();
     };
-
-    function htmlCode(props, type) {
-        if (type === "Header")
-            return (<h>{props}</h>)
-        else if (type === "Paragraph")
-            return (<p>{props}</p>)
-        else if (type === "Link")
-            return (<a> href={props}</a>)
-        else if (type === "Footer")
-            return (<div>{props}</div>)
-    }
 
     function reactCode(key, type) {
         if (type === "Title") {
@@ -54,7 +42,6 @@ export default function NewsletterPublisher() {
                     autoFocus
                     margin="normal"
                     className="enterTitle"
-                    onChange={(e) => { console.log(e.target.id, e.target.value) }}
 
                 />
             </Grid>)
@@ -69,12 +56,12 @@ export default function NewsletterPublisher() {
                     autoFocus
                     margin="normal"
                     className="enterBody"
-                    onChange={(e) => { updateHTML(e.target.id, e.target.value, "Header") }}
+                    multiline
                 />
             </Grid>)
         }
         else if (type === "Paragraph") {
-            return (<Grid item>
+            return (
                 < TextField
                     variant="outlined"
                     required
@@ -83,12 +70,11 @@ export default function NewsletterPublisher() {
                     autoFocus
                     margin="normal"
                     className="enterBody"
-                    onChange={(e) => { updateHTML(e.target.id, e.target.value, "Paragraph") }}
-                />
-            </Grid>)
+                    multiline
+                />)
         }
         else if (type === "Link") {
-            return (<Grid item>
+            return (
                 < TextField
                     variant="outlined"
                     required
@@ -97,12 +83,10 @@ export default function NewsletterPublisher() {
                     autoFocus
                     margin="normal"
                     className="enterBody"
-                    onChange={(e) => { updateHTML(e.target.id, e.target.value, "Link") }}
-                />
-            </Grid>)
+                    multiline />)
         }
         else if (type === "Footer") {
-            return (<Grid item>
+            return (
                 < TextField
                     variant="outlined"
                     required
@@ -111,52 +95,81 @@ export default function NewsletterPublisher() {
                     autoFocus
                     margin="normal"
                     className="enterBody"
-                    onChange={(e) => { updateHTML(e.target.id, e.target.value, "Footer") }}
-                />
-            </Grid>)
+                    multiline
+                />)
         }
     }
 
-    function updateHTML(key, input, label) {
-        console.log(key, input, label)
-        let newEmail = email
-        newEmail.splice(key - 1, 1, htmlCode(input, label))
-        console.log(email)
-        console.log(newEmail)
-        //let newEmail = email.forEach(function (item, i) { if (i = key - 1) email[key - 1] = htmlCode(input, label); })
-        set_email(newEmail);
-    }
+
 
     const addItem = () => {
         if (options[selectedIndex] === "Header") {
             set_parts(parts => [...parts, reactCode(index, "Header")])
             setIndex(index + 1)
-            set_email(email => [...email, htmlCode("Header", "Header")])
-            console.log(email)
         }
         else if (options[selectedIndex] === "Paragraph") {
             set_parts(parts => [...parts, reactCode(index, "Paragraph")])
             setIndex(index + 1)
-            set_email(email => [...email, htmlCode("Paragraph", "Paragraph")])
         }
         else if (options[selectedIndex] === "Link") {
             set_parts(parts => [...parts, reactCode(index, "Link")])
+            setIndex(index + 1)
         }
         else if (options[selectedIndex] === "Footer") {
             set_parts(parts => [...parts, reactCode(index, "Footer")])
+            setIndex(index + 1)
         }
     }
 
-    function seeEmail() {
-        console.log(email)
+    function printCode() {
+        console.log(parts)
     }
+
+    const changeOrderUp = (props) => {
+        if (props > 0) {
+            const shallow = [...parts]
+            const temp1 = parts[props]
+            console.log(temp1)
+            const temp2 = parts[props - 1]
+            console.log(temp2)
+            shallow[props] = temp2;
+            shallow[props - 1] = temp1;
+            set_parts(shallow);
+        }
+    }
+    const changeOrderDown = (props) => {
+        const shallow = [...parts]
+        const temp1 = parts[props]
+        const temp2 = parts[props + 1]
+        shallow[props + 1] = temp1;
+        shallow[props] = temp1;
+
+        set_parts(shallow)
+    }
+
+
+
     return (
         <div className="App">
             <header className="App-header">
             </header>
             <Grid container>
                 <Paper className="Paper">
-                    {parts.map((e) => <div>{e}</div>)}
+                    {reactCode(0, "Title")}
+                    {parts.map((e, i) =>
+                        <div>
+                            <Grid item >
+                                {e}
+                                <Button color="primary" size="small" id={i} onClick={e => changeOrderUp(e.currentTarget.id)} >
+                                    <ArrowUpwardIcon className="arrows" />
+                                </Button>
+                                <Button color="primary" size="small"
+                                    id={i}
+                                    onClick={e => changeOrderDown(e.currentTarget.id)}>
+                                    <ArrowDownwardIcon className="arrows" />
+                                </Button>
+                            </Grid>
+                        </div>)}
                     <Grid container>
                         <Grid item>
                             <PopupState variant="popover" popupId="demo-popup-menu">
@@ -184,24 +197,22 @@ export default function NewsletterPublisher() {
                             </PopupState>
                         </Grid>
                         <Grid item>
-                            <Button onClick={addItem}
+                            <Button
+                                onClick={addItem}
                                 fullWidth
                                 variant="contained"
                                 color="primary"
                             >Add component</Button>
                         </Grid>
                         <Grid item>
-                            <Button onClick={seeEmail}>See html</Button>
+                            <Button
+                                onClick={printCode}
+                                fullWidth
+                                variant="contained"
+                                color="primary">
+                                Show react code</Button>
                         </Grid>
                     </Grid>
-                </Paper>
-                <Paper className="Paper" align="left">
-
-                    <div class="container">
-                        <div class="content">
-                            {email.map((e) => <div>{e}</div>)}
-                        </div>
-                    </div>
                 </Paper>
             </Grid>
         </div >
