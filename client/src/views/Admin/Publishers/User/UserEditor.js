@@ -15,6 +15,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Avatar from 'react-avatar';
+import {Link as RouterLink } from 'react-router-dom';
+
 
 const useStyles = makeStyles({
     table: {
@@ -22,12 +25,48 @@ const useStyles = makeStyles({
         },
   });
 
+  const SimpleDialogUser = (props) => {
+    const classes = useStyles();
+    const { onClose, selectedValue, open } = props;
+  
+    const handleClose = () => {
+      onClose(selectedValue);
+    };
+  
+    const handleListItemClick = value => {
+      onClose(value);
+    };
+
+    return (
+      <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} style={{textAlign: "center"}}>
+          
+        <DialogTitle id="simple-dialog-title">
+            <div><Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#2BCED6','#00ADB5'])} name={`${props.user.firstname}` + " " + `${props.user.lastname}`}/></div>
+            {props.user.username}</DialogTitle>
+        <DialogContent>
+            <div>{props.user.firstname} {props.user.lastname}</div>
+            <div>{props.user.email}</div>
+            <Box mt={3}>
+                <Grid container direction="row" justify="center">
+                    <Grid item xs={8} sm={4}>
+                        <Button color="primary" component={RouterLink} to={'/User/ChangeUsername'} onClick={handleClose}>Change Username</Button>
+                    </Grid>
+                    <Grid item xs={8} sm={4}>
+                        <Button color="primary" component={RouterLink} to={'/User/ChangePassword'} onClick={handleClose}>Change Password</Button>
+                    </Grid>
+                </Grid>
+            </Box>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
 const GetUsers = () => {
     const [data, setData] = useState([]);
     const [changed, setChange] = useState(false);
     const [counter, setCounter] = useState(0);
     useEffect(() => {
-        API.get('/api/getAllUsers').then(res=>{
+        API.get('/api/admin/getAllUsers').then(res=>{
             setData(res.data);
         }).catch(err=>{
             console.log(err);
@@ -37,22 +76,13 @@ const GetUsers = () => {
         setCounter(1);
         setChange(true);
     }
-    const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = () => {
-      setOpen(false);
-    };
     const makeAdmin = (user, popupState) => {
         
         var confirmed;
         if(!user.admin) {
             confirmed = window.confirm("Would you like to make " + user.firstname + " " + user.lastname + " an admin?");
             if(confirmed) {
-                API.post('/api/makeAdmin', {email: user.email, admin: true}).then(res => {
+                API.post('/api/admin/makeAdmin', {email: user.email, admin: true}).then(res => {
                     alert(user.firstname + " " + user.lastname + " is an admin!");
                     popupState.close();
                     window.location.reload(false); 
@@ -63,7 +93,7 @@ const GetUsers = () => {
         else {
             confirmed = window.confirm("Would you like to make " + user.firstname + " " + user.lastname + " not an admin?");
             if(confirmed) {
-                API.post('/api/makeAdmin', {email: user.email, admin: false}).then(res => {
+                API.post('/api/admin/makeAdmin', {email: user.email, admin: false}).then(res => {
                     alert(user.firstname + " " + user.lastname + " is not an admin!");
                     popupState.close();
                     window.location.reload(false); 
@@ -74,16 +104,31 @@ const GetUsers = () => {
 
     }
     const deleteUser = (user, popupState) => {
+        
         var confirmed = window.confirm("Would you like to delete " + user.firstname + " " + user.lastname + "'s account?\nNOTE: Confirming this would mean that the user's information is lost.");
         if(confirmed) {
             var firstname = user.firstname;
             var lastname = user.lastname;
-            API.post('/api/deleteUser',{username: user.username}).then(res => {
+            API.post('/api/admin/deleteUser',{username: user.username}).then(res => {
                 alert(firstname + " " + lastname + " was deleted!");
+                popupState.close();
+                window.location.reload(false); 
+                return false;
             })
         }
         popupState.close();
     }
+    const [open, setOpen] = React.useState(false);
+    const [selectedValue, setSelectedValue] = React.useState();
+  
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = value => {
+      setOpen(false);
+      setSelectedValue(value);
+    };
     const classes = useStyles();
     const userInfo = useContext(UserContext);
     return(
@@ -116,7 +161,8 @@ const GetUsers = () => {
                                             <MoreVertIcon/>
                                         </Button>
                                         <Menu {...bindMenu(popupState)}>
-                                            {userInfo.user.username === user.username ? <div><MenuItem onClick={() => {makeAdmin(user, popupState);}}>View Account</MenuItem></div>: <div>{user.admin ? <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Remove Admin</MenuItem> : <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Approve Admin</MenuItem>}
+                                            {userInfo.user.username === user.username ? <div><MenuItem onClick={handleClickOpen}>View Account</MenuItem><SimpleDialogUser selectedValue={selectedValue} open={open} onClose={handleClose} user={user}/></div> : 
+                                            <div>{user.admin ? <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Remove Admin</MenuItem> : <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Approve Admin</MenuItem>}
                                             <MenuItem onClick={() => {deleteUser(user, popupState);}}>Delete User</MenuItem></div>}
                                         </Menu>
                                         </React.Fragment>
