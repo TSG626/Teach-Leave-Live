@@ -77,7 +77,7 @@ module.exports = {
         const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/newsletterPublisher/newsletterPublisher-inlined.html', 'utf-8');
         var compiledEmail = Hogan.compile(emailTemplate);
 
-        User.find({ 'email_verified': true, 'email': 'frank.simon20@gmail.com' }, (err, users) => {
+        User.find({ 'email_verified': true }, (err, users) => {
             users.forEach(user => {
                 var mailOptions = {
                     from: config.username,
