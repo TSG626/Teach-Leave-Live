@@ -122,14 +122,14 @@ const Admin = ({match}) => {
                             <Grid item xs={12} sm={11}>
                                 <Container maxWidth='lg'>
                                     <Switch>
-                                        <BlogProvider>
-                                            <Route path={`${match.path}/Blog`} component={Blog} />
-                                        </BlogProvider>
                                         <Route path={`${match.path}/Newsletter`} component={NewsletterPublisher} />
                                         <Route path={`${match.path}/User`} component={UserEditor} />
                                         <CourseProvider>
                                             <Route path={`${match.path}/Course`} component={Course} />
                                         </CourseProvider>
+                                        <BlogProvider>
+                                            <Route path={`${match.path}/Blog`} component={Blog} />
+                                        </BlogProvider>
                                     </Switch>
                                 </Container>
                             </Grid>

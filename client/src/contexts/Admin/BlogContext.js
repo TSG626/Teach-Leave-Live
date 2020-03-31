@@ -45,8 +45,10 @@ const BlogProvider = (props) => {
     };
 
     const data = {
-        blogList, 
+        blogList,
+        setBlogList,
         blog,
+        setBlog,
         setId,
         updateBlog,
     };
