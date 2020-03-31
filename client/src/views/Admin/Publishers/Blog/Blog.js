@@ -28,62 +28,70 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function BlogRouter({match}) {
+    const [blogList, setBlogList] = useState([]);
     const classes = useStyles();
     const [errors, setErrors] = useState({});
     const [adding, setAdding] = useState(false);
+
+    useEffect(() => {
+      async function fetchData(){
+          API.get('/api/blog/').then(res => {
+              if(res.status == 200){
+                  setBlogList(res.data);
+              }
+          });
+      }
+      fetchData();
+    }, []);
 
     function handleAddBlog(event){
       setAdding(true);
     }
 
     return (
-    <BlogContext.Consumer>{context=>{
-      return(
-        <Switch>
-            {/* //Main router function */}
-            <Route exact path={`${match.path}/`} component={function(){
-              return(
-                <Container component="main" maxWidth={false}>
-                  <Grid container alignContent={'center'} justify={'space-between'}>
-                    <Typography className={classes.title}>
-                      Blog
-                    </Typography>
-                    <Button onClick={handleAddBlog} endIcon={<AddIcon/>} varient={'contained'}>
-                      Add Blog
-                    </Button>
-                    <Modal open={adding} onClose={() => setAdding(false)} className={classes.blogCreatorWindow}>
-                      <Container>
-                        <Card elevation={2}>
-                          <CardContent>
-                            <BlogCreator context={context} setAdding={setAdding}/>
-                          </CardContent>
-                        </Card>
-                      </Container>
-                    </Modal>
-                  </Grid>
-                  <Grid
-                    container
-                    direction="column"
-                    justify="flex-start"
-                    alignItems="flex-start"
-                    className={classes.cardList}
-                  >
-                    {/* {context.blogList && context.blogList.map((blog, index) => {
-                      return(
-                        <Grid key={index} item container sm className={classes.card}>
-                          <BlogCard blog={blog}/>
-                        </Grid>
-                      )
-                    })} */}
-                  </Grid>
-                </Container>
-                )
-            }}/>
-            <Route exact path={`${match.path}/Edit/:id`} component={BlogEditor}/>
-        </Switch>
-      )
-    }}</BlogContext.Consumer>
-  );
+      <Switch>
+          {/* //Main router function */}
+          <Route exact path={`${match.path}/`} component={function(){
+            return(
+              <Container component="main" maxWidth={false}>
+                <Grid container alignContent={'center'} justify={'space-between'}>
+                  <Typography className={classes.title}>
+                    Blog
+                  </Typography>
+                  <Button onClick={handleAddBlog} endIcon={<AddIcon/>} varient={'contained'}>
+                    Add Blog
+                  </Button>
+                  <Modal open={adding} onClose={() => setAdding(false)} className={classes.blogCreatorWindow}>
+                    <Container>
+                      <Card elevation={2}>
+                        <CardContent>
+                          <BlogCreator setAdding={setAdding}/>
+                        </CardContent>
+                      </Card>
+                    </Container>
+                  </Modal>
+                </Grid>
+                <Grid
+                  container
+                  direction="column"
+                  justify="flex-start"
+                  alignItems="flex-start"
+                  className={classes.cardList}
+                >
+                  {blogList && blogList.map((blog, index) => {
+                    return(
+                      <Grid key={index} item container sm className={classes.card}>
+                        <BlogCard blog={blog}/>
+                      </Grid>
+                    )
+                  })}
+                </Grid>
+              </Container>
+              )
+          }}/>
+          <Route exact path={`${match.path}/Edit/:id`} component={BlogEditor}/>
+      </Switch>
+    )
 }
 
 export default BlogRouter;
