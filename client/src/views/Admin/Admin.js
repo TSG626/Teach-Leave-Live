@@ -2,11 +2,7 @@ import React, {useState} from 'react';
 import { Route, Switch, Redirect, Link } from 'react-router-dom';
 import clsx from 'clsx';
 import {UserContext} from "../../contexts/UserContext"
-<<<<<<< HEAD
-import BlogPublisher from "./Publishers/Blog/Blog";
-=======
 import Blog from "./Publishers/Blog/Blog";
->>>>>>> 9ce4bbcbeee37f33ea68308ffaa9cfde799aa351
 import Course from "./Publishers/Course/Course";
 import NewsletterPublisher from "./Publishers/Newsletter/NewsletterPublisher";
 import UserEditor from "./Publishers/User/UserEditor";
