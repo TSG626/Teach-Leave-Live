@@ -37,7 +37,7 @@ module.exports = {
         });
     },
     forgotPassword: function (key, userInfo) {
-        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/authenticateEmail/authenticateEmail-inlined.html', 'utf-8')
+        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/forgotPassword/forgotPassword-inlined.html', 'utf-8')
         var compiledEmail = Hogan.compile(emailTemplate)
 
         var mailOptions = {
