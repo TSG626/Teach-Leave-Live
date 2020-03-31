@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import API from '../../../../modules/API';
 import BlogCard from '../../../../components/Blog/BlogCard';
-import { Typography, Button, Grid, Modal, CardContent, Card} from '@material-ui/core';
+import { Typography, ListItem, List, Button, CircularProgress, Grid, IconButton, Modal, CardContent, Card} from '@material-ui/core';
 import { Switch, Route, Redirect, Link } from 'react-router-dom';
 import BlogCreator from './BlogCreator';
 import BlogEditor from './BlogEditor';
@@ -26,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function BlogRouter({match}) {
+function BlogRouter({match}) {
     const classes = useStyles();
     const [errors, setErrors] = useState({});
     const [adding, setAdding] = useState(false);
@@ -67,13 +68,13 @@ export default function BlogRouter({match}) {
                     alignItems="flex-start"
                     className={classes.cardList}
                   >
-                    {context.blogList && context.blogList.map((blog, index) => {
+                    {/* {context.blogList && context.blogList.map((blog, index) => {
                       return(
                         <Grid key={index} item container sm className={classes.card}>
                           <BlogCard blog={blog}/>
                         </Grid>
                       )
-                    })}
+                    })} */}
                   </Grid>
                 </Container>
                 )
@@ -84,3 +85,5 @@ export default function BlogRouter({match}) {
     }}</BlogContext.Consumer>
   );
 }
+
+export default BlogRouter;
