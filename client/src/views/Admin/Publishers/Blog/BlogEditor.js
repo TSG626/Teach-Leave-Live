@@ -1,26 +1,25 @@
-// import React, {useState, useEffect, useRef} from 'react';
-// import { makeStyles } from '@material-ui/core/styles';
-// import { useParams } from 'react-router';
-// import Grid from '@material-ui/core/Grid'
-// import { Typography, Button, TextField, Input, Container, Tooltip, Box, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, ListItemIcon, ListItem, List, ListSubheader, ListItemText, Divider, Collapse, Link} from '@material-ui/core';
-// import AddIcon from '@material-ui/icons/Add';
-// import EditIcon from '@material-ui/icons/Edit';
-// import {Delete as DeleteIcon, ExpandMore, ExpandLess, SaveTwoTone as SaveIcon} from '@material-ui/icons/';
-// import Hoverable from '../../../../components/Interface/Hoverable'
-// import API from '../../../../modules/API';
-// import EditorJs from 'react-editor-js';
-// import {COURSE_TOOLS} from '../../../../config/tools'
+import React, {useState, useEffect, useRef} from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { useParams } from 'react-router';
+import Grid from '@material-ui/core/Grid'
+import { Typography, Button, TextField, Input, Container, Tooltip, Box, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, ListItemIcon, ListItem, List, ListSubheader, ListItemText, Divider, Collapse} from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import {Delete as DeleteIcon, ExpandMore, ExpandLess, SaveTwoTone as SaveIcon} from '@material-ui/icons/';
+import Hoverable from '../../../../components/Interface/Hoverable'
+import API from '../../../../modules/API';
+import EditorJs from 'react-editor-js';
+import {COURSE_TOOLS} from '../../../../config/tools'
 
-// const useStyles = makeStyles(theme => ({
-//     root: {
-//       flexGrow: 1,
-//     },
-//     moduleText: {
-//         width: 200,
-//         height: 50
-        
-//     }
-// }));
+const useStyles = makeStyles(theme => ({
+    root: {
+      flexGrow: 1,
+    },
+    moduleText: {
+        width: 200,
+        height: 50
+    }
+}));
 
 // function DetailEditor(props){
 //     return(
@@ -87,11 +86,11 @@
 //                         </Link>
 //                         <Typography color="textPrimary">{props.course.modules[props.selectedModule]}</Typography>
 //                     </Breadcrumbs> */}
-//                     <EditorJs 
-//                         // data={} 
-//                         tools={{ 
-//                             // linkTool: { 
-//                             //     class: LinkTool, 
+//                     <EditorJs
+//                         // data={}
+//                         tools={{
+//                             // linkTool: {
+//                             //     class: LinkTool,
 //                             //     config: { endpoint: 'http://localhost:5000/api/course/' + props.id}
 //                             // },
 //                             ...COURSE_TOOLS
@@ -112,7 +111,7 @@
 //     }
 
 //     useEffect(()=>{
-//         setName(props.section.name);      
+//         setName(props.section.name);
 //     },[props.section.name])
 
 //     return(
@@ -138,8 +137,8 @@
 //                     <Box visibility={hovering ? 'visible' : 'hidden'}>
 //                         <ListItemIcon>
 //                             <Tooltip arrow title='Edit Section'>
-//                                 <EditIcon onClick={() => { 
-//                                     props.selectSection(props.index) 
+//                                 <EditIcon onClick={() => {
+//                                     props.selectSection(props.index)
 //                                 }}/>
 //                             </Tooltip>
 //                         </ListItemIcon>
@@ -223,7 +222,7 @@
 //                     <Box visibility={hovering ? 'visible' : 'hidden'}>
 //                         <ListItemIcon>
 //                             <Tooltip arrow title='Add Section'>
-//                                 <AddIcon onClick={() => { 
+//                                 <AddIcon onClick={() => {
 //                                     props.selectModule(props.index)
 //                                     props.addSection(props.index, props.increment)
 //                                 }}/>
@@ -245,7 +244,7 @@
 //                         module={props.module}
 //                         moduleIndex={props.index}
 //                         increment={props.increment}
-//                         removeSection={props.removeSection} 
+//                         removeSection={props.removeSection}
 //                         renameSection={props.renameSection}
 //                         isSectionSelected={props.isSectionSelected}
 //                         selectSection={props.selectSection}
@@ -271,7 +270,7 @@
 //                 {props.course.modules.map((module, index) => {
 //                     return(
 //                         <React.Fragment key={index}>
-//                             <Module 
+//                             <Module
 //                                 index={index}
 //                                 module={module}
 //                                 addSection={props.addSection}
@@ -299,126 +298,51 @@
 //     )
 // }
 
-// export default function CourseList() {
-//     const classes = useStyles();
-//     const [course, setCourse] = useState({
-//         author: [],
-//         free: false,
-//         price: 0,
-//         modules: [],
-//         published: false,
-//         title: '',
-//         description: '',
-//     });
-//     const [selectedModule, setSelectedModule] = useState(0); 
-//     const [selectedSection, setSelectedSection] = useState(0); 
-//     const [selected, setSelected] = useState(0); 
-//     const [increment, setStillIncrement] = useState(true);
-//     let {id} = useParams();
+export default function CourseEditor() {
+    const classes = useStyles();
+    const [blog, setBlog] = useState({
+        author: [],
+        modules: [],
+        published: false,
+        title: '',
+        description: '',
+    });
+    let {id} = useParams();
 
-//     useEffect(() => {
-//         let ignore = false;
-//         async function fetchData(){
-//             API.get(`/api/course/`, {id: id}).then(res => {
-//                 console.log(res);
-//                 if(res.status === 200){
-//                     setCourse(res.data);
-//                 }
-//             });   
-//         }
-//         fetchData();
-//         return () => {ignore = true;}
-//     }, []);
+    // useEffect(()=>{console.log(course)}, [course])
 
-//     //Module functions
-//     function selectModule(index){
-//         setSelectedModule(index + 1)
-//     }
-//     function isModuleSelected(moduleIndex){
-//         return (selectedModule === moduleIndex + 1);
-//     }
-//     function addModule(){
-//         setCourse({...course, modules: [...course.modules, {
-//             name: increment ? 'Module ' + (course.modules.length + 1) : 'Untitled Module',
-//             sections: []
-//         }]});
-//         selectModule(course.modules.length);
-//     }
-//     function removeModule(index){
-//         if(increment) setStillIncrement(false);
-//         if(isModuleSelected(index)) selectModule(0);
-//         setCourse({...course, modules: [...course.modules].filter((module, i) => i !== index)});
-//     }
-//     function renameModule(index, name){
-//         setCourse({...course, modules: [...course.modules].map((module, i) =>{
-//             if(i === index) module.name = name;
-//             return module;
-//         })});
-//     }
-//     //Section functions
-//     function selectSection(index){
-//         setSelectedSection(index + 1);
-//     }
-//     function isSectionSelected(sectionIndex){
-//         return (selectedSection === sectionIndex + 1);
-//     }
-//     function addSection(moduleIndex){
-//         selectModule(moduleIndex);
-//         setCourse({...course, modules: [...course.modules].map((module, i) =>{
-//             if(i !== moduleIndex) return module;
-//             return ({...module, sections: [...module.sections, {
-//                 name: 'Untitled Section',
-//                 data: {}
-//             }]});
-//         })});
-//     }
-//     function renameSection(moduleIndex, sectionIndex, name){
-//         setCourse({...course, modules: [...course.modules].map((module, i) =>{
-//             if(i !== moduleIndex) return module;
-//             return {...module, sections: [...module.sections].map((section, i) => {
-//                 if(i !== sectionIndex) return section;
-//                 return({...section, name: name})
-//             })};
-//         })});
-//     }
-//     function removeSection(moduleIndex, sectionIndex){
-//         if(increment) setStillIncrement(false);
-//         if(isSectionSelected(sectionIndex)) selectSection(0);
-//         setCourse({...course, modules: [...course.modules].map((module, i) =>{
-//             if(i !== moduleIndex) return module;
-//             return {...module, sections: [...module.sections].filter((section, i) => i !== sectionIndex)};
-//         })});
-//     }
 
-//     return (
-//         <Grid container>
-//             <Grid item>
-//                 <ListItem button 
-//                     selected={selected === index + 1}
-//                     onClick={()=>setSelected(index + 1)}
-//                     component={Link} 
-//                     to={`/Admin/Course/Edit/${course._id}`}
-//                 >
-//                     <ListItemText inset>
-//                         {course.title}
-//                     </ListItemText>
-//                 </ListItem>
-//                 {selected == index + 1 && 
-//                     <ModuleList 
-//                         course={course}
-//                         addModule={addModule}
-//                         renameModule={renameModule}
-//                         removeModule={removeModule}
-//                         isSectionSelected={isSectionSelected}
-//                         addSection={addSection}
-//                         renameSection={renameSection}
-//                         removeSection={removeSection}
-//                         isModuleSelected={isModuleSelected}
-//                         selectModule={selectModule}
-//                         selectSection={selectSection}
-//                     />
-//                 }
-//             </Grid>
-//         </Grid>
-//     );
-// }
+    useEffect(() => {
+        async function fetchData(){
+            API.get('/api/blog/', {id: id}).then(res => {
+                console.log(res);
+                if(res.status === 200){
+                    setBlog(res.data);
+                }
+            });
+        }
+        fetchData();
+    }, []);
+
+    return (
+        <Container maxWidth={false} style={{padding:25}}>
+            <Box border={1}>
+                <div className={classes.root}>
+                    <Grid container>
+                        <Grid item xs={12} style={{padding: 20}}>
+                            <Button startIcon={<SaveIcon/>} color='primary' variant='outlined' size='large'>Save</Button>
+                        </Grid>
+                        <Grid item xs={12} style={{padding:15}}>
+                            <Box>
+                                {/* <DetailEditor course={course} setCourse={setCourse}/> */}
+                            </Box>
+                        </Grid>
+                    </Grid>
+                    <Grid item container xs={12} style={{padding: 20}} justify='center'>
+                            <Button startIcon={<SaveIcon/>} color='primary' variant='outlined' size='large'>Save</Button>
+                    </Grid>
+                </div>
+            </Box>
+        </Container>
+    );
+}
