@@ -2,14 +2,9 @@ import React, {useState, useEffect, useRef} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from 'react-router';
 import Grid from '@material-ui/core/Grid'
-import { Typography, Button, TextField, Input, Container, Tooltip, Box, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, ListItemIcon, ListItem, List, ListSubheader, ListItemText, Divider, Collapse} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
+import { Button, Container, Box} from '@material-ui/core';
 import {Delete as DeleteIcon, ExpandMore, ExpandLess, SaveTwoTone as SaveIcon} from '@material-ui/icons/';
-import Hoverable from '../../../../components/Interface/Hoverable'
 import API from '../../../../modules/API';
-import EditorJs from 'react-editor-js';
-import {COURSE_TOOLS} from '../../../../config/tools'
 
 const useStyles = makeStyles(theme => ({
     root: {
