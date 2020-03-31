@@ -162,10 +162,11 @@ export default function CourseCreator() {
     return (
         <UserContext.Consumer>{(context) => {
             return(
-                <Container component="main" maxWidth="xl">
-                    <Grid container>
+                <Container component="main" maxWidth={false}>
+                    <Grid container alignContent={'center'} justify={'space-between'}>
                         <Grid item xs={12}>
-                            <Typography component="h1" variant="h5">
+                            <br></br>
+                            <Typography className={classes.title}>
                                 Blog Post Creator
                             </Typography>
                         </Grid>
