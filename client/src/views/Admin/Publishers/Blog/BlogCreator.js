@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Grid } from '@material-ui/core';
-import AuthorForm from '../../../../components/Admin/';
+import AuthorForm from '../../../../components/Admin/AuthorForm';
 import { Redirect } from 'react-router-dom';
 import API from '../../../../modules/API';
 
