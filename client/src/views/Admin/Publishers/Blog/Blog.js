@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import API from '../../../../modules/API';
 import BlogCard from '../../../../components/Blog/BlogCard';
-import { Typography, ListItem, List, Button, CircularProgress, Grid, IconButton, Modal, CardContent, Card} from '@material-ui/core';
+import { Typography, Button, Grid, Modal, CardContent, Card} from '@material-ui/core';
 import { Switch, Route, Redirect, Link } from 'react-router-dom';
 import BlogCreator from './BlogCreator';
 import BlogEditor from './BlogEditor';
