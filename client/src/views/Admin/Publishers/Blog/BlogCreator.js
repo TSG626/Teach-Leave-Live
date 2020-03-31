@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import AuthorForm from '../../../../components/Admin/AuthorForm';
 import { Redirect } from 'react-router-dom';
 import API from '../../../../modules/API';
@@ -35,10 +35,7 @@ const useStyles = makeStyles(theme => ({
 function BodyForm(props){
     const classes = useStyles();
     const [body, setBody] = useState('');
-
-    // function addBody(a){
-    //     props.setBody(props.body.concat(a));
-    // }
+    console.log(props);
 
     return(
         <Grid container>
@@ -49,45 +46,49 @@ function BodyForm(props){
                     required
                     fullWidth
                     id="body"
-                    label="Description"
+                    label="Body"
                     name="body"
                     value={body}
                     onChange={(event) => setBody(event.target.value)}
                 />
             </Grid>
             <Grid item container xs={12}>
-                {props.body.map((body, index) => {
+                {/* {props.body.map((body, index) => {
                     return(
                         <Grid item xs={12} sm={2}
                             style={{paddingRight: 5, paddingBottom: 5}}>
                         </Grid>
                     )
-                })}
+                })} */}
             </Grid>
-        </Grid>   
+        </Grid>
     )
 }
 
-export default function BlogCreator() {
+export default function BlogCreator(props) {
     const classes = useStyles();
     
     const [title, setTitle] = useState('');
     const [authors, setAuthors] = useState([]);
-    const [body, setBody] = useState([]);
+    const [body, setBody] = useState('');
     const [id, setId] = useState('');
     const [errors, setErrors] = useState({});
 
     function handleSubmit(){
         API.post('/api/blog/', {
             title: document.getElementById('title').value,
-            author: authors,
+            authors: authors,
             body: document.getElementById('body').value,
         }).then(res => {
             console.log(res.data);
             if(res.status == 200){
+                props.setBody(res.data.body);
+                props.setAuthors(res.data.authors);
+
                 setTitle(res.data.title);
-                setId(res.data.id);
                 setBody(res.data.body);
+                setAuthors(res.data.authors);
+                setId(res.data.id);
             }
         }).catch(err => {
             setErrors(err);
@@ -110,6 +111,7 @@ export default function BlogCreator() {
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
+                        required
                         variant="outlined"
                         margin="normal"
                         fullWidth
@@ -120,9 +122,21 @@ export default function BlogCreator() {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <BodyForm body={body} setBody={setBody}/>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="body"
+                            label="Body"
+                            name="body"
+                            value={body}
+                            onChange={(event) => setBody(event.target.value)}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                     <AuthorForm authors={authors} setAuthors={setAuthors}/>
                 </Grid>
                 <Grid item xs={12}>

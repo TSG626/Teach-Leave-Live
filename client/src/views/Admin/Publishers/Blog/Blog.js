@@ -8,7 +8,6 @@ import { Switch, Route, Redirect, Link } from 'react-router-dom';
 import BlogCreator from './BlogCreator';
 import BlogEditor from './BlogEditor';
 import {Add as AddIcon, Edit as EditIcon, Close} from '@material-ui/icons/';
-import { BlogContext } from '../../../../contexts/Admin/BlogContext';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -51,6 +50,8 @@ function SimpleDialog(props) {
 
 function BlogRouter({match}) {
     const [blogList, setBlogList] = useState([]);
+    const [body, setBody] = useState('');
+    const [authors, setAuthors] = ([]);
     const classes = useStyles();
     const [errors, setErrors] = useState({});
     const [adding, setAdding] = useState(false);
@@ -80,7 +81,7 @@ function BlogRouter({match}) {
           <Route exact path={`${match.path}/`} component={function(){
             return(
               <Container component="main" maxWidth={false}>
-                <Grid container alignContent={'center'} justify={'space-between'}>
+                <Grid xs={12} container alignContent={'center'} justify={'space-between'}>
                   <Typography className={classes.title}>
                     Blog
                   </Typography>
@@ -91,6 +92,7 @@ function BlogRouter({match}) {
                 </Grid>
                 <Grid
                   container
+                  maxWidth
                   direction="column"
                   justify="flex-start"
                   alignItems="flex-start"
@@ -99,7 +101,10 @@ function BlogRouter({match}) {
                   {blogList && blogList.map((blog, index) => {
                     return(
                       <Grid key={index} item container sm className={classes.card}>
-                        <BlogCard blog={blog}/>
+                        <BlogCard
+                        body={body}
+                        authors={authors}
+                        blog={blog}/>
                       </Grid>
                     )
                   })}
@@ -107,7 +112,7 @@ function BlogRouter({match}) {
               </Container>
               )
           }}/>
-          <Route exact path={`${match.path}/Edit/:id`} component={BlogEditor}/>
+          {/* <Route exact path={`${match.path}/Edit/:id`} component={BlogEditor}/> */}
       </Switch>
     )
 }
