@@ -33,8 +33,7 @@ export default function BlogCard(props){
                 </ExpansionPanelDetails>
                 <ExpansionPanelActions>
                     <ButtonGroup fullWidth varient="contained" color="secondary">
-                        <Button component={Link} className={classes.action} to={`/Admin/Course/Edit/${props.blog._id}`}>Edit Blog</Button>
-                        <Button component={Link} className={classes.action} to={`/Admin/Course/View/${props.blog._id}`}>Course Info</Button>
+                        <Button component={Link} className={classes.action} to={`/Admin/Blog/${props.blog._id}`}>Edit Blog</Button>
                     </ButtonGroup>
                 </ExpansionPanelActions>
             </ExpansionPanel>
