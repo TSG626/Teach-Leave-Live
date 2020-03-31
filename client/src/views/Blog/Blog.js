@@ -3,7 +3,7 @@ import './Blog.css';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { Grid, CssBaseline } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -27,10 +27,13 @@ export default function Blog({match}) {
     const [errors, setErrors] = useState({});
 
     return (
+      <CssBaseline>
         <Grid container alignContent={'center'} justify={'space-between'}>
             <Typography className={classes.title}>
                 Join in the Conversation!
             </Typography>
         </Grid>
+      </CssBaseline>
+
   );
 }

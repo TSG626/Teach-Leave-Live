@@ -21,6 +21,7 @@
   "author": "Dakota Rennemann",
   "license": "MIT",
   "dependencies": {
+    "@material-ui/core": "^4.9.8",
     "@material-ui/lab": "^4.0.0-alpha.47",
     "@passport-next/passport-facebook": "^3.1.2",
     "@passport-next/passport-google-oauth2": "^1.0.0",
