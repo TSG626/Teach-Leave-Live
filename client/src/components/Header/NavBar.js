@@ -99,7 +99,7 @@ const SimpleDialog = (props) => {
       <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} style={{textAlign: "center"}}>
           
         <DialogTitle id="simple-dialog-title">
-            <div><Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#2BCED6', '#222831', '#393E46','#00ADB5'])} name={`${props.user.firstname}` + " " + `${props.user.lastname}`}/></div>
+            <div><Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#2BCED6','#00ADB5'])} name={`${props.user.firstname}` + " " + `${props.user.lastname}`}/></div>
             {props.user.username}</DialogTitle>
         <DialogContent>
             <div>{props.user.firstname} {props.user.lastname}</div>
@@ -216,9 +216,23 @@ export default function NavBar() {
                                 if(context.isAuthenticated()) {
                                     return(
                                         <div>
-                                        <Button onClick={handleClickOpen}>
-                                            <Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#2BCED6', '#222831', '#393E46','#00ADB5'])} name={`${context.user.firstname}` + " " + `${context.user.lastname}`}/>
-                                        </Button>    
+                                            <Hoverable>{hovering=> {
+                                                return(
+                                            <Button onClick={handleClickOpen}>
+                                              <Box 
+                                                display="flex" 
+                                                justifyContent="center"
+                                                m={1} 
+                                                style={ {width: '3rem', height: '3rem'} } 
+                                                borderRadius="50%"
+                                                boxShadow={hovering ? 7 : 2}
+                                                borderColor='secondary'
+                                            >
+                                                <Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#222831', '#393E46'])} name={`${context.user.firstname}` + " " + `${context.user.lastname}`}/>
+                                                </Box>
+                                            </Button>    
+                                                )
+                                            }}</Hoverable>
                                         <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} user={context.user}/>
                                         </div>
         

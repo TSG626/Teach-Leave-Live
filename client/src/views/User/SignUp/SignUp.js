@@ -63,7 +63,7 @@ export default function SignUp() {
                 lastname: document.getElementById('lastname').value,
                 reference: document.getElementById('reference').value
             }).then(res => {
-                if(res.status == 200) setRegistered(true);
+                if(res.status === 200) setRegistered(true);
             }).catch(err => {
                 console.log(err.response.data);
                 setErrors({
