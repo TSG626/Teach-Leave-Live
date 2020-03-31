@@ -69,33 +69,35 @@ function DetailEditor(props){
 }
 
 function ModuleEditor(props){
-    // if(props.course.modules == undefined || props.course.modules.length == 0) return(<React.Fragment/>)
-    // if(props.selectedModule == 0 || props.selectedSection == 0) return('No sections');
+    const [editorInstance, setEditorInstance] = useState(null);
+    const [data, setData] = useState({});
+
+    async function handleSave(){
+        const saveData = await editorInstance.save();
+        props.editSection(props.moduleIndex, props.sectionIndex, saveData);
+        setData(props.course.modules[props.selectedModule].sections[props.selectSection].data);
+    }
+
+    useEffect(()=>{
+        setData(props.course.modules[props.selectedModule].sections[props.selectSection].data);
+    },[])
+
+    if(props.selectedModule == 0 || props.selectedSection == 0) return('No sections');
+    
     return(
         <Grid container>
             <Grid item xs={12}>
                 <Typography>Module Editor</Typography>
             </Grid>
             <Grid item xs={12}>
-                    {/* <Breadcrumbs aria-label="breadcrumb">
-                        <Link color="inherit" href="/" onClick={(e)=>{e.preventDefault()}}>
-                            {props.course.title}
-                        </Link>
-                        <Link color="inherit" href="/" onClick={(e)=>{e.preventDefault()}}>
-                            {JSON.stringify(props.course.modules[props.selectedModule])}
-                        </Link>
-                        <Typography color="textPrimary">{props.course.modules[props.selectedModule]}</Typography>
-                    </Breadcrumbs> */}
                     <EditorJs
-                        // data={}
+                        data={data}
+                        instanceRef={instance => setEditorInstance(instance)}
                         tools={{
-                            // linkTool: {
-                            //     class: LinkTool,
-                            //     config: { endpoint: 'http://localhost:5000/api/course/' + props.id}
-                            // },
                             ...COURSE_TOOLS
-                            }}
+                        }}
                     />
+                    <Button onClick={handleSave}>Save</Button>
             </Grid>
         </Grid>
     )
@@ -196,7 +198,7 @@ function Module(props){
 
     useEffect(() => {
         setName(props.module.name);
-    }, [props.module.name])
+    }, [])
 
     return(
         <React.Fragment>
@@ -212,10 +214,9 @@ function Module(props){
                             value={name}
                             onChange={(event)=>{setName(event.target.value)}}
                             onKeyPress={handleSubmit}
-                            onBlur={() => props.renameModule(props.index, name)}
                             onFocus={() => props.selectModule(props.index)}
                             inputProps={{style: {fontSize: 15, }}}
-                            autoFocus
+                            autoFocus={props.isModuleSelected(props.index)}
                             disableUnderline={!props.isModuleSelected(props.index)}
                             size='small'
                     /></Tooltip>}/>
@@ -313,16 +314,16 @@ export default function CourseEditor() {
     const [selectedSection, setSelectedSection] = useState(0);
     const [increment, setStillIncrement] = useState(true);
     let {id} = useParams();
-
-    useEffect(()=>{console.log(course)}, [course])
-
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         let ignore = false;
         async function fetchData(){
             API.get('/api/course/', {id: id}).then(res => {
-                console.log(res);
                 if(res.status === 200){
+                    if(res.data.modules.length > 0){
+                        setStillIncrement(false);
+                    }
                     setCourse(res.data);
                 }
             });
@@ -335,9 +336,11 @@ export default function CourseEditor() {
     function selectModule(index){
         setSelectedModule(index + 1)
     }
+
     function isModuleSelected(moduleIndex){
         return (selectedModule === moduleIndex + 1);
     }
+
     function addModule(){
         setCourse({...course, modules: [...course.modules, {
             name: increment ? 'Module ' + (course.modules.length + 1) : 'Untitled Module',
@@ -345,24 +348,29 @@ export default function CourseEditor() {
         }]});
         selectModule(course.modules.length);
     }
+
     function removeModule(index){
         if(increment) setStillIncrement(false);
         if(isModuleSelected(index)) selectModule(0);
         setCourse({...course, modules: [...course.modules].filter((module, i) => i !== index)});
     }
+
     function renameModule(index, name){
         setCourse({...course, modules: [...course.modules].map((module, i) =>{
             if(i === index) module.name = name;
             return module;
         })});
     }
+
     //Section functions
     function selectSection(index){
         setSelectedSection(index + 1);
     }
+
     function isSectionSelected(sectionIndex){
         return (selectedSection === sectionIndex + 1);
     }
+
     function addSection(moduleIndex){
         selectModule(moduleIndex);
         setCourse({...course, modules: [...course.modules].map((module, i) =>{
@@ -373,6 +381,7 @@ export default function CourseEditor() {
             }]});
         })});
     }
+
     function renameSection(moduleIndex, sectionIndex, name){
         setCourse({...course, modules: [...course.modules].map((module, i) =>{
             if(i !== moduleIndex) return module;
@@ -382,6 +391,27 @@ export default function CourseEditor() {
             })};
         })});
     }
+
+    function renameSection(moduleIndex, sectionIndex, name){
+        setCourse({...course, modules: [...course.modules].map((module, i) =>{
+            if(i !== moduleIndex) return module;
+            return {...module, sections: [...module.sections].map((section, i) => {
+                if(i !== sectionIndex) return section;
+                return({...section, name: name})
+            })};
+        })});
+    }
+
+    function editSection(moduleIndex, sectionIndex, data){
+        setCourse({...course, modules: [...course.modules].map((module, i) =>{
+            if(i !== moduleIndex) return module;
+            return {...module, sections: [...module.sections].map((section, i) => {
+                if(i !== sectionIndex) return section;
+                return({...section, data: data})
+            })};
+        })});
+    }
+
     function removeSection(moduleIndex, sectionIndex){
         if(increment) setStillIncrement(false);
         if(isSectionSelected(sectionIndex)) selectSection(0);
@@ -390,13 +420,24 @@ export default function CourseEditor() {
             return {...module, sections: [...module.sections].filter((section, i) => i !== sectionIndex)};
         })});
     }
+
+    async function handleSave(){
+        setSaving(true);
+        API.put(`/api/course/${id}`, course).then(res => {
+            console.log(res);
+            if(res.status === 200){
+                setSaving(false);
+            }
+        });
+    }
+
     return (
         <Container maxWidth={false} style={{padding:25}}>
             <Box border={1}>
                 <div className={classes.root}>
                     <Grid container>
                         <Grid item xs={12} style={{padding: 20}}>
-                            <Button startIcon={<SaveIcon/>} color='primary' variant='outlined' size='large'>Save</Button>
+                            <Button startIcon={<SaveIcon/>} onClick={handleSave} color='primary' variant='outlined' size='large'>Save</Button>
                         </Grid>
                         <Grid item xs={12} style={{padding:15}}>
                             <Box>
@@ -423,16 +464,18 @@ export default function CourseEditor() {
                         <Grid item xs={12} sm={8} style={{padding:15}}>
                             <Box>
                                 <ModuleEditor
+                                    id={id}
                                     course={course}
                                     setCourse={setCourse}
                                     selectedModule={selectedModule}
                                     selectedSection={selectedSection}
+                                    editSection={editSection}
                                 />
                             </Box>
                         </Grid>
                     </Grid>
                     <Grid item container xs={12} style={{padding: 20}} justify='center'>
-                            <Button startIcon={<SaveIcon/>} color='primary' variant='outlined' size='large'>Save</Button>
+                            <Button startIcon={<SaveIcon/>} onClick={handleSave} color='primary' variant='outlined' size='large'>Save</Button>
                     </Grid>
                 </div>
             </Box>

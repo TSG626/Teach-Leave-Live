@@ -3,6 +3,29 @@ const Course = require('../models/CourseModel.js');
 
 const router = express.Router();
 
+router.get('/:id/module/:mid/:sid/', (req, res, next) => {
+    Course.findById(req.params.id, (err, course) => {
+        if (err) return next(err);
+        const section = course.modules[req.params.mid].sections[req.params.sid];
+        console.log("Get section: ", section);
+        if(section.data) {
+            res.json(section.data);
+        }else{
+            res.status(400).send("error");
+        }
+    });
+})
+
+router.put('/:id/module/:mid/:sid/', (req, res, next) => {
+    Course.findById(req.params.id, (err, course) => {
+        if (err) return next(err);
+        const section = course.modules[req.params.mid].sections[req.params.sid];
+        course.modules[req.params.mid].sections[req.params.sid] = {...section, data: req.body};
+        console.log(course.modules[req.params.mid].sections[req.params.sid])
+        course.save().then(course => res.json(course));
+    });
+})
+
 router.get('/subjects/', (req, res, next) => {
     Course.find({}, function(err, courses) {
         var subjects = [];
