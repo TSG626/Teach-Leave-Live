@@ -4,24 +4,28 @@ var {Schema, Number} = mongoose;
 
 const blogSchema = new Schema({
     title: {type: String, required: true},
-    post: {type: String, required: true},
-    username: {type: String, required: true},
+    body: {type: String, required: true},
+    author: [{
+        type: String,
+        required: true
+    }],
     date: {type: Date, default: Date.now},
-    replies: [
-        {
-            title: {type: String, required: true},
-            post: {type: String, required: true},
-            username: {type: String, required: true},
-            date: {type: Date, default: Date.now},
-            replies: [
-            {
-                title: {type: String, required: true},
-                post: {type: String, required: true},
-                username: {type: String, required: true},
-                date: {type: Date, default: Date.now}
-            }]
-        }
-    ]
+    // replies: [
+    //     {
+    //         title: {type: String, required: true},
+    //         body: {type: String, required: true},
+    //         username: {type: String, required: true},
+    //         date: {type: Date, default: Date.now},
+    //         replies: [
+    //         {
+    //             title: {type: String, required: true},
+    //             post: {type: String, required: true},
+    //             username: {type: String, required: true},
+    //             date: {type: Date, default: Date.now}
+    //         }],
+    //         default: []
+    //     }
+    // ]
 });
 
 const Blog = mongoose.model('Blog', blogSchema);

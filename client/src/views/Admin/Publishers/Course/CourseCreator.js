@@ -158,7 +158,7 @@ export default function CourseCreator(props) {
     return (
         <Grid container>
             <Grid item xs={12}>
-                <Typography variant="h5">
+                <Typography varient="h5">
                     Course Creator
                 </Typography>
             </Grid>
