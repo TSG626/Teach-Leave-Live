@@ -8,11 +8,8 @@
     "@material-ui/lab": "^4.0.0-alpha.47",
     "axios": "^0.19.2",
     "http-proxy-middleware": "^1.0.0",
-<<<<<<< HEAD
     "material-ui-popup-state": "^1.5.3",
-=======
     "material-ui": "^0.20.2",
->>>>>>> c6464f10f041ee9a53c30c7bacb5ed85e469aea7
     "nodemon": "^2.0.2",
     "react": "^16.10.1",
     "react-avatar": "^3.9.2",
