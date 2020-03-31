@@ -5,7 +5,7 @@ var {Schema, Number} = mongoose;
 const blogSchema = new Schema({
     title: {type: String, required: true},
     body: {type: String, required: true},
-    author: [{
+    authors: [{
         type: String,
         required: true
     }],
