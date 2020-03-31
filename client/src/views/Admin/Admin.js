@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Route, Switch, Redirect, Link } from 'react-router-dom';
 import clsx from 'clsx';
 import {UserContext} from "../../contexts/UserContext"
-import BlogPublisher from "./Publishers/Blog/BlogPublisher";
+import Blog from "./Publishers/Blog/Blog";
 import Course from "./Publishers/Course/Course";
 import NewsletterPublisher from "./Publishers/Newsletter/NewsletterPublisher";
 import UserEditor from "./Publishers/User/UserEditor";
@@ -121,7 +121,7 @@ const Admin = ({match}) => {
                             <Grid item xs={12} sm={11}>
                                 <Container maxWidth='lg'>
                                     <Switch>
-                                        <Route path={`${match.path}/Blog`} component={BlogPublisher} />
+                                        <Route path={`${match.path}/Blog`} component={Blog} />
                                         <Route path={`${match.path}/Newsletter`} component={NewsletterPublisher} />
                                         <Route path={`${match.path}/User`} component={UserEditor} />
                                         <CourseProvider>
