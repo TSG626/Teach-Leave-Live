@@ -1,14 +1,11 @@
-import './BlogCreator.css';
 import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import DeleteIcon from '@material-ui/icons/Delete'
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Grid } from '@material-ui/core';
-import {UserContext} from '../../../../contexts/UserContext';
-import AuthorForm from '../../../../components/Admin/AuthorForm'
+import AuthorForm from '../../../../components/Admin/AuthorForm';
 import { Redirect } from 'react-router-dom';
 import API from '../../../../modules/API';
 
@@ -39,9 +36,9 @@ function BodyForm(props){
     const classes = useStyles();
     const [body, setBody] = useState('');
 
-    function addBody(a){
-        props.setBody(props.body.concat(a));
-    }
+    // function addBody(a){
+    //     props.setBody(props.body.concat(a));
+    // }
 
     return(
         <Grid container>
@@ -74,6 +71,7 @@ function BodyForm(props){
 export default function BlogCreator() {
     const classes = useStyles();
     
+    const [title, setTitle] = useState('');
     const [authors, setAuthors] = useState([]);
     const [body, setBody] = useState([]);
     const [id, setId] = useState('');
@@ -83,10 +81,13 @@ export default function BlogCreator() {
         API.post('/api/blog/', {
             title: document.getElementById('title').value,
             author: authors,
-            description: document.getElementById('description').value,
+            body: document.getElementById('body').value,
         }).then(res => {
+            console.log(res.data);
             if(res.status == 200){
+                setTitle(res.data.title);
                 setId(res.data.id);
+                setBody(res.data.body);
             }
         }).catch(err => {
             setErrors(err);
@@ -108,18 +109,18 @@ export default function BlogCreator() {
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <BodyForm body={body} setBody={setBody}/>
-                </Grid>
-                <Grid item xs={12}>
                     <TextField
                         variant="outlined"
                         margin="normal"
                         fullWidth
                         multiline
-                        id="description"
-                        label="Description"
-                        name="description"
+                        id="title"
+                        label="Title"
+                        name="title"
                     />
+                </Grid>
+                <Grid item xs={12}>
+                    <BodyForm body={body} setBody={setBody}/>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <AuthorForm authors={authors} setAuthors={setAuthors}/>

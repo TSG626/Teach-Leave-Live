@@ -158,22 +158,8 @@ const Home = () => {
                                         </tr>
                                         <tr>
                                             <td>
-                                                <Link2 target="_blank" rel="noopener" href="https://www.facebook.com">
+                                                <Link2 target="_blank" rel="noopener" href="https://www.facebook.com/teachleavelive/">
                                                     <FacebookIcon fontSize="large" color="inherit"/>
-                                                </Link2>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <Link2 target="_blank" rel="noopener" href="https://www.twitter.com">
-                                                    <TwitterIcon fontSize="large" color="inherit"/>
-                                                </Link2>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <Link2 target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live">
-                                                    <StoreIcon fontSize="large" color="inherit"/>
                                                 </Link2>
                                             </td>
                                         </tr>
