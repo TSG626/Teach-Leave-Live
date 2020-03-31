@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import API from '../../../../modules/API';
 import BlogCard from '../../../../components/Blog/BlogCard';
-import { Typography, ListItem, List, Button, CircularProgress, Grid, IconButton, Modal, CardContent, Card} from '@material-ui/core';
+import { Typography, ListItem, List, Button, CircularProgress, Grid, IconButton, Modal, CardContent, Card, Dialog} from '@material-ui/core';
 import { Switch, Route, Redirect, Link } from 'react-router-dom';
 import BlogCreator from './BlogCreator';
 import BlogEditor from './BlogEditor';
@@ -26,6 +26,28 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+function SimpleDialog(props) {
+  const { onClose, selectedValue, open } = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  const handleListItemClick = (value) => {
+    onClose(value);
+  };
+
+  return (
+    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+      <Container>
+            <CardContent>
+              <BlogCreator setAdding={props.setAdding}/>
+            </CardContent>
+        </Container>
+    </Dialog>
+  );
+}
+
 function BlogRouter({match}) {
     const [blogList, setBlogList] = useState([]);
     const [body, setBody] = useState('');
@@ -45,9 +67,13 @@ function BlogRouter({match}) {
       fetchData();
     }, []);
 
-    function handleAddBlog(event){
+  const handleClickOpen = () => {
       setAdding(true);
-    }
+    };
+  
+    const handleClose = () => {
+      setAdding(false);
+    };
 
     return (
       <Switch>
@@ -59,23 +85,10 @@ function BlogRouter({match}) {
                   <Typography className={classes.title}>
                     Blog
                   </Typography>
-                  <Button onClick={handleAddBlog} endIcon={<AddIcon/>} varient={'contained'}>
-                    Add Blog
-                  </Button>
-                  <Modal open={adding} onClose={() => setAdding(false)} className={classes.blogCreatorWindow}>
-                    <Container>
-                      <Card elevation={2}>
-                        <CardContent>
-                          <BlogCreator
-                          body={body}
-                          authors={authors}
-                          setBody={setBody}
-                          setAuthors={setAuthors}
-                          setAdding={setAdding}/>
-                        </CardContent>
-                      </Card>
-                    </Container>
-                  </Modal>
+                  <Button onClick={handleClickOpen} endIcon={<AddIcon/>} varient={'contained'}>
+                      Add Blog
+                    </Button>
+                    <SimpleDialog open={adding} onClose={handleClose} setAdding={setAdding} className={classes.courseCreatorWindow}/>
                 </Grid>
                 <Grid
                   container

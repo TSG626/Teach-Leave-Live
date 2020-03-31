@@ -146,19 +146,25 @@ function LogoIcon(){
 function Logo(){
     return (
         <Hoverable>{hovering => <div>
-            <Button component={RouterLink} to={'/Home'}>
-                <Box 
-                    display="flex" 
-                    justifyContent="center"
-                    bgcolor='white' m={1} 
-                    style={ {width: '3rem', height: '3rem'} } 
-                    borderRadius="50%"
-                    boxShadow={hovering ? 7 : 2}
-                    borderColor='secondary'
-                >
-                    <Typography style={{color: 'black', fontSize: 32, fontFamily: 'Georgia', paddingTop: 0}}>T</Typography>
-                </Box>
-            </Button>
+            <UserContext.Consumer>{context => {
+                var path;
+                context.isAuthenticated() ? path='/Home' : path='/';
+                return(
+                    <Button component={RouterLink} to={path}>
+                    <Box 
+                        display="flex" 
+                        justifyContent="center"
+                        bgcolor='white' m={1} 
+                        style={ {width: '3rem', height: '3rem'} } 
+                        borderRadius="50%"
+                        boxShadow={hovering ? 7 : 2}
+                        borderColor='secondary'
+                    >
+                        <Typography style={{color: 'black', fontSize: 32, fontFamily: 'Georgia', paddingTop: 0}}>T</Typography>
+                    </Box>
+                    </Button>
+                )
+            }}</UserContext.Consumer>
         </div>}</Hoverable>
     );
 }
