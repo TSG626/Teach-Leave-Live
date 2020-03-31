@@ -61,21 +61,7 @@ function BlogRouter({match}) {
                       </Container>
                     </Modal>
                   </Grid>
-                  <Grid
-                    container
-                    direction="column"
-                    justify="flex-start"
-                    alignItems="flex-start"
-                    className={classes.cardList}
-                  >
-                    {/* {context.blogList && context.blogList.map((blog, index) => {
-                      return(
-                        <Grid key={index} item container sm className={classes.card}>
-                          <BlogCard blog={blog}/>
-                        </Grid>
-                      )
-                    })} */}
-                  </Grid>
+                  
                 </Container>
                 )
             }}/>
