@@ -18,7 +18,6 @@ const useStyles = makeStyles(theme => ({
     moduleText: {
         width: 200,
         height: 50
-
     }
 }));
 
@@ -391,7 +390,6 @@ export default function CourseEditor() {
             return {...module, sections: [...module.sections].filter((section, i) => i !== sectionIndex)};
         })});
     }
-
     return (
         <Container maxWidth={false} style={{padding:25}}>
             <Box border={1}>
