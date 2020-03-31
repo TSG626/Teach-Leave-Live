@@ -149,6 +149,8 @@ export default function CourseCreator(props) {
         }).then(res => {
             if(res.status == 200){
                 props.setAdding(false);
+                window.location.reload(false); 
+                return false;
             }
         }).catch(err => {
             setErrors(err);
