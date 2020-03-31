@@ -9,7 +9,6 @@ import UserEditor from "./Publishers/User/UserEditor";
 import {Box, CssBaseline, Button, Typography, Container, Menu, List, ListItem, Grid, ListItemText, CircularProgress, makeStyles, ListItemIcon, Collapse, Drawer } from '@material-ui/core';
 import { CourseProvider } from '../../contexts/Admin/CourseContext';
 import {Book as CourseIcon, Announcement as NewsletterIcon, Person as UserIcon, Note as BlogIcon, ChevronRight as OpenIcon, ChevronLeft as CloseIcon } from '@material-ui/icons/'
-import { BlogProvider } from '../../contexts/Admin/BlogContext';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -122,14 +121,12 @@ const Admin = ({match}) => {
                             <Grid item xs={12} sm={11}>
                                 <Container maxWidth='lg'>
                                     <Switch>
+                                        <Route path={`${match.path}/Blog`} component={Blog} />
                                         <Route path={`${match.path}/Newsletter`} component={NewsletterPublisher} />
                                         <Route path={`${match.path}/User`} component={UserEditor} />
                                         <CourseProvider>
                                             <Route path={`${match.path}/Course`} component={Course} />
                                         </CourseProvider>
-                                        <BlogProvider>
-                                            <Route path={`${match.path}/Blog`} component={Blog} />
-                                        </BlogProvider>
                                     </Switch>
                                 </Container>
                             </Grid>
