@@ -11,6 +11,7 @@ import {UserContext} from '../../../../contexts/UserContext';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Grid, Tooltip } from '@material-ui/core';
 import API from '../../../../modules/API';
 import { Redirect } from 'react-router-dom';
+import AuthorForm from '../../../../components/Admin/AuthorForm'
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete'
 
 const useStyles = makeStyles(theme => ({
@@ -35,66 +36,6 @@ const useStyles = makeStyles(theme => ({
         color: 'red',
     }
 }));
-
-function AuthorForm(props){
-    const classes = useStyles();
-    const [author, setAuthor] = useState('');
-
-    function addAuthor(a){
-        props.setAuthors(props.authors.concat(a));
-    }
-
-    function removeAuthor(index){
-        const newAuthors = props.authors.filter((a, i) => {
-            if(i !== index) return(a);
-        }) 
-        props.setAuthors(newAuthors);
-    }
-
-    function handleAuthorSubmit(event){
-        if(event.key === 'Enter'){
-            addAuthor(document.getElementById('author').value);
-            setAuthor('');
-        }
-    }
-
-    return(
-        <Grid container>
-            <Tooltip arrow title="Type a name and press Enter">
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="author"
-                label="Authors"
-                name="author"
-                value={author}
-                onChange={(event) => setAuthor(event.target.value)}
-                onKeyPress={handleAuthorSubmit}
-            />
-            </Tooltip>
-            <Grid container>
-                {props.authors.map((author, index) => {
-                    return(
-                        <Grid item style={{paddingRight: 5, paddingBottom: 5}}>
-                            <Button
-                                key={index}
-                                variant="contained"
-                                color="secondary"
-                                className={classes.button}
-                                endIcon={<DeleteIcon/>}
-                                onClick={(event) => removeAuthor(index)}
-                            >
-                                {author}
-                            </Button>
-                        </Grid>
-                    )
-                })}
-            </Grid>
-        </Grid>   
-    )
-}
 
 function PriceForm(props){
     const classes = useStyles();
@@ -208,6 +149,8 @@ export default function CourseCreator(props) {
         }).then(res => {
             if(res.status == 200){
                 props.setAdding(false);
+                window.location.reload(false); 
+                return false;
             }
         }).catch(err => {
             setErrors(err);
@@ -217,7 +160,7 @@ export default function CourseCreator(props) {
     return (
         <Grid container>
             <Grid item xs={12}>
-                <Typography variant="h5">
+                <Typography varient="h5">
                     Course Creator
                 </Typography>
             </Grid>
