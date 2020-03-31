@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const CourseCard = (props) => {
+export default function BlogCard(props){
   const classes = useStyles();
 
   return (
@@ -26,15 +26,15 @@ const CourseCard = (props) => {
         <div className={classes.root}>
             <ExpansionPanel expanded={hovering}>
                 <ExpansionPanelSummary>
-                    <Typography className={classes.title}>{props.course.title}</Typography>
+                    <Typography className={classes.title}>{props.blog.title}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                    <Typography varient="subtitle" color={'textSecondary'}>{props.course.description}</Typography>
+                    <Typography varient="subtitle" color={'textSecondary'}>{props.blog.description}</Typography>
                 </ExpansionPanelDetails>
                 <ExpansionPanelActions>
                     <ButtonGroup fullWidth varient="contained" color="secondary">
-                        <Button component={Link} className={classes.action} to={`/Admin/Course/Edit/${props.course._id}`}>Edit Course</Button>
-                        <Button component={Link} className={classes.action} to={`/Admin/Course/View/${props.course._id}`}>Course Info</Button>
+                        <Button component={Link} className={classes.action} to={`/Admin/Course/Edit/${props.blog._id}`}>Edit Blog</Button>
+                        <Button component={Link} className={classes.action} to={`/Admin/Course/View/${props.blog._id}`}>Course Info</Button>
                     </ButtonGroup>
                 </ExpansionPanelActions>
             </ExpansionPanel>
@@ -42,6 +42,3 @@ const CourseCard = (props) => {
     </div>}</Hoverable>
   );
 };
-
-
-export default CourseCard;
