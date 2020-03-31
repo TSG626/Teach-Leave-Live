@@ -53,6 +53,11 @@ export default function Login() {
     const [message, setMessage] = useState('');
     const [email_message, setEmail_message] = useState('');
 
+    async function handleClick(e) {
+        API.post('/api/authEmail', {
+            email: document.getElementById('email').value
+        })
+    }
     async function handleSubmit(e, context){
         e.preventDefault();
         API.post('/api/login', {
@@ -64,10 +69,12 @@ export default function Login() {
                 setAuthed(true);
             }
         }).catch(err => {
-            if (err.response.data.message === 'Email has not been verified') {
-                setEmail_message();
+            if (err.response.data.name == "UnverifiedEmail") {
+                setEmail_message(err.response.data.message);
             }
-            setMessage(err.response.data.message);
+            else {
+                setMessage(err.response.data.message);
+            }
         });
     }
 
@@ -116,6 +123,18 @@ export default function Login() {
                     {message ? <Typography className={classes.error}>
                         {message}
                     </Typography> : <React.Fragment/>}
+                    {email_message ? 
+                        <React.Fragment>
+                            <Typography className={classes.error}>
+                                {email_message} Check your inbox.
+                                To resend the email, click the button below.
+                            </Typography>
+                            <Button color = "primary" component={Link} href = '/User/Login' onClick = {(e) => handleClick(e)}>
+                                Resend Authentication Email
+                            </Button>
+                        </React.Fragment>
+                    : null}
+
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"

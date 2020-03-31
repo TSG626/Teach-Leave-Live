@@ -1,13 +1,13 @@
 const express = require('express'),
     passport = require('passport'),
     passwordmaster = require('../config/passwordreset.js'),
+    authEmail = require('../config/authEmail'),
     validator = require('validator'),
     config = require('../config/config'),
     User = require('../models/UserModel.js'),
     PasswordReset = require('../models/PasswordResetModel.js'),
     bcrypt = require('bcrypt'),
     jwt = require('jsonwebtoken'),
-    crypto = require('crypto'),
     sendEmail = require('../email/sendEmail.js');
 
 const router = express.Router();
@@ -139,18 +139,21 @@ router.post('/login', (req, res, next) => {
             if (err.name === 'IncorrectCredentialsError') {
                 return res.status(400).json({
                     success: false,
+                    name: err.name,
                     message: err.message
                 });
             }
             else if (err.name === 'UnverifiedEmail') {
                 return res.status(400).json({
                     success: false,
+                    name: err.name,
                     message: err.message
                 })
             }
             else{
                 return res.status(400).json({
                     success: false,
+                    name: err.name,
                     message: 'Could not process the form.'
                 });
             }
@@ -398,11 +401,14 @@ router.post('/updateusername', updateUsernameHandler);
 router.post('/updatepassworduser', updatePasswordUser);
 //Check to see if username exists
 router.post('/checkusernamenotexist', checkUsernameNotExist);
+router.post('/authEmail', authEmail.resendEmail);
+
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
 
 //confirm email
 router.get('/confirmEmail', (req, res) => {
+    console.log(req.query.key);
     User.updateOne({key_for_verify:req.query.key}, {$set: {email_verified: true}}, (err, user) => {
         if (err) {
             console.log(err);
