@@ -48,7 +48,10 @@ const ChangePassword = () => {
 
 
     const handleSubmit = () => {
-        if (newpassword != confirmpassword) {
+        if (newpassword.length < 8) {
+            setMessage('The new password must be 8 characters or more.')
+        }
+        else if (newpassword != confirmpassword) {
             setMessage('The new and confirmation password do not match.')
         }
         else {
@@ -105,7 +108,7 @@ const ChangePassword = () => {
                             className={classes.formField}
                             onChange={(e) => {setNewPassword(e.target.value)}}
                         />
-                        {newpassword.length !== 8 ? <Typography className={classes.error}>
+                        {newpassword.length < 8 ? <Typography className={classes.error}>
                             Password must be 8 characters.
                         </Typography>: <React.Fragment/>}
                         <TextField

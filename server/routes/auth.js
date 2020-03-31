@@ -341,26 +341,6 @@ const sendCodeEmail = async (email, code) => {
     return 'got here';
 };
 
-router.post('/makeAdmin', async (req, res, next) => {
-    User.findOneAndUpdate(
-        { 'email': req.body.email },
-        { 'admin': req.body.admin },
-        {returnNewDocument: true}).then((user) => {
-            return res.status(200).json({
-                success: true,
-            });
-        }
-    );
-})
-
-router.post('/deleteUser', async (req, res, next) => {
-    User.remove({'username': req.body.username}).then((user) => {
-        return res.status(200).json({
-            success: true,
-        });
-    })
-})
-
 router.post('/forgotpassword', async (req, res, next) => {
     let validationResult;
     if (req.body.mode === 'email') {
@@ -425,14 +405,6 @@ router.post('/authEmail', authEmail.resendEmail);
 
 //Signup
 router.post('/register', checkNotAuthenticated, registerHandler);
-
-router.get('/getAllUsers', async (req, res) => {
-    User.find({}, function(err, data) {
-        if(err)
-            return err;
-        return res.json(data);
-    })
-})
 
 //confirm email
 router.get('/confirmEmail', (req, res) => {
