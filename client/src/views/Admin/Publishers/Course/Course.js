@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import API from '../../../../modules/API';
 import SubjectCard from '../../../../components/Course/SubjectCard';
-import { Typography, ListItem, List, Button, CircularProgress, Grid, IconButton, Modal, CardContent, Card} from '@material-ui/core';
+import { Typography, ListItem, List, Button, CircularProgress, Grid, IconButton, Modal, CardContent, Card, Dialog, DialogTitle} from '@material-ui/core';
 import { Switch, Route, Redirect, Link } from 'react-router-dom';
 import CourseCreator from './CourseCreator';
 import CourseEditor from './CourseEditor';
@@ -28,14 +28,41 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+function SimpleDialog(props) {
+  const { onClose, selectedValue, open } = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  const handleListItemClick = (value) => {
+    onClose(value);
+  };
+
+  return (
+    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+      <Container>
+            <CardContent>
+              <CourseCreator context={props.context} setAdding={props.setAdding}/>
+            </CardContent>
+        </Container>
+    </Dialog>
+  );
+}
+
+
 export default function CourseRouter({match}) {
     const classes = useStyles();
     const [errors, setErrors] = useState({});
     const [adding, setAdding] = useState(false);
-
-    function handleAddCourse(event){
+  
+    const handleClickOpen = () => {
       setAdding(true);
-    }
+    };
+  
+    const handleClose = () => {
+      setAdding(false);
+    };
 
     return (
     <CourseContext.Consumer>{context=>{
@@ -49,10 +76,11 @@ export default function CourseRouter({match}) {
                     <Typography className={classes.title}>
                       Courses
                     </Typography>
-                    <Button onClick={handleAddCourse} endIcon={<AddIcon/>} varient={'contained'}>
+                    <Button onClick={handleClickOpen} endIcon={<AddIcon/>} varient={'contained'}>
                       Add Course
                     </Button>
-                    <Modal open={adding} onClose={() => setAdding(false)} className={classes.courseCreatorWindow}>
+                    <SimpleDialog open={adding} onClose={handleClose} context={context} setAdding={setAdding} className={classes.courseCreatorWindow}/>
+                    {/* <Modal open={adding} onClose={() => setAdding(false)} className={classes.courseCreatorWindow}>
                       <Container>
                         <Card elevation={2}>
                           <CardContent>
@@ -60,7 +88,7 @@ export default function CourseRouter({match}) {
                           </CardContent>
                         </Card>
                       </Container>
-                    </Modal>
+                    </Modal> */}
                   </Grid>
                   <Grid
                     container
