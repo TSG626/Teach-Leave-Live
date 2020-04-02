@@ -181,6 +181,10 @@ export default function ForgotPassword() {
             />
             <h5>{errors.code}</h5>
             <h5 class="message">{message}</h5>
+            <h5 class="message">If you did not receive an email, </h5>
+            <Link href="/Contact">
+                contact us.
+            </Link>
             <Button
                 type="submit"
                 fullWidth
