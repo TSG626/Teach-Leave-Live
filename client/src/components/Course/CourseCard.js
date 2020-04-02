@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 import { Button, ButtonGroup, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, ExpansionPanelActions } from '@material-ui/core';
 import Hoverable from '../Interface/Hoverable';
+import { UserContext } from '../../contexts/UserContext';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,6 +23,8 @@ const CourseCard = (props) => {
   const classes = useStyles();
 
   return (
+  <UserContext.Consumer>{context => {
+    return(
     <Hoverable>{hovering => <div>
         <div className={classes.root}>
             <ExpansionPanel expanded={hovering}>
@@ -31,15 +34,19 @@ const CourseCard = (props) => {
                 <ExpansionPanelDetails>
                     <Typography varient="subtitle" color={'textSecondary'}>{props.course.description}</Typography>
                 </ExpansionPanelDetails>
-                <ExpansionPanelActions>
-                    <ButtonGroup fullWidth varient="contained" color="secondary">
-                        <Button component={Link} className={classes.action} to={`/Admin/Course/Edit/${props.course._id}`}>Edit Course</Button>
-                        <Button component={Link} className={classes.action} to={`/Admin/Course/View/${props.course._id}`}>Course Info</Button>
-                    </ButtonGroup>
-                </ExpansionPanelActions>
+                {context.user.admin ? 
+                    <ExpansionPanelActions>
+                        <ButtonGroup fullWidth varient="contained" color="secondary">
+                            <Button component={Link} className={classes.action} to={`/Admin/Course/Edit/${props.course._id}`}>Edit Course</Button>
+                            <Button component={Link} className={classes.action} to={`/Course/${props.course._id}`}>Course Info</Button>
+                        </ButtonGroup>
+                    </ExpansionPanelActions>
+                : <React.Fragment/>}
             </ExpansionPanel>
         </div>
     </div>}</Hoverable>
+    )
+  }}</UserContext.Consumer>
   );
 };
 
