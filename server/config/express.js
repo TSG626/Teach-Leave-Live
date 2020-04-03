@@ -7,9 +7,8 @@ const path = require('path'),
     // session = require('express-session'),
     passport = require('passport'),
     cors = require('cors'),
-    cookieParser = require('cookie-parser');
-    // MongoStore = require('connect-mongo')(session);
-
+    cookieParser = require('cookie-parser')
+    
 module.exports.init = () => {
     //connect to database
     mongoose.connect(config.db.uri, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}).then(() => {
