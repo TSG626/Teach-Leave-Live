@@ -39,7 +39,11 @@ const userSchema = new Schema({
     },
     key_for_verify: {
         type: String,
-        required: true
+    },
+    avatar: {
+        type: String,
+        required: true,
+        default: ''
     }
 });
 
