@@ -51,11 +51,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const AccountOptions = () => {
-    let admin = false;
 
     return(
         <UserContext.Consumer>{context => {
-            admin = true;
             if(!context.isAuthenticated()){
                 return(
                     <Grid container>
@@ -73,7 +71,7 @@ const AccountOptions = () => {
                         <Grid item xs={12} sm={6}>
                             <Link href='/User/Logout' color='inherit'>Log Out</Link>
                         </Grid>
-                        {admin && <Grid item xs={12} sm={6}>
+                        {(context.user.status === 1 || context.user.status === 0) && <Grid item xs={12} sm={6}>
                             <Link href='/Admin/' color='inherit'>Admin Panel</Link>
                         </Grid>}
                     </Grid>

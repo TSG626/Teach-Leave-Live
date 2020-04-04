@@ -94,45 +94,37 @@ function NavMenu(){
 
 const Admin = ({match}) => {
     const classes = useStyles();
-    const [admin, setAdmin] = useState(true);
-
-    function checkAdmin(context){
-        if(context.user){
-            setAdmin(context.user.admin);
-        }
-    }
-
-    if(admin === false) {
-        return(<Redirect to='/Home'/>);
-    };
-
     return(
             <UserContext.Consumer>{context => {
-                {checkAdmin(context)}
-                return(
-                    <div className={classes.root}>
-                        <CssBaseline/>
-                        <Grid container>
-                            <Grid item xs={12} sm={1}>
-                                <Box className={classes.nav}>
-                                    <NavMenu/>
-                                </Box>
+                // if(context.user.status !== 1) {
+                    return(
+                        <div className={classes.root}>
+                            <CssBaseline/>
+                            <Grid container>
+                                <Grid item xs={12} sm={1}>
+                                    <Box className={classes.nav}>
+                                        <NavMenu/>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={12} sm={11}>
+                                    <Container maxWidth='lg'>
+                                        <Switch>
+                                            <Route path={`${match.path}/Blog`} component={Blog} />
+                                            <Route path={`${match.path}/Newsletter`} component={NewsletterPublisher} />
+                                            <Route path={`${match.path}/User`} component={UserEditor} />
+                                            <CourseProvider>
+                                                <Route path={`${match.path}/Course`} component={Course} />
+                                            </CourseProvider>
+                                        </Switch>
+                                    </Container>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} sm={11}>
-                                <Container maxWidth='lg'>
-                                    <Switch>
-                                        <Route path={`${match.path}/Blog`} component={Blog} />
-                                        <Route path={`${match.path}/Newsletter`} component={NewsletterPublisher} />
-                                        <Route path={`${match.path}/User`} component={UserEditor} />
-                                        <CourseProvider>
-                                            <Route path={`${match.path}/Course`} component={Course} />
-                                        </CourseProvider>
-                                    </Switch>
-                                </Container>
-                            </Grid>
-                        </Grid>
-                    </div>
-                )
+                        </div>
+                    )
+                // }
+                // else {
+                //     return(<Redirect to='/Home'/>)
+                // }
             }}</UserContext.Consumer>
     )
 }
