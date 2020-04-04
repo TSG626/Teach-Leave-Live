@@ -8,20 +8,20 @@ const config = require('../config/config');
 
 const router = express.Router();
 
-//Checks if admin
+//Checks if admin or owner
 router.use('/', (req, res, next) => {
-    if (req.user.admin === true) {
+    if (req.user.status === 1 || req.user.status === 0) {
         next();
     } else {
         res.status(401).send({ message: 'User is not an admin.' });
     }
 });
 
-//makes user admin
-router.post('/makeAdmin', async (req, res, next) => {
+//change status level
+router.post('/changeStatus', async (req, res, next) => {
     User.findOneAndUpdate(
         { 'email': req.body.email },
-        { 'admin': req.body.admin },
+        { 'status': req.body.status },
         {returnNewDocument: true}).then((user) => {
             return res.status(200).json({
                 success: true,
