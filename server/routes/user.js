@@ -94,13 +94,13 @@ router.get('/', (req, res, next) => {
         })
     }else{
         if (req.user){
-            const {username, email, firstname, lastname, admin, avatar} = req.user;
+            const {username, email, firstname, lastname, status, avatar} = req.user;
             res.status(200).send(JSON.stringify({
                 username: username,
                 email: email,
                 firstname: firstname,
                 lastname: lastname,
-                admin: admin,
+                status: status,
                 avatar: avatar
             }))
         }else{

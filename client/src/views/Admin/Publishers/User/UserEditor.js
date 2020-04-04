@@ -79,10 +79,10 @@ const GetUsers = () => {
     const makeAdmin = (user, popupState) => {
         
         var confirmed;
-        if(!user.admin) {
+        if(user.status !== 1) {
             confirmed = window.confirm("Would you like to make " + user.firstname + " " + user.lastname + " an admin?");
             if(confirmed) {
-                API.post('/api/admin/makeAdmin', {email: user.email, admin: true}).then(res => {
+                API.post('/api/admin/changeStatus', {email: user.email, status: 1}).then(res => {
                     alert(user.firstname + " " + user.lastname + " is an admin!");
                     popupState.close();
                     window.location.reload(false); 
@@ -93,7 +93,7 @@ const GetUsers = () => {
         else {
             confirmed = window.confirm("Would you like to make " + user.firstname + " " + user.lastname + " not an admin?");
             if(confirmed) {
-                API.post('/api/admin/makeAdmin', {email: user.email, admin: false}).then(res => {
+                API.post('/api/admin/changeStatus', {email: user.email, status: 3}).then(res => {
                     alert(user.firstname + " " + user.lastname + " is not an admin!");
                     popupState.close();
                     window.location.reload(false); 
@@ -152,7 +152,7 @@ const GetUsers = () => {
                                 <TableCell>{user.firstname + " " + user.lastname}</TableCell>
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>{user.username}</TableCell>
-                                <TableCell>{user.admin ? <CheckIcon/>:<ClearIcon/>}</TableCell>
+                                <TableCell>{user.status === 1 ? <CheckIcon/>:<ClearIcon/>}</TableCell>
                                 <TableCell>
                                     <PopupState variant="popover" popupId="demo-popup-menu">
                                     {popupState => (
@@ -162,7 +162,7 @@ const GetUsers = () => {
                                         </Button>
                                         <Menu {...bindMenu(popupState)}>
                                             {userInfo.user.username === user.username ? <div><MenuItem onClick={handleClickOpen}>View Account</MenuItem><SimpleDialogUser selectedValue={selectedValue} open={open} onClose={handleClose} user={user}/></div> : 
-                                            <div>{user.admin ? <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Remove Admin</MenuItem> : <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Approve Admin</MenuItem>}
+                                            <div>{user.status === 1 ? <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Remove Admin</MenuItem> : <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Approve Admin</MenuItem>}
                                             <MenuItem onClick={() => {deleteUser(user, popupState);}}>Delete User</MenuItem></div>}
                                         </Menu>
                                         </React.Fragment>
