@@ -9,6 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import StarIcon from '@material-ui/icons/Star';
 import { UserContext } from '../../../../contexts/UserContext'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -31,10 +32,6 @@ const useStyles = makeStyles({
   
     const handleClose = () => {
       onClose(selectedValue);
-    };
-  
-    const handleListItemClick = value => {
-      onClose(value);
     };
 
     return (
@@ -118,6 +115,31 @@ const GetUsers = () => {
         }
         popupState.close();
     }
+    const makeMod = (user, popupState) => {
+        var confirmed;
+        if(user.status !== 2) {
+            confirmed = window.confirm("Would you like to make " + user.firstname + " " + user.lastname + " a moderator?");
+            if(confirmed) {
+                API.post('/api/admin/changeStatus', {email: user.email, status: 2}).then(res => {
+                    alert(user.firstname + " " + user.lastname + " is a moderator!");
+                    popupState.close();
+                    window.location.reload(false); 
+                    return false;
+                })
+            }
+        }
+        else {
+            confirmed = window.confirm("Would you like to make " + user.firstname + " " + user.lastname + " not a moderator?");
+            if(confirmed) {
+                API.post('/api/admin/changeStatus', {email: user.email, status: 3}).then(res => {
+                    alert(user.firstname + " " + user.lastname + " is not a moderator!");
+                    popupState.close();
+                    window.location.reload(false); 
+                    return false;
+                })
+            }
+        }
+    }
     const [open, setOpen] = React.useState(false);
     const [selectedValue, setSelectedValue] = React.useState();
   
@@ -133,7 +155,7 @@ const GetUsers = () => {
     const userInfo = useContext(UserContext);
     return(
         <div>
-            <Box ml="15%" mr="15%">
+            <Box ml="10%" mr="10%">
             <TableContainer component={Paper} >
             <Table className={classes.table} aria-label="simple table">
                 <TableHead>
@@ -143,7 +165,7 @@ const GetUsers = () => {
                             <TableCell>Name</TableCell>
                             <TableCell>Email</TableCell>
                             <TableCell>Username</TableCell>
-                            <TableCell>Admin</TableCell>
+                            <TableCell>Status</TableCell>
                             <TableCell></TableCell>
                     </TableRow>
                     {data.map(user => {
@@ -152,19 +174,24 @@ const GetUsers = () => {
                                 <TableCell>{user.firstname + " " + user.lastname}</TableCell>
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>{user.username}</TableCell>
-                                <TableCell>{user.status === 1 ? <CheckIcon/>:<ClearIcon/>}</TableCell>
+                                <TableCell>{user.status === 1 ? "Admin":<React.Fragment></React.Fragment>}{user.status === 2 ? "Moderator":<React.Fragment></React.Fragment>}
+                                {user.status === 3 ? "User" : <React.Fragment></React.Fragment>}{user.status === 0 ? "Owner":<React.Fragment></React.Fragment>}</TableCell>
                                 <TableCell>
                                     <PopupState variant="popover" popupId="demo-popup-menu">
                                     {popupState => (
                                         <React.Fragment>
-                                        <Button {...bindTrigger(popupState)}>
-                                            <MoreVertIcon/>
-                                        </Button>
-                                        <Menu {...bindMenu(popupState)}>
-                                            {userInfo.user.username === user.username ? <div><MenuItem onClick={handleClickOpen}>View Account</MenuItem><SimpleDialogUser selectedValue={selectedValue} open={open} onClose={handleClose} user={user}/></div> : 
-                                            <div>{user.status === 1 ? <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Remove Admin</MenuItem> : <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Approve Admin</MenuItem>}
-                                            <MenuItem onClick={() => {deleteUser(user, popupState);}}>Delete User</MenuItem></div>}
-                                        </Menu>
+                                            {user.status === 0 ? <Box ml={2} mt={1}><StarIcon/></Box> : 
+                                                <div>
+                                                    <Button {...bindTrigger(popupState)}>
+                                                        <MoreVertIcon/>
+                                                    </Button>
+                                                    <Menu {...bindMenu(popupState)}>
+                                                        {userInfo.user.username === user.username ? <div><MenuItem onClick={handleClickOpen}>View Account</MenuItem><SimpleDialogUser selectedValue={selectedValue} open={open} onClose={handleClose} user={user}/></div> : 
+                                                        <div>{user.status === 1 ? <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Remove Admin</MenuItem> : <MenuItem onClick={() => {makeAdmin(user, popupState);}}>Approve Admin</MenuItem>}
+                                                        {user.status === 2 ? <MenuItem onClick={() => {makeMod(user, popupState);}}>Remove Moderator</MenuItem> : <MenuItem onClick={() => makeMod(user, popupState)}>Approve Moderator</MenuItem>}
+                                                        <MenuItem onClick={() => {deleteUser(user, popupState);}}>Delete User</MenuItem></div>}
+                                                    </Menu>
+                                                </div>}
                                         </React.Fragment>
                                     )}
                                     </PopupState>
