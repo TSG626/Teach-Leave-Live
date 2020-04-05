@@ -34,7 +34,7 @@ const CourseCard = (props) => {
                 <ExpansionPanelDetails>
                     <Typography varient="subtitle" color={'textSecondary'}>{props.course.description}</Typography>
                 </ExpansionPanelDetails>
-                {context.user.status === 1 || context.user.status === 0 ? 
+                {(context.user.status === 1 || context.user.status === 0) ? 
                     <ExpansionPanelActions>
                         <ButtonGroup fullWidth varient="contained" color="secondary">
                             <Button component={Link} className={classes.action} to={`/Admin/Course/Edit/${props.course._id}`}>Edit Course</Button>
