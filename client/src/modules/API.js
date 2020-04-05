@@ -19,5 +19,14 @@ export default {
                 "Authorization": `JWT ${localStorage.getItem('token')}`
             },
         })
-    }
+    },
+    put: async function(path, body){
+        console.log(path);
+        return await axios.put(path, JSON.stringify(body),{
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization": `JWT ${localStorage.getItem('token')}`
+            },
+        })
+    },
 }
