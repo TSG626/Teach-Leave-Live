@@ -96,5 +96,23 @@ module.exports = {
 
         });
 
-    }
+    },
+    contact: function (body) {
+      const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/contact/contact-inlined.html', 'utf-8');
+      let compiledEmail = Hogan.compile(emailTemplate);
+
+      let mailOptions = {
+          from: body.email,
+          to: config.email.username,
+          subject: 'From the TLL contact form',
+          html: compiledEmail.render({email: body.email, body: body.message})
+      };
+      transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+              console.log(error);
+          } else {
+              console.log('Contact email sent from: ' + body.email);
+          }
+      });
+    },
 }
