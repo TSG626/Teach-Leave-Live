@@ -35,7 +35,6 @@ const useStyles = makeStyles(theme => ({
 function BodyForm(props){
     const classes = useStyles();
     const [body, setBody] = useState('');
-    console.log(props);
 
     return(
         <Grid container>
@@ -80,7 +79,7 @@ export default function BlogCreator(props) {
             authors: authors,
             body: document.getElementById('body').value,
         }).then(res => {
-            console.log(res.data);
+            //console.log(res.data);
             if(res.status == 200){
                 props.setBody(res.data.body);
                 props.setAuthors(res.data.authors);
@@ -133,6 +132,7 @@ export default function BlogCreator(props) {
                             name="body"
                             value={body}
                             onChange={(event) => setBody(event.target.value)}
+                            multiline
                         />
                     </Grid>
                 </Grid>

@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BlogCard(props){
     const classes = useStyles();
-    console.log(props);
+    
     return (
         <Hoverable>{hovering => <div>
             <div className={classes.root}>
