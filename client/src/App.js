@@ -16,6 +16,7 @@ import NotFound from "./views/NotFound";
 import Login from './views/User/Login/Login';
 import SignUp from './views/User/SignUp/SignUp';
 import ForgotPassword from './views/User/ForgotPassword/ForgotPassword';
+import Contact from './views/Contact/Contact.js';
 import themes from './themes'
 
 const useStyles = makeStyles(theme => ({
@@ -34,6 +35,7 @@ const Authorization = () => {
             <Route exact path="/User/SignUp" component={SignUp}/>
             <Route exact path="/User/Login" component={Login}/>
             <Route exact path="/User/ForgotPassword" component={ForgotPassword}/>
+            <Route path="/Contact" component={Contact} />
             <Route path="/" component={() => {
               return(<React.Fragment/>)
             }}/>
@@ -57,6 +59,7 @@ const Routes = () => {
       <Route path="/Catalogue" component={Catalogue} />
       <Route path="/Course" component={Course} />
       <Route path="/Store" component={Store} />
+      <Route path="/Contact" component={Contact} />
       <Route component={NotFound}/>
     </Switch>
   )
