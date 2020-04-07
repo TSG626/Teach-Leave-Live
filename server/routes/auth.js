@@ -299,7 +299,7 @@ const updatePasswordUser = async (req, res, done) => {
                 error.name = 'UpdatingPasswordError';
                 return done(error);
             }
-            
+
             bcrypt.compare(req.body.oldPassword, user.password).then((response) => {
                 if (response === true) {
                     User.findOneAndUpdate(
@@ -422,6 +422,7 @@ router.get('/confirmEmail', (req, res) => {
         }
     })
 });
+
 //Authed users may access other routes of the site including homepage.
 router.use('/', (req, res, next) => {
     passport.authenticate('jwt', {session: false}, (err, user) => {
