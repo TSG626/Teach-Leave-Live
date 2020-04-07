@@ -31,7 +31,7 @@ export default function BlogEditor() {
     useEffect(() => {
         async function fetchData(){
             API.get('/api/blog/', {id: id}).then(res => {
-                console.log(res);
+                //console.log(res);
                 if(res.status === 200){
                     setBlog(res.data);
                 }
