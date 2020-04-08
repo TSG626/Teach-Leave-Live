@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import API from '../../../../modules/API';
 import BlogCard from '../../../../components/Blog/BlogCard';
-import { Typography, ListItem, List, Button, CircularProgress, Grid, IconButton, Modal, CardContent, Card, Dialog} from '@material-ui/core';
-import { Switch, Route, Redirect, Link } from 'react-router-dom';
+import { Typography, Button, Grid, CardContent, Dialog} from '@material-ui/core';
+import { Switch, Route} from 'react-router-dom';
 import BlogCreator from './BlogCreator';
+import {Add as AddIcon} from '@material-ui/icons/';
+import API from '../../../../modules/API';
 import BlogEditor from './BlogEditor';
-import { BlogContext } from '../../../../contexts/Admin/BlogContext';
-import {Add as AddIcon, Edit as EditIcon, Close} from '@material-ui/icons/';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -51,8 +50,6 @@ function SimpleDialog(props) {
 
 export default function BlogRouter({match}) {
     const [blogList, setBlogList] = useState([]);
-    const [body, setBody] = useState('');
-    const [authors, setAuthors] = ([]);
     const classes = useStyles();
     const [errors, setErrors] = useState({});
     const [adding, setAdding] = useState(false);
@@ -92,10 +89,9 @@ export default function BlogRouter({match}) {
               justify="flex-start"
               alignItems="flex-start"
               className={classes.cardList}>
-                {console.log(blogList)}
                 {blogList && blogList.map((blog, index) => {
                   return(
-                    <Grid key={index} item container sm className={classes.card}>
+                    <Grid key={index} item container xs={12} className={classes.card}>
                       <BlogCard blog={blog}/>
                     </Grid>
                   )

@@ -12,7 +12,6 @@ const BlogProvider = (props) => {
       async function fetchData(){
           API.get('/api/blog/').then(res => {
               if(res.status == 200){
-                console.log(res);
                 setBlogList(res.data);
               }
           });
