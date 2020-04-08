@@ -10,6 +10,8 @@ const useStyles = makeStyles((theme) => ({
         width: "100%"
     },
     title: {
+        width: "100%",
+        varient: "h4"
     },
     content: {
     },
@@ -20,22 +22,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BlogCard(props){
     const classes = useStyles();
-    
+
     return (
         <Hoverable>{hovering => <div>
             <div className={classes.root}>
                 <ExpansionPanel expanded={hovering}>
                     <ExpansionPanelSummary>
-                        <Typography className={classes.title}>{props.blog.title}</Typography>
+                        <Typography className={classes.title}>{props.blog.title} ({props.blog.authors})</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <Typography varient="subtitle" color={'textSecondary'}>{props.body}</Typography>
+                        <Typography varient="body2" color={'textSecondary'}>{props.blog.body}</Typography>
                     </ExpansionPanelDetails>
-                    {/* <ExpansionPanelActions>
-                        <ButtonGroup fullWidth varient="contained" color="secondary">
-                            <Button component={Link} className={classes.action} to={`/Admin/Blog/${props.blog._id}`}>Edit Blog</Button>
-                        </ButtonGroup>
-                    </ExpansionPanelActions> */}
                 </ExpansionPanel>
             </div>
         </div>}</Hoverable>
