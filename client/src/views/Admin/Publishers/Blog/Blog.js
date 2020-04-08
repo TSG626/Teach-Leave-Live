@@ -101,6 +101,6 @@ export default function BlogRouter({match}) {
           )
       }}/>
       <Route path={`${match.path}/Create`} component={BlogCreator} />
-      {/* <Route exact path={`${match.path}/Edit/:id`} component={BlogEditor}/> */}
+      <Route exact path={`${match.path}/Edit/:id`} component={BlogEditor}/>
     </Switch>)
 }
