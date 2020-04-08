@@ -33,12 +33,13 @@ const UserProvider = (props) => {
         async function fetchData(){
             API.get('/api/user/').then(res => {
                 if(res.status == 200){
-                    const {username, email, firstname, lastname, status} = res.data;
+                    const {username, email, firstname, lastname, status, avatar} = res.data;
                     setUser({
                         username: username,
                         email: email,
                         firstname: firstname,
                         lastname: lastname,
+                        avatar: avatar,
                         status: status,
                     });
                 }
