@@ -37,7 +37,7 @@ module.exports = {
         });
     },
     forgotPassword: function (key, userInfo) {
-        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/authenticateEmail/authenticateEmail-inlined.html', 'utf-8')
+        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/forgotPassword/forgotPassword-inlined.html', 'utf-8')
         var compiledEmail = Hogan.compile(emailTemplate)
 
         var mailOptions = {
@@ -52,7 +52,7 @@ module.exports = {
                 console.log(error);
             } else {
                 console.log('Forgot password email sent: ' + info.response);
-            } s
+            }
         });
     },
     userAuthenticate: function (url, userInfo) {
@@ -82,7 +82,7 @@ module.exports = {
                 var mailOptions = {
                     from: config.username,
                     to: user.email,
-                    subject: title,
+                    subject: "Teach Leave Live: " + title,
                     html: compiledEmail.render({ firstname: user.firstname, body: body, link: link })
                 };
                 transporter.sendMail(mailOptions, function (error, info) {
@@ -96,5 +96,23 @@ module.exports = {
 
         });
 
-    }
+    },
+    contact: function (body) {
+      const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/contact/contact-inlined.html', 'utf-8');
+      let compiledEmail = Hogan.compile(emailTemplate);
+
+      let mailOptions = {
+          from: body.email,
+          to: config.email.username,
+          subject: 'From the TLL contact form',
+          html: compiledEmail.render({email: body.email, body: body.message})
+      };
+      transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+              console.log(error);
+          } else {
+              console.log('Contact email sent from: ' + body.email);
+          }
+      });
+    },
 }
