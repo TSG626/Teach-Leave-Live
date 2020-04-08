@@ -31,7 +31,7 @@ export default function BlogCard(props){
                         <Typography className={classes.title}>{props.blog.title} ({props.blog.authors})</Typography>
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
-                        <Typography varient="body2" color={'textSecondary'}>{props.blog.body}</Typography>
+                        <Typography varient="body2" color={'textSecondary'}>{props.blog.description}</Typography>
                     </ExpansionPanelDetails>
                 </ExpansionPanel>
             </div>
