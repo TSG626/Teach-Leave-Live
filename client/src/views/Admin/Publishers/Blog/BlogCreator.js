@@ -6,8 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Grid } from '@material-ui/core';
 import AuthorForm from '../../../../components/Admin/AuthorForm';
-import { Redirect } from 'react-router-dom';
 import API from '../../../../modules/API';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -38,7 +38,6 @@ export default function BlogCreator(props) {
     const [title, setTitle] = useState('');
     const [authors, setAuthors] = useState([]);
     const [body, setBody] = useState('');
-    const [id, setId] = useState('');
     const [errors, setErrors] = useState({});
 
     function handleSubmit(){
@@ -48,10 +47,9 @@ export default function BlogCreator(props) {
             authors: authors
         }).then(res => {
             if(res.status == 200){
-                console.log(res.data);
                 props.setBlogList(props.blogList.concat(res.data));
                 props.setAdding(false);
-                //window.location.reload(false); FIXME: Uncomment later
+                window.location.reload(false);
                 return false;
             }
         }).catch(err => {
