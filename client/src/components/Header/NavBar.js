@@ -8,6 +8,7 @@ import { Typography, Menu, MenuItem, Badge, IconButton, AppBar, Toolbar, InputBa
 import { Mail as MailIcon, Search as SearchIcon, AccountCircle, More as MoreIcon, Menu as MenuIcon, Notifications as NotificationsIcon} from '@material-ui/icons';
 import Hoverable from '../Interface/Hoverable';
 import Avatar from 'react-avatar';
+import API from '../../modules/API';
 
 const useStyles = makeStyles(theme => ({
     grow: {
@@ -93,12 +94,36 @@ const SimpleDialog = (props) => {
       onClose(value);
     };
 
+    function handleFileUpload(event){
+        var formData = new FormData();
+        var imagefile = event.target.files[0];
+        formData.append("avatar", imagefile);
+        API.postMP('/api/user/avatar/', formData).then(res => {
+        })
+    }
+
     return (
       <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} style={{textAlign: "center"}}>
           
         <DialogTitle id="simple-dialog-title">
-            <div><Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#2BCED6','#00ADB5'])} name={`${props.user.firstname}` + " " + `${props.user.lastname}`}/></div>
-            {props.user.username}</DialogTitle>
+            <div>
+            <input
+                accept="image/*"
+                className={classes.input}
+                style={{ display: 'none' }}
+                onChange={handleFileUpload}
+                id="avatar"
+                name='avatar'
+                type="file"
+            />
+            <label htmlFor="avatar">
+                <Button component="span">
+                    <Avatar round={true} size="3rem" src={props.user.avatar} color={Avatar.getRandomColor('sitebase', ['#2BCED6','#00ADB5'])} name={`${props.user.firstname}` + " " + `${props.user.lastname}`}/>
+                </Button>
+            </label>
+            </div>
+                {props.user.username}    
+        </DialogTitle>
         <DialogContent>
             <div>{props.user.firstname} {props.user.lastname}</div>
             <div>{props.user.email}</div>
@@ -232,7 +257,7 @@ export default function NavBar() {
                                                 boxShadow={hovering ? 7 : 2}
                                                 borderColor='secondary'
                                             >
-                                                <Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#222831', '#393E46'])} name={`${context.user.firstname}` + " " + `${context.user.lastname}`}/>
+                                                <Avatar round={true} size="3rem" src={context.user.avatar} color={Avatar.getRandomColor('sitebase', ['#222831', '#393E46'])} name={`${context.user.firstname}` + " " + `${context.user.lastname}`}/>
                                                 </Box>
                                             </Button>    
                                                 )
