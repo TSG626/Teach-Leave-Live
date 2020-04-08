@@ -54,6 +54,17 @@ export default function BlogRouter({match}) {
     const [errors, setErrors] = useState({});
     const [adding, setAdding] = useState(false);
 
+    useEffect(() => {
+      async function fetchData(){
+          API.get('/api/blog/').then(res => {
+              if(res.status == 200){
+                  setBlogList(res.data);
+              }
+          });
+      }
+      fetchData();
+    }, []);
+    
     const handleClickOpen = () => {
       setAdding(true);
     };

@@ -43,13 +43,12 @@ export default function BlogCreator(props) {
     function handleSubmit(){
         API.post('/api/blog/', {
             title: document.getElementById('title').value,
-            body: document.getElementById('body').value,
+            description: document.getElementById('description').value,
             authors: authors
         }).then(res => {
             if(res.status == 200){
                 props.setBlogList(props.blogList.concat(res.data));
                 props.setAdding(false);
-                window.location.reload(false);
                 return false;
             }
         }).catch(err => {
@@ -85,9 +84,9 @@ export default function BlogCreator(props) {
                             margin="normal"
                             required
                             fullWidth
-                            id="body"
-                            label="Body"
-                            name="body"
+                            id="description"
+                            label="Description"
+                            name="description"
                             value={body}
                             onChange={(event) => setBody(event.target.value)}
                             multiline
