@@ -17,9 +17,9 @@ const userSchema = new Schema({
         type: String, 
         required: true
     },
-    admin: {
-        type: Boolean, 
-        default: false
+    status: {
+        type: Number, 
+        default: 3
     },
     firstname: {
         type: String, 
@@ -42,7 +42,6 @@ const userSchema = new Schema({
     },
     avatar: {
         type: String,
-        required: true,
         default: ''
     }
 });
