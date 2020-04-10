@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from 'react-router-dom';
 import InstagramIcon from '@material-ui/icons/Instagram'
 import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
+import WebIcon from '@material-ui/icons/Web';
 import Button from '@material-ui/core/Button';
 import './Landing.css';
 import { UserContext } from './../../contexts/UserContext';
@@ -14,7 +14,11 @@ import { spacing } from '@material-ui/system';
 import EJSContentViewer from './../../components/Interface/EJSContentViewer';
 
 const useStyles = makeStyles(theme => ({
-  }));
+    cardList: {
+        padding: theme.spacing(1, 1),
+        backgroundColor: 'grey'
+      },
+}));
 
 export default function Landing() {
     const classes = useStyles();
@@ -22,31 +26,57 @@ export default function Landing() {
         <div>
             <CssBaseline/>
             <Box p={2}>
-                <Grid>
-                    <Typography align={'center'} variant="h2">Welcome to TLL!</Typography>
-                    <Link color={'initial'} underline={'always'} variant="h6">About TLL</Link>
-                    <Typography varient={'body2'}>
-                        TLL is a web-based platform designed to provide tools to teachers so that they can teach their 
-                        hearts out, leave work at work, and live life with intention. We provide resources for teachers to 
-                        learn how to efficiently manage time and organize their work.
-                    </Typography>
+                <Grid container>
+                    <Grid xs={12}>
+                        <Typography align={'center'} variant="h2">Welcome to TLL!</Typography>
+                    </Grid>
+                    <Grid xs={6}>
+                        <Link color={'initial'} underline={'always'} variant="h6">About TLL</Link>
+                        <Typography varient={'body2'}>
+                            TLL is a web-based platform designed to provide tools to teachers so that they can teach their 
+                            hearts out, leave work at work, and live life with intention. We provide resources for teachers to 
+                            learn how to efficiently manage time and organize their work.
+                        </Typography>
+                    </Grid>
+                    <Grid xs={6}>
+                        <Box p={2}>
+                            <Link color={'initial'} underline={'always'} variant="h6">Socials</Link>
+                        </Box>
+                        <Box p={2} display="flex">
+                            <Box flexGrow={0.4}>
+                                <Link2 target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/">
+                                    <InstagramIcon style={{ fontSize: 100 }} fontSize="large" color="inherit"/>
+                                </Link2>
+                            </Box>
+                            <Box flexGrow={0.4}>
+                                <Link2 target="_blank" rel="noopener" href="https://www.facebook.com/teachleavelive/">
+                                    <FacebookIcon style={{ fontSize: 100 }} fontSize="large" color="inherit"/>
+                                </Link2>
+                            </Box>
+                            <Box flexGrow={0.4}>
+                                <Link2 target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live">
+                                    <WebIcon style={{ fontSize: 100 }} fontSize="large" color="inherit"/>
+                                </Link2>
+                            </Box>
+                        </Box>
+                    </Grid>
                 </Grid>
-            </Box>
-            <Box p={2} flexWrap="wrap">
-                <Grid>
-                </Grid>
-                <Grid>
-                    <Link color={'initial'} underline={'always'} variant="h6">Socials</Link>
-                    <Link2 target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/">
-                        <InstagramIcon fontSize="large" color="inherit"/>
-                    </Link2>
-                    <Link2 target="_blank" rel="noopener" href="https://www.facebook.com/teachleavelive/">
-                        <FacebookIcon fontSize="large" color="inherit"/>
-                    </Link2>
-                    <Link2 target="_blank" rel="noopener" href="https://www.twitter.com/">
-                        <TwitterIcon fontSize="large" color="inherit"/>
-                    </Link2>
-                </Grid>
+                <Box p={2}>
+                    <Grid
+                    container
+                    direction="column"
+                    justify="flex-start"
+                    alignItems="flex-start"
+                    className={classes.cardList}>
+                        {/* {blogList && blogList.map((blog, index) => {
+                        return(
+                            <Grid key={index} item container xs={12} className={classes.card}>
+                            <BlogCard blog={blog}/>
+                            </Grid>
+                        )
+                        })} */}
+                    </Grid>
+                </Box>
             </Box>
         </div>
         // <UserContext.Consumer>{context=>{
@@ -87,7 +117,7 @@ export default function Landing() {
         //                     <Button className="InstLink" target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/"></Button>
         //                     <Button className="TwitLink" target="_blank" rel="noopener" href="https://www.twitter.com"></Button>
         //                     <Button className="FBLink" target="_blank" rel="noopener" href="https://www.facebook.com"></Button>
-        //                     <Button className="OtherLink" target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live"></Button>
+        //                     <Button className="OtherLink" target="_blank" rel="noopener" href=""></Button>
         //                 </div>
         //             </div>
         //         </div>
