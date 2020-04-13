@@ -1,18 +1,13 @@
 import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import DeleteIcon from '@material-ui/icons/Delete'
-import {UserContext} from '../../../../contexts/UserContext';
 import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Grid, Tooltip } from '@material-ui/core';
-import API from '../../../../modules/API';
-import { Redirect } from 'react-router-dom';
-import AuthorForm from '../../../../components/Admin/AuthorForm'
+import AuthorForm from '../../../../../components/Admin/AuthorForm'
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete'
+import {CourseContext} from '../../../../../contexts/Admin/CourseContext'
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -38,11 +33,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function PriceForm(props){
-    const classes = useStyles();
     const [radio, setRadio] = useState('');
 
     function handlePriceChange(event){
-        props.setPrice(event.target.value);
+        props.setCourse({...props.course, price: event.target.value});
     }
 
     function handleRadioChange(event){
@@ -51,17 +45,16 @@ function PriceForm(props){
 
     return(
         <Grid container style={{padding: 15}}>
-
             <FormControl>
                 <FormLabel>Price</FormLabel>
-                <RadioGroup onChange={handleRadioChange}>
+                <RadioGroup value={props.course.free ? 'free' : props.course.price} onChange={handleRadioChange}>
                     <FormControlLabel 
-                        value='free' 
+                        value='free'
                         label='Free' 
                         control={<Radio/>}
                     />
                     <FormControlLabel 
-                        value='price' 
+                        value='price'
                         label={
                             (radio == 'price') && 
                             <CurrencyTextField
@@ -71,7 +64,7 @@ function PriceForm(props){
                                     maximumValue={1000}
                                     margin="normal"
                                     fullWidth
-                                    value={props.price}
+                                    value={props.course.price}
                                     onChange={handlePriceChange}
                                     id="price"
                                     label="Price"
@@ -90,78 +83,61 @@ function SubjectForm(props){
     const filter = createFilterOptions();
 
     return(
-        <Autocomplete
-            value={props.subject}
-            onChange={(event, newValue) => {
-                if (newValue && newValue.inputValue) {
-                  props.setSubject(newValue.inputValue);
-                  return;
-                }
-                props.setSubject(newValue);
-            }}
-            options={props.context.subjectList}
-            filterOptions={(options, params) => {
-                const filtered = filter(options, params);
-                if (params.inputValue !== '') {
-                    filtered.push({
-                    inputValue: params.inputValue,
-                    title: `Add "${params.inputValue}"`,
-                    });
-                }
-                return filtered;
-            }}
-            getOptionLabel={(option) => {
-                if (option.inputValue) {
-                  return option.inputValue;
-                }
-                return option;
-            }}
-            renderOption={(option) => {
-                if (option.inputValue) {
-                  return option.title;
-                }
-                return option;
-            }}
-            renderInput={(params) => (
-                <TextField {...params} label="Subject" variant="outlined" />
-            )}
-        />
+        <CourseContext.Consumer>{context => {
+            return(
+                <Autocomplete
+                    value={props.course.subject}
+                    onChange={(event, newValue) => {
+                        if (newValue && newValue.inputValue) {
+                        props.setCourse({...props.course, subject: newValue.inputValue});
+                        return;
+                        }
+                        props.setCourse({...props.course, subject: newValue});
+                    }}
+                    options={context.subjectList}
+                    filterOptions={(options, params) => {
+                        const filtered = filter(options, params);
+                        if (params.inputValue !== '') {
+                            filtered.push({
+                            inputValue: params.inputValue,
+                            title: `Add "${params.inputValue}"`,
+                            });
+                        }
+                        return filtered;
+                    }}
+                    getOptionLabel={(option) => {
+                        if (option.inputValue) {
+                        return option.inputValue;
+                        }
+                        return option;
+                    }}
+                    renderOption={(option) => {
+                        if (option.inputValue) {
+                        return option.title;
+                        }
+                        return option;
+                    }}
+                    renderInput={(params) => (
+                        <TextField {...params} label="Subject" variant="outlined" />
+                    )}
+                />
+            )
+        }}</CourseContext.Consumer>
     )
 }
 
 export default function CourseCreator(props) {
     const classes = useStyles();
-    
-    const [authors, setAuthors] = useState([]);
-    const [price, setPrice] = useState(0);
-    const [subject, setSubject] = useState(null);
 
-    const [errors, setErrors] = useState({});
-
-    function handleSubmit(){
-        API.post('/api/course/', {
-            title: document.getElementById('title').value,
-            author: authors,
-            description: document.getElementById('description').value,
-            free: (price == 0),
-            price: price,
-            subject: subject
-        }).then(res => {
-            if(res.status == 200){
-                props.setAdding(false);
-                window.location.reload(false); 
-                return false;
-            }
-        }).catch(err => {
-            setErrors(err);
-        })
+    function setAuthors(authors){
+        props.setCourse({...props.course, author: authors});
     }
-    
+
     return (
         <Grid container>
             <Grid item xs={12}>
                 <Typography varient="h5">
-                    Course Creator
+                    Course Details
                 </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -173,11 +149,12 @@ export default function CourseCreator(props) {
                     id="title"
                     label="Course Title"
                     name="title"
-                    autoFocus
+                    value={props.course.title}
+                    onChange={(event) => props.setCourse({...props.course, title: event.target.value})}
                 />
             </Grid>
             <Grid item xs={12}>
-                <SubjectForm context={props.context} subject={subject} setSubject={setSubject}/>
+                <SubjectForm course={props.course} setCourse={props.setCourse}/>
             </Grid>
             <Grid item xs={12}>
                 <TextField
@@ -188,22 +165,15 @@ export default function CourseCreator(props) {
                     id="description"
                     label="Description"
                     name="description"
+                    value={props.course.description}
+                    onChange={(event) => props.setCourse({...props.course, description: event.target.value})}
                 />
             </Grid>
             <Grid item xs={12} sm={6}>
-                <AuthorForm authors={authors} setAuthors={setAuthors}/>
+                <AuthorForm authors={props.course.author} setAuthors={setAuthors}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-                <PriceForm price={price} setPrice={setPrice}/>
-            </Grid>
-            <Grid item xs={12}>
-                <Button
-                    color='primary'
-                    variant='outlined'
-                    onClick={handleSubmit}
-                >
-                    Submit
-                </Button>
+                <PriceForm course={props.course} setCourse={props.setCourse}/>
             </Grid>
         </Grid>
     )

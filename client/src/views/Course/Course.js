@@ -1,38 +1,40 @@
-import React, {useState} from 'react';
-import './Course.css';
-import {UserContext} from '../../contexts/UserContext';
-import {Redirect} from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';    //Baseline of look for entire page
-import TextField from '@material-ui/core/TextField';
+import { Typography, Container, Grid } from '@material-ui/core';
+import API from '../../modules/API';
+import { Switch, Route } from 'react-router-dom';
+import CourseViewer from './CourseViewer/CourseViewer';
 
-export default function Course() {
-    const[courses] = useState("No courses listed!");
+function Landing(props){
     return(
-    <UserContext.Consumer>{context => {
-        if(context.isAuthenticated()) {
-            return (
-                <CssBaseline>
-                    <div className="App">
-                        <header className="App-header">
-                            <TextField
-                            variant="outlined"
-                            margin="normal"
-                            style={{width: 1000}}
-                            id="search"
-                            label="Search"
-                            name="search"
-                            autoComplete="search"
-                            />
-                            {courses}
-                        </header>
-                    </div>
-                </CssBaseline>);
+        <Grid container>
+            <Typography>Courses</Typography>
+        </Grid>
+    )
+}
+
+export default function Course({match}) {
+    const[courses, setCourses] = useState([]);
+
+    useEffect(()=>{
+        async function fetchData(){  
+            API.get('/api/course/').then((res)=>{
+                if(res.status === 200){
+                    setCourses(res.data);
+                }
+            })
         }
-        else {
-            return(
-                <Redirect to="/User/Login"/>
-            );
-        }
-    }}</UserContext.Consumer>
+        fetchData();
+    },[])
+
+    return(
+        <Container>
+            <CssBaseline/>
+            <Switch>
+                {/* //Main router function */}
+                <Route exact path={`${match.path}/`} component={Landing}/>
+                <Route path={`${match.path}/:id/`} component={CourseViewer}/>
+            </Switch>
+        </Container>
     );
 }

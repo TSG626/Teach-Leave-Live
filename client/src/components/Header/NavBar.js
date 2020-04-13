@@ -8,6 +8,7 @@ import { Typography, Menu, MenuItem, Badge, IconButton, AppBar, Toolbar, InputBa
 import { Mail as MailIcon, Search as SearchIcon, AccountCircle, More as MoreIcon, Menu as MenuIcon, Notifications as NotificationsIcon} from '@material-ui/icons';
 import Hoverable from '../Interface/Hoverable';
 import Avatar from 'react-avatar';
+import API from '../../modules/API';
 
 const useStyles = makeStyles(theme => ({
     grow: {
@@ -51,11 +52,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const AccountOptions = () => {
-    let admin = false;
 
     return(
         <UserContext.Consumer>{context => {
-            admin = true;
             if(!context.isAuthenticated()){
                 return(
                     <Grid container>
@@ -73,7 +72,7 @@ const AccountOptions = () => {
                         <Grid item xs={12} sm={6}>
                             <Link href='/User/Logout' color='inherit'>Log Out</Link>
                         </Grid>
-                        {admin && <Grid item xs={12} sm={6}>
+                        {(context.user.status === 1 || context.user.status === 0) && <Grid item xs={12} sm={6}>
                             <Link href='/Admin/' color='inherit'>Admin Panel</Link>
                         </Grid>}
                     </Grid>
@@ -95,12 +94,36 @@ const SimpleDialog = (props) => {
       onClose(value);
     };
 
+    function handleFileUpload(event){
+        var formData = new FormData();
+        var imagefile = event.target.files[0];
+        formData.append("avatar", imagefile);
+        API.postMP('/api/user/avatar/', formData).then(res => {
+        })
+    }
+
     return (
       <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} style={{textAlign: "center"}}>
           
         <DialogTitle id="simple-dialog-title">
-            <div><Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#2BCED6','#00ADB5'])} name={`${props.user.firstname}` + " " + `${props.user.lastname}`}/></div>
-            {props.user.username}</DialogTitle>
+            <div>
+            <input
+                accept="image/*"
+                className={classes.input}
+                style={{ display: 'none' }}
+                onChange={handleFileUpload}
+                id="avatar"
+                name='avatar'
+                type="file"
+            />
+            <label htmlFor="avatar">
+                <Button component="span">
+                    <Avatar round={true} size="3rem" src={props.user.avatar} color={Avatar.getRandomColor('sitebase', ['#2BCED6','#00ADB5'])} name={`${props.user.firstname}` + " " + `${props.user.lastname}`}/>
+                </Button>
+            </label>
+            </div>
+                {props.user.username}    
+        </DialogTitle>
         <DialogContent>
             <div>{props.user.firstname} {props.user.lastname}</div>
             <div>{props.user.email}</div>
@@ -146,19 +169,25 @@ function LogoIcon(){
 function Logo(){
     return (
         <Hoverable>{hovering => <div>
-            <Button component={RouterLink} to={'/Home'}>
-                <Box 
-                    display="flex" 
-                    justifyContent="center"
-                    bgcolor='white' m={1} 
-                    style={ {width: '3rem', height: '3rem'} } 
-                    borderRadius="50%"
-                    boxShadow={hovering ? 7 : 2}
-                    borderColor='secondary'
-                >
-                    <Typography style={{color: 'black', fontSize: 32, fontFamily: 'Georgia', paddingTop: 0}}>T</Typography>
-                </Box>
-            </Button>
+            <UserContext.Consumer>{context => {
+                var path;
+                context.isAuthenticated() ? path='/Home' : path='/';
+                return(
+                    <Button component={RouterLink} to={path}>
+                    <Box 
+                        display="flex" 
+                        justifyContent="center"
+                        bgcolor='white' m={1} 
+                        style={ {width: '3rem', height: '3rem'} } 
+                        borderRadius="50%"
+                        boxShadow={hovering ? 7 : 2}
+                        borderColor='secondary'
+                    >
+                        <Typography style={{color: 'black', fontSize: 32, fontFamily: 'Georgia', paddingTop: 0}}>T</Typography>
+                    </Box>
+                    </Button>
+                )
+            }}</UserContext.Consumer>
         </div>}</Hoverable>
     );
 }
@@ -228,7 +257,7 @@ export default function NavBar() {
                                                 boxShadow={hovering ? 7 : 2}
                                                 borderColor='secondary'
                                             >
-                                                <Avatar round={true} size="3rem" color={Avatar.getRandomColor('sitebase', ['#222831', '#393E46'])} name={`${context.user.firstname}` + " " + `${context.user.lastname}`}/>
+                                                <Avatar round={true} size="3rem" src={context.user.avatar} color={Avatar.getRandomColor('sitebase', ['#222831', '#393E46'])} name={`${context.user.firstname}` + " " + `${context.user.lastname}`}/>
                                                 </Box>
                                             </Button>    
                                                 )
