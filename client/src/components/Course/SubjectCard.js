@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { Button, ButtonGroup, CssBaseline, Divider, Grid, CardActionArea, Collapse, IconButton, CircularProgress, Box, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary } from '@material-ui/core';
-import Hoverable from '../Interface/Hoverable';
+import { Grid, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import CourseCard from './CourseCard';
 import API from '../../modules/API';
@@ -35,7 +31,7 @@ const SubjectCard = (props) => {
     
     useEffect(()=>{
         API.get('/api/course/', {subject: props.subject}).then(res => {
-            if(res.status == 200){
+            if(res.status === 200){
                 setCourses(res.data);
             }
         }).catch((err) => {

@@ -10,7 +10,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {UserContext} from '../../../contexts/UserContext';
 import API from '../../../modules/API';
-import './SignUp.css';
 
 const useStyles = makeStyles(theme => ({
     paper: {

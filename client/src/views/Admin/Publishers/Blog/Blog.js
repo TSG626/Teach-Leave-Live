@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import BlogCard from '../../../../components/Blog/BlogCard';
@@ -8,6 +8,7 @@ import BlogCreator from './BlogCreator';
 import {Add as AddIcon} from '@material-ui/icons/';
 import API from '../../../../modules/API';
 import BlogEditor from './BlogEditor';
+import { UserContext } from '../../../../contexts/UserContext';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -33,10 +34,6 @@ function SimpleDialog(props) {
     onClose(selectedValue);
   };
 
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
-
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
       <Container>
@@ -51,13 +48,13 @@ function SimpleDialog(props) {
 export default function BlogRouter({match}) {
     const [blogList, setBlogList] = useState([]);
     const classes = useStyles();
-    const [errors, setErrors] = useState({});
     const [adding, setAdding] = useState(false);
+    const userInfo = useContext(UserContext);
 
     useEffect(() => {
       async function fetchData(){
           API.get('/api/blog/').then(res => {
-              if(res.status == 200){
+              if(res.status === 200){
                   setBlogList(res.data);
               }
           });
@@ -75,43 +72,39 @@ export default function BlogRouter({match}) {
 
     return(
       <Switch>
-      {/* //Main router function */}
-      <Route exact path={`${match.path}/`} component={function(){
-        return(
-          <Container component="main" maxWidth={false}>
-            <Grid xs={12} container alignContent={'center'} justify={'space-between'}>
-              <Typography className={classes.title}>
-                  Blog
-              </Typography>
-              <Button onClick={handleClickOpen} endIcon={<AddIcon/>} varient={'contained'}>
-                  Add Blog
-              </Button>
-              <SimpleDialog
-                  open={adding}
-                  onClose={handleClose}
-                  blogList={blogList}
-                  setBlogList={setBlogList}
-                  setAdding={setAdding}
-                  className={classes.blogCreatorWindow}/>
-            </Grid>
-            <Grid
-              container
-              direction="column"
-              justify="flex-start"
-              alignItems="flex-start"
-              className={classes.cardList}>
-                {blogList && blogList.map((blog, index) => {
-                  return(
-                    <Grid key={index} item container xs={12} className={classes.card}>
-                      <BlogCard blog={blog}/>
-                    </Grid>
-                  )
-                })}
-            </Grid>
-          </Container>
-          )
-      }}/>
-      <Route path={`${match.path}/Create`} component={BlogCreator} />
-      <Route exact path={`${match.path}/Edit/:id`} component={BlogEditor}/>
-    </Switch>)
+        <Route exact path={`${match.path}/`} component={function(){
+          return(
+            <Container component="main" maxWidth={false}>
+              <Grid xs={12} container alignContent={'center'} justify={'space-between'}>
+                <Typography className={classes.title}>
+                    Blog
+                </Typography>{((userInfo.user.stats === 0) || (userInfo.user.stats === 1)) ? <Button onClick={handleClickOpen} endIcon={<AddIcon/>} varient={'contained'}>Add Blog</Button> : <div></div>}
+                <SimpleDialog
+                    open={adding}
+                    onClose={handleClose}
+                    blogList={blogList}
+                    setBlogList={setBlogList}
+                    setAdding={setAdding}
+                    className={classes.blogCreatorWindow}/>
+              </Grid>
+              <Grid
+                container
+                direction="column"
+                justify="flex-start"
+                alignItems="flex-start"
+                className={classes.cardList}>
+                  {blogList.map((blog, index) => {
+                    return(
+                      <Grid key={index} item container xs={12} className={classes.card}>
+                        <BlogCard blog={blog}/>
+                      </Grid>
+                    )
+                  })}
+              </Grid>
+            </Container>
+            )
+        }}/>
+        <Route path={`${match.path}/Create`} component={BlogCreator} />
+        <Route exact path={`${match.path}/Edit/:id`} component={BlogEditor}/>
+      </Switch>)
 }

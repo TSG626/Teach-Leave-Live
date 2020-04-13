@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Typography, Stepper, Step, StepLabel, StepContent, Button, makeStyles, Paper } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import API from '../../../modules/API';
-import { UserContext } from '../../../contexts/UserContext';
 import EJSContentViewer from '../../../components/Interface/EJSContentViewer';
 
 const useStyles = makeStyles((theme) => ({

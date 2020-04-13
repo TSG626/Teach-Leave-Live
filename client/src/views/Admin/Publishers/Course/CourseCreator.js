@@ -1,16 +1,11 @@
 import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import CurrencyTextField from '@unicef/material-ui-currency-textfield'
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import DeleteIcon from '@material-ui/icons/Delete'
-import {UserContext} from '../../../../contexts/UserContext';
-import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Grid, Tooltip } from '@material-ui/core';
+import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Grid } from '@material-ui/core';
 import API from '../../../../modules/API';
-import { Redirect } from 'react-router-dom';
 import AuthorForm from '../../../../components/Admin/AuthorForm'
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete'
 
@@ -63,7 +58,7 @@ function PriceForm(props){
                     <FormControlLabel 
                         value='price' 
                         label={
-                            (radio == 'price') && 
+                            (radio === 'price') && 
                             <CurrencyTextField
                                     variant="outlined"
                                     currencySymbol="$"
@@ -143,11 +138,11 @@ export default function CourseCreator(props) {
             title: document.getElementById('title').value,
             author: authors,
             description: document.getElementById('description').value,
-            free: (price == 0),
+            free: (price === 0),
             price: price,
             subject: subject
         }).then(res => {
-            if(res.status == 200){
+            if(res.status === 200){
                 props.setAdding(false);
                 window.location.reload(false); 
                 return false;

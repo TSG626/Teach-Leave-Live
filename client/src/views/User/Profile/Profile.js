@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import './Profile.css';
 import { UserContext } from '../../../contexts/UserContext';
 import { Redirect } from 'react-router-dom';
