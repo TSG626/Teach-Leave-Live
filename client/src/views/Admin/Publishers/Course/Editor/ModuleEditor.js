@@ -25,7 +25,7 @@ function ModuleEditor(props){
         if(display && editorInstance){
             if(!props.course.modules[props.selectedModule].sections[props.selectedSection] || 
                 !props.course.modules[props.selectedModule].sections[props.selectedSection].data ||
-                Object.keys(props.course.modules[props.selectedModule].sections[props.selectedSection].data).length == 0){
+                Object.keys(props.course.modules[props.selectedModule].sections[props.selectedSection].data).length === 0){
                 editorInstance.clear();
             }else{
                 editorInstance.render(props.course.modules[props.selectedModule].sections[props.selectedSection].data);
@@ -33,7 +33,7 @@ function ModuleEditor(props){
         }
     },[props.selectedSection])
 
-    if(props.course.modules.length == 0 || props.course.modules[props.selectedModule].sections.length == 0) return('No sections');
+    if(props.course.modules.length === 0 || props.course.modules[props.selectedModule].sections.length === 0) return('No sections');
         
     return(
         <Grid container>

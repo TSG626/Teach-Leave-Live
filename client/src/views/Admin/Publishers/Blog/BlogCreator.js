@@ -7,7 +7,6 @@ import Container from '@material-ui/core/Container';
 import { Grid } from '@material-ui/core';
 import AuthorForm from '../../../../components/Admin/AuthorForm';
 import API from '../../../../modules/API';
-import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -46,7 +45,7 @@ export default function BlogCreator(props) {
             description: document.getElementById('description').value,
             authors: authors
         }).then(res => {
-            if(res.status == 200){
+            if(res.status === 200){
                 props.setBlogList(props.blogList.concat(res.data));
                 props.setAdding(false);
                 return false;

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useLocation, Redirect, Link as RouterLink } from 'react-router-dom';
+import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import './NavBar.css';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import {UserContext} from '../../contexts/UserContext';
 import Button from '@material-ui/core/Button';
-import { Typography, Menu, MenuItem, Badge, IconButton, AppBar, Toolbar, InputBase, Grid, Box, Collapse, TextField, Link, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
-import { Mail as MailIcon, Search as SearchIcon, AccountCircle, More as MoreIcon, Menu as MenuIcon, Notifications as NotificationsIcon} from '@material-ui/icons';
+import { Typography, AppBar, Toolbar, InputBase, Grid, Box, Link, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
+import { Search as SearchIcon } from '@material-ui/icons';
 import Hoverable from '../Interface/Hoverable';
 import Avatar from 'react-avatar';
 import API from '../../modules/API';

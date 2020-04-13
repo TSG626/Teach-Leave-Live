@@ -1,11 +1,10 @@
 import './Profile.css';
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import { UserContext } from '../../../contexts/UserContext';
-import { Redirect, Link as RouterLink} from 'react-router-dom';
-import { CssBaseline, TextField, Typography, makeStyles, Box, Container, Grid } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import { CssBaseline, TextField, Typography, makeStyles, Container, Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import API from '../../../modules/API'
-import Avatar from 'react-avatar';
+import API from '../../../modules/API';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -51,7 +50,7 @@ const ChangePassword = () => {
         if (newpassword.length < 8) {
             setMessage('The new password must be 8 characters or more.')
         }
-        else if (newpassword != confirmpassword) {
+        else if (newpassword !== confirmpassword) {
             setMessage('The new and confirmation password do not match.')
         }
         else {
@@ -60,7 +59,7 @@ const ChangePassword = () => {
                 password: newpassword,
                 oldPassword: oldpassword,
             }).then(res => {
-                if(res.status == 200) {
+                if(res.status === 200) {
                 alert("Your password has been reset!")};
                 isChanged(true);
             }).catch(err => {

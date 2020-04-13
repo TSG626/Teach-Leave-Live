@@ -1,11 +1,10 @@
 import './Profile.css';
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import { UserContext } from '../../../contexts/UserContext';
-import { Redirect, Link as RouterLink} from 'react-router-dom';
-import { CssBaseline, TextField, Typography, makeStyles, Box, Container, Grid } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
+import { CssBaseline, TextField, Typography, makeStyles, Container, Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import API from '../../../modules/API'
-import Avatar from 'react-avatar';
+import API from '../../../modules/API';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -63,7 +62,7 @@ const ChangeUsername = () => {
                     oldUsername: userInfo.user.username,
                     email: userInfo.user.email
                 }).then(res => {
-                    if(res.status == 200) {alert("Username changed!"); setMessage(''); isChanged(true); };
+                    if(res.status === 200) {alert("Username changed!"); setMessage(''); isChanged(true); };
                 }).catch(err =>{
                     setMessage("Incorrect password.")
                 })

@@ -1,15 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import API from '../../../../modules/API';
 import SubjectCard from '../../../../components/Course/SubjectCard';
-import { Typography, ListItem, List, Button, CircularProgress, Grid, IconButton, Modal, CardContent, Card, Dialog, DialogTitle} from '@material-ui/core';
-import { Switch, Route, Redirect, Link } from 'react-router-dom';
+import { Typography, Button, Grid, CardContent, Dialog } from '@material-ui/core';
+import { Switch, Route } from 'react-router-dom';
 import CourseCreator from './CourseCreator';
 import CourseEditor from './CourseEditor';
-import {Add as AddIcon, Edit as EditIcon, Close} from '@material-ui/icons/';
+import {Add as AddIcon } from '@material-ui/icons/';
 import { CourseContext } from '../../../../contexts/Admin/CourseContext';
-import { PromiseProvider } from 'mongoose';
 
 const useStyles = makeStyles(theme => ({
   title: {

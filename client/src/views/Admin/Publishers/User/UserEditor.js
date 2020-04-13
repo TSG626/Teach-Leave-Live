@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useContext} from 'react';
-import './UserEditor.css';
-import { CssBaseline, Table, TableHead, TableRow, TableCell, TableContainer, TableBody, Grid, Fab, Tooltip, Box, makeStyles, Paper} from '@material-ui/core';
+import { CssBaseline, Table, TableHead, TableRow, TableCell, TableContainer, TableBody, Grid, Box, makeStyles, Paper} from '@material-ui/core';
 import API from '../../../../modules/API'
-import CheckIcon from '@material-ui/icons/Check';
-import ClearIcon from '@material-ui/icons/Clear';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
@@ -12,9 +9,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import StarIcon from '@material-ui/icons/Star';
 import { UserContext } from '../../../../contexts/UserContext'
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Avatar from 'react-avatar';
 import {Link as RouterLink } from 'react-router-dom';
