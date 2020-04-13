@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
 import {UserContext, UserProvider} from "./contexts/UserContext";
-import { CircularProgress, MuiThemeProvider, makeStyles } from '@material-ui/core';
-
+import { MuiThemeProvider, makeStyles } from '@material-ui/core';
 import NavBar from "./components/Header/NavBar";
 import Landing from "./views/Landing/Landing";
 import Home from "./views/Home/Home";

@@ -32,7 +32,7 @@ const UserProvider = (props) => {
         let ignore = false;
         async function fetchData(){
             API.get('/api/user/').then(res => {
-                if(res.status == 200){
+                if(res.status === 200){
                     const {username, email, firstname, lastname, status, avatar} = res.data;
                     setUser({
                         username: username,

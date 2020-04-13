@@ -4,7 +4,7 @@ var {Schema, Number} = mongoose;
 
 const blogSchema = new Schema({
     title: {type: String, required: true},
-    body: {type: String, required: true},
+    description: {type: String, required: true},
     authors: [{
         type: String,
         required: true

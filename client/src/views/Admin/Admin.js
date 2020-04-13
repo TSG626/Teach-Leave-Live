@@ -6,7 +6,7 @@ import Blog from "./Publishers/Blog/Blog";
 import Course from "./Publishers/Course/Course";
 import NewsletterPublisher from "./Publishers/Newsletter/NewsletterPublisher";
 import UserEditor from "./Publishers/User/UserEditor";
-import {Box, CssBaseline, Button, Typography, Container, Menu, List, ListItem, Grid, ListItemText, CircularProgress, makeStyles, ListItemIcon, Collapse, Drawer } from '@material-ui/core';
+import {Box, CssBaseline, Container, List, ListItem, Grid, ListItemText, makeStyles, ListItemIcon, Drawer } from '@material-ui/core';
 import { CourseProvider } from '../../contexts/Admin/CourseContext';
 import {Book as CourseIcon, Announcement as NewsletterIcon, Person as UserIcon, Note as BlogIcon, ChevronRight as OpenIcon, ChevronLeft as CloseIcon } from '@material-ui/icons/'
 
@@ -75,16 +75,16 @@ function NavMenu(){
                 <ListItem>
                     {open ? <CloseIcon onClick={()=>setOpen(false)}/> : <OpenIcon onClick={()=>setOpen(true)}/>}
                 </ListItem>
-                <ListItem selected={selected == 1} button component={Link} to={`/Admin/Blog`} onClick={()=>setSelected(1)}>
+                <ListItem selected={selected === 1} button component={Link} to={`/Admin/Blog`} onClick={()=>setSelected(1)}>
                     {open ? <ListItemText>Blogs</ListItemText> : <ListItemIcon><BlogIcon/></ListItemIcon>}
                 </ListItem>
-                <ListItem selected={selected == 2} button component={Link} to={`/Admin/Course`} onClick={()=>setSelected(2)}>
+                <ListItem selected={selected === 2} button component={Link} to={`/Admin/Course`} onClick={()=>setSelected(2)}>
                     {open ? <ListItemText>Courses</ListItemText> : <ListItemIcon><CourseIcon/></ListItemIcon>}
                 </ListItem>
-                <ListItem selected={selected == 3} button component={Link} to={`/Admin/Newsletter`} onClick={()=>setSelected(3)}>
+                <ListItem selected={selected === 3} button component={Link} to={`/Admin/Newsletter`} onClick={()=>setSelected(3)}>
                     {open ? <ListItemText>Newsletters</ListItemText> : <ListItemIcon><NewsletterIcon/></ListItemIcon>}
                 </ListItem>
-                <ListItem selected={selected == 4} button component={Link} to={`/Admin/User`} onClick={()=>setSelected(4)}>
+                <ListItem selected={selected === 4} button component={Link} to={`/Admin/User`} onClick={()=>setSelected(4)}>
                     {open ? <ListItemText>Users</ListItemText> : <ListItemIcon><UserIcon/></ListItemIcon>}
                 </ListItem>
             </List>

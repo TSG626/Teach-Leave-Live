@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import './Home.css';
 import InstagramIcon from '@material-ui/icons/Instagram'
 import Link2 from '@material-ui/core/Link'
@@ -8,8 +8,6 @@ import {Redirect, Link} from 'react-router-dom';
 import {UserContext} from '../../contexts/UserContext';
 import CssBaseline from '@material-ui/core/CssBaseline';    //Baseline of look for entire page
 import FacebookIcon from '@material-ui/icons/Facebook';
-import TwitterIcon from '@material-ui/icons/Twitter';
-import StoreIcon from '@material-ui/icons/Store';
 import Slide from '@material-ui/core/Slide';
 import Grow from '@material-ui/core/Grow';
 

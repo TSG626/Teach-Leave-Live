@@ -55,7 +55,7 @@ export default function CourseEditor() {
 
     //Module functions
     function selectModule(index){
-        if(index != selectedModule){
+        if(index !== selectedModule){
             setSelectedModule(index);
             setSelectedSection(0);
         }
@@ -96,7 +96,7 @@ export default function CourseEditor() {
 
     //Section functions
     function selectSection(index){
-        if(selectedSection != index){
+        if(selectedSection !== index){
             setSelectedSection(index);
         }
     }
