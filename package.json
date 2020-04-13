@@ -56,9 +56,12 @@
     "react": "^16.13.0",
     "react-avatar": "^3.9.2",
     "react-dom": "^16.13.0",
+    "react-stripe-checkout": "^2.6.3",
     "react-use": "^13.27.0",
     "should": "^13.2.3",
+    "stripe": "^8.39.2",
     "supertest": "^4.0.2",
+    "uuid": "^7.0.3",
     "validator": "^12.2.0"
   },
   "homepage": "https://github.com/UFWebApps/React_Template_Repo#readme",

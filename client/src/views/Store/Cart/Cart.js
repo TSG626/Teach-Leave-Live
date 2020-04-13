@@ -4,32 +4,33 @@ import './Cart.css';
 import { CssBaseline } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-
-
-const SetListings = () => {
-    const [list, setList] = useState("Shopping Cart is empty!")
-    return(
-        <div className="Empty">
-            <Typography component="h4" variant="h4">
-                {list}
-            </Typography>
-            <Button component={Link} to="/Store" color="default" variant="contained" color="primary">
-                Go Shopping!
-            </Button>
-        </div>
-    );
-}
+import StripeCheckout from "react-stripe-checkout"
+import API from '../../../modules/API'
 
 const Cart = () => {
+    //array of products stored
+    const [product, setProduct] = useState({
+        name: "React from FB",
+        price: 10,
+        productBy: "facebook"
+    });
+
+    const makePayment = token => {
+        API.post('/api/cart/payment', {product: product, token: token}).then(res=>{
+            console.log("RESPONSE", res);
+            const {status} = res;
+            console.log("STATUS", status)
+        }).catch(err => console.log(err))
+    }
     return (
         <CssBaseline>
-            <div>
-                <header className="Header">
+            <div className="App">
+                <header className="App-header">
                     <Typography component="h1" variant="h3">Shopping Cart</Typography>
                 </header>
-                <div className="List">
-                    <SetListings/>
-                </div>
+                <StripeCheckout stripeKey={process.env.REACT_APP_KEY} token={makePayment} name="Buy React" amount={product.price * 100}>
+                    <Button variant="contained" color="primary">Checkout</Button>
+                </StripeCheckout>
             </div>
         </CssBaseline>
     );
