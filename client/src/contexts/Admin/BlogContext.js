@@ -4,9 +4,20 @@ import API from '../../modules/API'
 const BlogContext = createContext();
 
 const BlogProvider = (props) => {
+    const [blogList, setBlogList] = useState([]);
     const [blog, setBlog] = useState({});
     const [id, setId] = useState('');
 
+    useEffect(() => {
+      async function fetchData(){
+          API.get('/api/blog/').then(res => {
+              if(res.status == 200){
+                setBlogList(res.data);
+              }
+          });
+      }
+      fetchData();
+    }, []);
 
     useEffect(() => {
         if(id){
@@ -36,6 +47,8 @@ const BlogProvider = (props) => {
     const data = {
         blog,
         setBlog,
+        blogList,
+        setBlogList,
         setId,
         updateBlog,
     };
