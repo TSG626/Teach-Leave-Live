@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import './Blog.css';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, CssBaseline } from '@material-ui/core';
+import Blog from '../Admin/Publishers/Blog/Blog'
+import { Route, Switch} from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     },
   }));
 
-export default function Blog({match}) {
+export default function BlogDisplay({match}) {
     const classes = useStyles();
     const [errors, setErrors] = useState({});
 
@@ -32,6 +33,11 @@ export default function Blog({match}) {
             <Typography className={classes.title}>
                 Join in the Conversation!
             </Typography>
+            <Container maxWidth='lg'>
+              <Switch>
+                <Route path={`${match.path}`} component={Blog} />
+              </Switch>
+            </Container>
         </Grid>
       </CssBaseline>
 

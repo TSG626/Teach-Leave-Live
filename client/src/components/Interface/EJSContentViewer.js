@@ -35,7 +35,7 @@ function Block(props){
         case "paragraph":
             return (<Typography className={classes.paragraph} variant='body1'>{props.block.data.text}</Typography>) 
         case "list":
-            if(props.block.data.style == "ordered"){
+            if(props.block.data.style === "ordered"){
                 return(<ol className={classes.list}>{props.block.data.items.map((item, index) => (<li key={index} className={classes.item}>{item}</li>))}</ol>)
             }else{
                 return(<ul className={classes.list}>{props.block.data.items.map((item, index) => (<li key={index} className={classes.item}>{item}</li>))}</ul>)

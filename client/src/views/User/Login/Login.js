@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState } from 'react';
 import API from '../../../modules/API';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -12,7 +12,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-// import './Login.css';
 import { Redirect } from 'react-router-dom';
 import {UserContext} from '../../../contexts/UserContext';
 
@@ -64,12 +63,12 @@ export default function Login() {
             email: document.getElementById('email').value,
             password: document.getElementById('password').value,
         }).then(res => {
-            if(res.status == 200){
+            if(res.status === 200){
                 context.authenticateUser(res.data.token);
                 setAuthed(true);
             }
         }).catch(err => {
-            if (err.response.data.name == "UnverifiedEmail") {
+            if (err.response.data.name === "UnverifiedEmail") {
                 setEmail_message(err.response.data.message);
             }
             else {
