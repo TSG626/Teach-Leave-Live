@@ -14,7 +14,8 @@
     "react": "^16.10.1",
     "react-avatar": "^3.9.2",
     "react-dom": "^16.10.1",
-    "react-scripts": "^3.4.0"
+    "react-scripts": "^3.4.0",
+    "react-stripe-checkout": "^2.6.3"
   },
   "scripts": {
     "start": "react-scripts start",
