@@ -12,12 +12,12 @@ const CourseProvider = (props) => {
     useEffect(() => {
         async function fetchData(){
             API.get('/api/course/').then(res => {
-                if(res.status == 200){
+                if(res.status === 200){
                     setCourseList(res.data);
                 }
             });
             API.get('/api/course/subjects/').then(res => {
-                if(res.status == 200){
+                if(res.status === 200){
                     if(!Object.keys(res.data).length) return;
                     setSubjectList(res.data);
                 }
@@ -31,7 +31,7 @@ const CourseProvider = (props) => {
             let ignore = false;
             async function fetchData(){
                 API.get('/api/course/', {id : id}).then(res => {
-                    if(res.status == 200){
+                    if(res.status === 200){
                         setCourse(res.data);
                     }
                 });
@@ -45,7 +45,7 @@ const CourseProvider = (props) => {
 
     function updateCourse(){
         API.post(`/api/course/${id}`, {id : id}).then(res => {
-            if(res.status == 200){
+            if(res.status === 200){
                 setCourse('');
             }
         });

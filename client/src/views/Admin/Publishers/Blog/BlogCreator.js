@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Grid } from '@material-ui/core';
 import AuthorForm from '../../../../components/Admin/AuthorForm';
-import { Redirect } from 'react-router-dom';
 import API from '../../../../modules/API';
 
 const useStyles = makeStyles(theme => ({
@@ -32,73 +31,28 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function BodyForm(props){
-    const classes = useStyles();
-    const [body, setBody] = useState('');
-    console.log(props);
-
-    return(
-        <Grid container>
-            <Grid item xs={12}>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="body"
-                    label="Body"
-                    name="body"
-                    value={body}
-                    onChange={(event) => setBody(event.target.value)}
-                />
-            </Grid>
-            <Grid item container xs={12}>
-                {/* {props.body.map((body, index) => {
-                    return(
-                        <Grid item xs={12} sm={2}
-                            style={{paddingRight: 5, paddingBottom: 5}}>
-                        </Grid>
-                    )
-                })} */}
-            </Grid>
-        </Grid>
-    )
-}
-
 export default function BlogCreator(props) {
     const classes = useStyles();
     
     const [title, setTitle] = useState('');
     const [authors, setAuthors] = useState([]);
     const [body, setBody] = useState('');
-    const [id, setId] = useState('');
     const [errors, setErrors] = useState({});
 
     function handleSubmit(){
         API.post('/api/blog/', {
             title: document.getElementById('title').value,
-            authors: authors,
-            body: document.getElementById('body').value,
+            description: document.getElementById('description').value,
+            authors: authors
         }).then(res => {
-            console.log(res.data);
-            if(res.status == 200){
-                props.setBody(res.data.body);
-                props.setAuthors(res.data.authors);
-
-                setTitle(res.data.title);
-                setBody(res.data.body);
-                setAuthors(res.data.authors);
-                setId(res.data.id);
+            if(res.status === 200){
+                props.setBlogList(props.blogList.concat(res.data));
+                props.setAdding(false);
+                return false;
             }
         }).catch(err => {
             setErrors(err);
         })
-    }
-
-    if(id != ''){
-        return(
-            <Redirect to={`/Admin/Blog/Edit/${id}/`}/>
-        )
     }
     
     return (
@@ -119,6 +73,7 @@ export default function BlogCreator(props) {
                         id="title"
                         label="Title"
                         name="title"
+                        onChange={(event) => setTitle(event.target.value)}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -128,11 +83,12 @@ export default function BlogCreator(props) {
                             margin="normal"
                             required
                             fullWidth
-                            id="body"
-                            label="Body"
-                            name="body"
+                            id="description"
+                            label="Description"
+                            name="description"
                             value={body}
                             onChange={(event) => setBody(event.target.value)}
+                            multiline
                         />
                     </Grid>
                 </Grid>

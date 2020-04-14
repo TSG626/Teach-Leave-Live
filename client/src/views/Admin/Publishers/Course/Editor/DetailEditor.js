@@ -56,7 +56,7 @@ function PriceForm(props){
                     <FormControlLabel 
                         value='price'
                         label={
-                            (radio == 'price') && 
+                            (radio === 'price') && 
                             <CurrencyTextField
                                     variant="outlined"
                                     currencySymbol="$"
