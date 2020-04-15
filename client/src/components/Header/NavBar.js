@@ -142,29 +142,6 @@ const SimpleDialog = (props) => {
     );
   }
 
-function SearchBar(){
-    const classes = useStyles();
-
-    return(
-        <div className={classes.search}>
-            <div className={classes.searchIcon}>
-                <SearchIcon fontSize='small'/>
-            </div>
-            <InputBase
-                placeholder="Search…"
-                classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                }}
-                inputProps={{ style: {fontSize: 12} }}
-            />
-        </div>
-    )
-}
-
-function LogoIcon(){
-
-}
 
 function Logo(){
     return (
@@ -220,14 +197,11 @@ export default function NavBar() {
                                 </Grid>
                             )
                         })}
-                        {/* <Grid item xs={11} sm={3} container justify='center'>
-                            <SearchBar/>
-                        </Grid> */}
                         <Grid item container xs={11} sm={2}>
                             {['Store'].map((route, index) => {
                                 return(
                                     <Grid key={index} item xs={13} sm={6} container justify='center'>
-                                        <Link href={`/${route}/`} color='inherit'>
+                                        <Link href={`/${route}`} color='inherit'>
                                             {route}
                                         </Link>
                                     </Grid>
