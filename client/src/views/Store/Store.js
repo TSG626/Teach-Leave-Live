@@ -1,15 +1,10 @@
 import React, {useState} from 'react';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
-// import './Store.css';
 import Cart from "./Cart/Cart";
-import Checkout from "./Checkout/Checkout";
-import Confirmation from "./Confirmation/Confirmation";
 import Summary from "./Summary/Summary";
 import { UserContext } from '../../contexts/UserContext';
 import { CssBaseline } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link'
-import Button from '@material-ui/core/Button';
 
 const DefaultStore = () => {
     const [courses, setCourses] = useState("No courses available!");
@@ -44,8 +39,6 @@ const Store = ({match}) => {
                         <DefaultStore/>
                         <Switch>
                             <Route exact path={`${match.path}/Cart`} component={Cart} />
-                            <Route exact path={`${match.path}/Checkout`} component={Checkout} />
-                            <Route exact path={`${match.path}/Confirmation`} component={Confirmation} />
                             <Route exact path={`${match.path}/Summary`} component={Summary} />
                         </Switch>
                     </CssBaseline>

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require("cors");
-const stripe = require("stripe")("sk_test_ieIIqneiyAZukzPjJQ206yPH00lm7p2eTX");
+const config = require("../config/config")
+const stripe = require("stripe")(config.stripe.sk);
 const uuid = require("uuid/v4");
 
 const router = express.Router();
