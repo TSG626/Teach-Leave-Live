@@ -10,7 +10,8 @@ const themes = {
         typography: {
             htmlFontSize: 10,
         },
+
         // spacing: (factor => `${0.25 * factor}rem`),
     })),
 }
-export default themes; 
+export default themes;
