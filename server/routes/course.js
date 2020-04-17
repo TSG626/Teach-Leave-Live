@@ -1,5 +1,6 @@
 const express = require('express');
 const Course = require('../models/CourseModel.js');
+const User = require('../models/UserModel');
 
 const router = express.Router();
 
@@ -20,6 +21,11 @@ router.get('/getAllCourses', async (req, res) => {
         if(err)
             return err;
         return res.json(data);
+    })
+})
+router.get('/getCourse', (req, res, next) => {
+    Course.findById(req.query.id).then(course =>{
+        return res.json(course);
     })
 })
 
