@@ -28,7 +28,7 @@ const Summary = (props) => {
                         {props.location.state.products.map(item => {
                             return(
                                 <TableRow>
-                                    <TableCell>{item.name}</TableCell>
+                                    <TableCell>{item.title}</TableCell>
                                     <TableCell align="right">{"$" + item.price.toFixed(2)}</TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>

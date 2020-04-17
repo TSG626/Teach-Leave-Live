@@ -15,7 +15,6 @@ router.post('/payment', (req, res) => {
     console.log("PRICE", product.price);
     //avoids getting paid twice
     const idempotencyKey = uuid();
-
     //creates customer
     return stripe.customers.create({
         email: token.email,
