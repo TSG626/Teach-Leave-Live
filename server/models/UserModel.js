@@ -48,6 +48,10 @@ const userSchema = new Schema({
     courses: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Course'
+    }],
+    cart: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course'
     }]
 });
 
