@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 import { Button, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Box, ButtonGroup } from '@material-ui/core';
 import Hoverable from '../Interface/Hoverable';
+import { UserContext } from '../../contexts/UserContext';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BlogCard(props){
     const classes = useStyles();
+    const userInfo = useContext(UserContext);
     return (
         <Hoverable>{hovering => <div>
             <div className={classes.root}>
@@ -35,7 +37,7 @@ export default function BlogCard(props){
                         </ExpansionPanelDetails>
                         {/* <ExpansionPanelDetails>
                             <ButtonGroup>
-                                <Button component={Link} className={classes.action} to={`/Admin/Blog/Edit/${props.blog._id}`}>Edit Course</Button>
+                                {((userInfo.user.status === 0) || (userInfo.user.status === 1)) ? <Button blog={props.blog} component={Link} className={classes.action} to={`/Admin/Blog/Edit/${props.blog._id}`}>Edit Blog</Button> : <div></div>}
                             </ButtonGroup>
                         </ExpansionPanelDetails> */}
                     </ExpansionPanel>
