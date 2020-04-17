@@ -20,14 +20,14 @@ router.get('/', (req, res, next) => {
     Blog.find({}, (err, blogs) => {
         if (err) return console.log(err);
         res.json(blogs);
-    })
+    }).sort({date: -1})
 });
 
 
 router.post('/', (req, res, next) => {
     let blog = new Blog({
         title: req.body.title,
-        body: req.body.description,
+        description: req.body.description,
         authors: req.body.authors,
     });
     blog.save((err)=>{

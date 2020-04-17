@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
-import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Box } from '@material-ui/core';
+import { Button, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Box, ButtonGroup } from '@material-ui/core';
 import Hoverable from '../Interface/Hoverable';
 
 const useStyles = makeStyles((theme) => ({
@@ -32,6 +33,11 @@ export default function BlogCard(props){
                         <ExpansionPanelDetails>
                             {props.blog.body}
                         </ExpansionPanelDetails>
+                        {/* <ExpansionPanelDetails>
+                            <ButtonGroup>
+                                <Button component={Link} className={classes.action} to={`/Admin/Blog/Edit/${props.blog._id}`}>Edit Course</Button>
+                            </ButtonGroup>
+                        </ExpansionPanelDetails> */}
                     </ExpansionPanel>
                 </Box>
                 
