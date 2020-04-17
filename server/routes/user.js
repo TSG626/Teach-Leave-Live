@@ -94,14 +94,15 @@ router.get('/', (req, res, next) => {
         })
     }else{
         if (req.user){
-            const {username, email, firstname, lastname, status, avatar} = req.user;
+            const {username, email, firstname, lastname, status, avatar, courses} = req.user;
             res.status(200).send(JSON.stringify({
                 username: username,
                 email: email,
                 firstname: firstname,
                 lastname: lastname,
                 status: status,
-                avatar: avatar
+                avatar: avatar,
+                courses: courses
             }))
         }else{
             res.status(400).json({message: 'Not logged in.'});
