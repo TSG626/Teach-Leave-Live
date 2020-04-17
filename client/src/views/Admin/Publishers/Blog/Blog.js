@@ -75,7 +75,7 @@ export default function BlogRouter({match}) {
         <Route exact path={`${match.path}/`} component={function(){
           return(
             <Container component="main" maxWidth={false}>
-              <Grid xs={12} container alignContent={'center'} justify={'space-between'}>
+              <Grid container alignContent={'center'} justify={'space-between'}>
                 <Typography className={classes.title}>
                     Blog
                     {console.log(userInfo)}
@@ -106,6 +106,8 @@ export default function BlogRouter({match}) {
             )
         }}/>
         <Route path={`${match.path}/Create`} component={BlogCreator} />
-        <Route exact path={`${match.path}/Edit/:id`} component={BlogEditor}/>
+        {/* <Route exact path={`${match.path}/Edit/:id`} component={BlogEditor} blog={blogList.find(function(blog){
+          return blog.id === id;
+        })}/> */}
       </Switch>)
 }

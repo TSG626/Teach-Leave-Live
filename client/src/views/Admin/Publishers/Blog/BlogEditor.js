@@ -17,7 +17,51 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function BlogEditor() {
+// function BlogForm(props){
+//     const filter = createFilterOptions();
+
+//     return(
+//         <Autocomplete
+//             value={props.blog.subject}
+//             onChange={(event, newValue) => {
+//                 if (newValue && newValue.inputValue) {
+//                 props.setBlog({...props.blog, subject: newValue.inputValue});
+//                 return;
+//                 }
+//                 props.setBlog({...props.blog, subject: newValue});
+//             }}
+//             options={context.subjectList}
+//             filterOptions={(options, params) => {
+//                 const filtered = filter(options, params);
+//                 if (params.inputValue !== '') {
+//                     filtered.push({
+//                     inputValue: params.inputValue,
+//                     title: `Add "${params.inputValue}"`,
+//                     });
+//                 }
+//                 return filtered;
+//             }}
+//             getOptionLabel={(option) => {
+//                 if (option.inputValue) {
+//                 return option.inputValue;
+//                 }
+//                 return option;
+//             }}
+//             renderOption={(option) => {
+//                 if (option.inputValue) {
+//                 return option.title;
+//                 }
+//                 return option;
+//             }}
+//             renderInput={(params) => (
+//                 <TextField {...params} label="Subject" variant="outlined" />
+//             )}
+//         />
+//     )
+// }
+
+export default function BlogEditor(props) {
+    console.log(props);
     const classes = useStyles();
     const [blog, setBlog] = useState({
         author: [],
