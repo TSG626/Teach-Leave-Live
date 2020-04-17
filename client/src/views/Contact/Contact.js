@@ -4,20 +4,12 @@ import Input from '@material-ui/core/Input';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import API from '../../modules/API';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 const Contact = () => {
     const useStyles = makeStyles(theme => ({
-        paper: {
-          marginTop: theme.spacing(8),
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        },
-        avatar: {
-          margin: theme.spacing(1),
-          backgroundColor: theme.palette.secondary.main,
-        },
         form: {
           width: '100%', // Fix IE 11 issue.
           marginTop: theme.spacing(1),
@@ -44,12 +36,13 @@ const Contact = () => {
     const classes = useStyles();
     return (
         !sent ? (
-            <div>
-                <div class="title">
-                    <h1>Teach. Leave. Live.</h1>
-                </div>
+            <Container component="main">
+            <CssBaseline/>
+                <Typography color="primary" class="title" component="h1" variant="h3">
+                    Teach. Leave. Live.
+                </Typography>
                 <div class="message">
-                    <Typography component="h1" variant="h5">
+                    <Typography component="h1" variant="h5" color="primary">
                         Email us
                     </Typography>
                     <form className={classes.form} onSubmit={(e) => handleSubmit(e)}>
@@ -90,9 +83,9 @@ const Contact = () => {
                     </Button>
                     </form>
                 </div>
-            </div>
+            </Container>
         ) : (
-            <div>
+            <Container component="main">
                 <div class="title">
                     <h1>Teach. Leave. Live.</h1>
                 </div>
@@ -101,7 +94,7 @@ const Contact = () => {
                         Email sent.
                     </Typography>
                 </div>
-            </div>
+            </Container>
         )
     );
 };
