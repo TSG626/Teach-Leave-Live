@@ -15,6 +15,14 @@ router.get('/subjects/', (req, res, next) => {
       });
 });
 
+router.get('/getAllCourses', async (req, res) => {
+    Course.find({}, function(err, data) {
+        if(err)
+            return err;
+        return res.json(data);
+    })
+})
+
 router.get('/', (req, res, next) => {
     if(req.query.id){
         Course.findById(req.query.id, (err, course) => {
