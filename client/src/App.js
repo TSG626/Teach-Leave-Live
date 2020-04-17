@@ -19,7 +19,15 @@ import Contact from './views/Contact/Contact.js';
 import themes from './themes'
 
 const useStyles = makeStyles(theme => ({
-  toolbar: theme.mixins.toolbar,
+    toolbar: theme.mixins.toolbar,
+    overrides: {
+        MuiTypography: {
+            color: {
+                textPrimary: '#ffffff',
+                textSecondary: '#ffffff',
+            }
+        },
+    },
 }));
 
 //Checks if user is signed in. If not, only allow them to access landing and signup/login
