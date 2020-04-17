@@ -15,7 +15,7 @@ import Container from '@material-ui/core/Container';
 import { Redirect } from 'react-router-dom';
 import {UserContext} from '../../../contexts/UserContext';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     paper: {
       marginTop: theme.spacing(8),
       display: 'flex',
@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     },
     error: {
         color: 'red'
-    }
+    },
   }));
 
 export default function Login() {
@@ -91,7 +91,7 @@ export default function Login() {
                     <Avatar className={classes.avatar}>
                         <LockOutlinedIcon/>
                     </Avatar>
-                    <Typography component="h1" variant="h5">
+                    <Typography className={classes.formField} component="h1" variant="h5">
                         Sign in
                     </Typography>
                     <form className={classes.form} onSubmit={(e) => handleSubmit(e, context)}>
@@ -105,7 +105,6 @@ export default function Login() {
                         name="email"
                         autoComplete="email"
                         autoFocus
-                        className={classes.formField}
                     />
                     <TextField
                         variant="filled"
@@ -122,7 +121,7 @@ export default function Login() {
                     {message ? <Typography className={classes.error}>
                         {message}
                     </Typography> : <React.Fragment/>}
-                    {email_message ? 
+                    {email_message ?
                         <React.Fragment>
                             <Typography className={classes.error}>
                                 {email_message} Check your inbox.
