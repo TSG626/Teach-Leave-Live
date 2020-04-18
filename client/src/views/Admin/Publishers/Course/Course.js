@@ -78,15 +78,6 @@ export default function CourseRouter({match}) {
                       Add Course
                     </Button>
                     <SimpleDialog open={adding} onClose={handleClose} context={context} setAdding={setAdding} className={classes.courseCreatorWindow}/>
-                    {/* <Modal open={adding} onClose={() => setAdding(false)} className={classes.courseCreatorWindow}>
-                      <Container>
-                        <Card elevation={2}>
-                          <CardContent>
-                            <CourseCreator context={context} setAdding={setAdding}/>
-                          </CardContent>
-                        </Card>
-                      </Container>
-                    </Modal> */}
                   </Grid>
                   <Grid
                     container

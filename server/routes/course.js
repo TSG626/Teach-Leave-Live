@@ -1,5 +1,6 @@
 const express = require('express');
 const Course = require('../models/CourseModel.js');
+const User = require('../models/UserModel');
 
 const router = express.Router();
 
@@ -14,6 +15,19 @@ router.get('/subjects/', (req, res, next) => {
         res.json(subjects);  
       });
 });
+
+router.get('/getAllCourses', async (req, res) => {
+    Course.find({}, function(err, data) {
+        if(err)
+            return err;
+        return res.json(data);
+    })
+})
+router.get('/getCourse', (req, res, next) => {
+    Course.findById(req.query.id).then(course =>{
+        return res.json(course);
+    })
+})
 
 router.get('/', (req, res, next) => {
     if(req.query.id){
