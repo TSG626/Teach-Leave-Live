@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Route, Switch, Link } from "react-router-dom";
 import clsx from "clsx";
-import { UserContext } from "../../contexts/UserContext";
 import Blog from "./Publishers/Blog/Blog";
 import Course from "./Publishers/Course/Course";
 import NewsletterPublisher from "./Publishers/Newsletter/NewsletterPublisher";

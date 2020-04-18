@@ -6,8 +6,6 @@ import Confirmation from "./Confirmation/Confirmation";
 import Summary from "./Summary/Summary";
 import { UserContext } from "../../contexts/UserContext";
 import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Button from "@material-ui/core/Button";
 
 const DefaultStore = () => {
   const [courses, setCourses] = useState("No courses available!");

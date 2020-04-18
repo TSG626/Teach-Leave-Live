@@ -1,14 +1,12 @@
 import React, { useState, useContext } from "react";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import Link2 from "@material-ui/core/Link";
-import { Typography, Box, CircularProgress } from "@material-ui/core";
+import { Typography, Box, CircularProgress, Slide } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { Redirect, Link } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
-import StoreIcon from "@material-ui/icons/Store";
-import Slide from "@material-ui/core/Slide";
 import Grow from "@material-ui/core/Grow";
 
 const ListCourses = () => {

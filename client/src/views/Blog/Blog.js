@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
-import { Grid } from "@material-ui/core";
+import { Grid, Container, Switch } from "@material-ui/core";
+import { Route } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -21,15 +21,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Blog({ match }) {
+export default function BlogDisplay({ match }) {
   const classes = useStyles();
-  const [errors, setErrors] = useState({});
 
   return (
     <Grid container alignContent={"center"} justify={"space-between"}>
       <Typography className={classes.title}>
         Join in the Conversation!
       </Typography>
+      <Container maxWidth="lg">
+        <Switch>
+          <Route path={`${match.path}`} component={BlogDisplay} />
+        </Switch>
+      </Container>
     </Grid>
   );
 }

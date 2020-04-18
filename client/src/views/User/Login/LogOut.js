@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import { Redirect } from "react-router-dom";
 import { UserContext } from "../../../contexts/UserContext";
 

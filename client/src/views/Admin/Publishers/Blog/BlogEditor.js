@@ -1,9 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from 'react-router';
-import Grid from '@material-ui/core/Grid'
+import Grid from '@material-ui/core/Grid';
 import { Button, Container, Box} from '@material-ui/core';
-import {Delete as DeleteIcon, ExpandMore, ExpandLess, SaveTwoTone as SaveIcon} from '@material-ui/icons/';
+import {SaveTwoTone as SaveIcon} from '@material-ui/icons/';
 import API from '../../../../modules/API';
 
 const useStyles = makeStyles(theme => ({
@@ -31,7 +31,6 @@ export default function BlogEditor() {
     useEffect(() => {
         async function fetchData(){
             API.get('/api/blog/', {id: id}).then(res => {
-                console.log(res);
                 if(res.status === 200){
                     setBlog(res.data);
                 }
@@ -50,6 +49,7 @@ export default function BlogEditor() {
                         </Grid>
                         <Grid item xs={12} style={{padding:15}}>
                             <Box>
+                                {/*---------- FIXME: Keep or remove? ----------*/}
                                 {/* <DetailEditor course={course} setCourse={setCourse}/> */}
                             </Box>
                         </Grid>

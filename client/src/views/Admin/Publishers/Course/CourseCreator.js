@@ -11,7 +11,6 @@ import {
   FormControlLabel,
   Radio,
   Grid,
-  Tooltip,
 } from "@material-ui/core";
 import API from "../../../../modules/API";
 import AuthorForm from "../../../../components/Admin/AuthorForm";

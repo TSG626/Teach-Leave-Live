@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
-import Input from "@material-ui/core/Input";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import API from "../../modules/API";
+import { Input } from "@material-ui/core";
 
 const Contact = () => {
   const useStyles = makeStyles((theme) => ({
