@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Route, Switch } from 'react-router-dom';
 import InstagramIcon from '@material-ui/icons/Instagram'
@@ -8,6 +8,9 @@ import { Link, Box } from '@material-ui/core';
 import Link2 from '@material-ui/core/Link';
 import { CssBaseline, Container, Grid, Typography } from '@material-ui/core';
 import Blog from '../Admin/Publishers/Blog/Blog';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import API from '../../modules/API.js';
 
 const useStyles = makeStyles(theme => ({
     cardList: {
@@ -16,53 +19,119 @@ const useStyles = makeStyles(theme => ({
       },
 }));
 
-export default function Landing({match}) {
-    const classes = useStyles();
+function Socials() {
+    return (
+        <Grid container direction="column">
+            <Grid item>
+                <Link2 target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/">
+                    <InstagramIcon style={{ fontSize: 50 }} fontSize="small" color="inherit"/>
+                </Link2>
+            </Grid>
+            <Grid item>
+                <Link2 target="_blank" rel="noopener" href="https://www.facebook.com/teachleavelive/">
+                    <FacebookIcon style={{ fontSize: 50 }} fontSize="small" color="inherit"/>
+                </Link2>
+            </Grid>
+            <Grid item>
+                <Link2 target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live">
+                    <WebIcon style={{ fontSize: 50 }} fontSize="small" color="inherit"/>
+                </Link2>
+            </Grid>
+        </Grid>
+    );
+}
+
+function LandingBody(props) {
+    const classes = props.classes;
+    const [message, setMessage] = useState('');
+
+    async function handleEmailSubmit(e) {
+        e.preventDefault();
+        let email = document.getElementById('email').value;
+        if (!email.includes('@')){
+            setMessage('Please enter a valid email.');
+            return;
+        }
+        else {
+            document.getElementById('email').value = ('');
+            setMessage('');
+            API.post('/api/addEmail', {
+                email: email,
+            }).then((res) => {
+                setMessage(res.data.message);
+            }).catch((err) => {
+                console.log(err);
+                setMessage('Something went wrong. Please refresh and try again.');
+            });
+        }
+    }
+
     return (
         <div>
             <CssBaseline/>
-            <Box p={2}>
-                <Grid container>
-                    <Grid xs={12}>
-                        <Typography align={'center'} variant="h2">Welcome to TLL!</Typography>
-                    </Grid>
-                    <Grid xs={6}>
-                        <Link color={'initial'} underline={'always'} variant="h6">About TLL</Link>
-                        <Typography varient={'body2'}>
-                            TLL is a web-based platform designed to provide tools to teachers so that they can teach their 
-                            hearts out, leave work at work, and live life with intention. We provide resources for teachers to 
-                            learn how to efficiently manage time and organize their work.
-                        </Typography>
-                    </Grid>
-                    <Grid xs={6}>
-                        <Box p={2}>
-                            <Link color={'initial'} underline={'always'} variant="h6">Socials</Link>
+            <Container maxWidth='lg'>
+                <Typography align={'center'} variant="h2">Welcome to TLL</Typography>
+                <Grid container direction='row' spacing={0}>
+                    <Grid item>
+                        <Box width={1/2}>
+                            <Typography color={'initial'} variant="h6">About TLL</Typography>
+                            <Typography varient={'body2'}>
+                                TLL is a web-based platform designed to provide tools to teachers so that they can teach their
+                                hearts out, leave work at work, and live life with intention. We provide resources for teachers to
+                                learn how to efficiently manage time and organize their work.
+                            </Typography>
                         </Box>
-                        <Box p={2} display="flex">
-                            <Box flexGrow={0.4}>
-                                <Link2 target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/">
-                                    <InstagramIcon style={{ fontSize: 100 }} fontSize="large" color="inherit"/>
-                                </Link2>
-                            </Box>
-                            <Box flexGrow={0.4}>
-                                <Link2 target="_blank" rel="noopener" href="https://www.facebook.com/teachleavelive/">
-                                    <FacebookIcon style={{ fontSize: 100 }} fontSize="large" color="inherit"/>
-                                </Link2>
-                            </Box>
-                            <Box flexGrow={0.4}>
-                                <Link2 target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live">
-                                    <WebIcon style={{ fontSize: 100 }} fontSize="large" color="inherit"/>
-                                </Link2>
-                            </Box>
+                    </Grid>
+                    <Grid item>
+                        <Box width={1}>
+                            <Typography variant="h6">Join our newsletter</Typography>
+                            <form onSubmit={(e) => handleEmailSubmit(e)}>
+                                <TextField
+                                    variant='filled'
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                    autoFocus
+                                />
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.submit}
+                                >
+                                Sign Up
+                                </Button>
+                                <Typography variant="subtitle">{message}</Typography>
+                            </form>
                         </Box>
                     </Grid>
                 </Grid>
-                <Container maxWidth='lg'>
-                    <Switch>
-                        <Route path={`${match.path}`} component={Blog} />
-                    </Switch>
-                </Container>
-            </Box>
+                <Switch>
+                    <Route path={`${props.match.path}`} component={Blog} />
+                </Switch>
+            </Container>
         </div>
     );
 }
+
+export default function Landing({match}) {
+    const classes = useStyles();
+    const [message, setMessage] = useState('');
+
+    return (
+        <div>
+            <LandingBody
+            classes={classes}
+            match={match}
+            />
+            <div style={{position: 'absolute', right: 1, top: 90}}>
+                <Socials/>
+            </div>
+        </div>
+    );
+};
