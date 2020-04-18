@@ -3,6 +3,7 @@ const multer  = require('multer');
 const GridFsStorage = require('multer-gridfs-storage');
 const Grid = require('gridfs-stream');
 const User = require('../models/UserModel.js');
+const Course = require('../models/CourseModel');
 const config = require('../config/config');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -94,7 +95,7 @@ router.get('/', (req, res, next) => {
         })
     }else{
         if (req.user){
-            const {username, email, firstname, lastname, status, avatar, courses} = req.user;
+            const {username, email, firstname, lastname, status, avatar, courses, cart} = req.user;
             res.status(200).send(JSON.stringify({
                 username: username,
                 email: email,
@@ -102,7 +103,8 @@ router.get('/', (req, res, next) => {
                 lastname: lastname,
                 status: status,
                 avatar: avatar,
-                courses: courses
+                courses: courses,
+                cart: cart
             }))
         }else{
             res.status(400).json({message: 'Not logged in.'});
@@ -131,5 +133,27 @@ router.delete('/:id', (req, res, next) => {
         res.json(post);
     });
 });
+
+router.post('/addToCart', (req, res, next) => {
+    console.log(req.body);
+    Course.findOne({
+        'title' : req.body.title
+    }).then(course => {
+        User.findOneAndUpdate({'username': req.body.username},{$push: {'cart': course}})
+        .then(
+            (user) => {
+                return res.status(200).json({
+                    success: true,
+                });
+            }
+        ).catch(error => done(error))
+    }).catch(error => done(error))
+})
+
+router.get('/getCart', (req, res) => {
+    User.findOne({'username': req.user.username}).then(user => {
+        return res.json(user.cart);
+        })
+})
 
 module.exports = router;
