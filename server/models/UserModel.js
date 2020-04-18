@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Course = require('./CourseModel').schema;
 
 var {Schema, Number} = mongoose; 
 
@@ -43,7 +44,15 @@ const userSchema = new Schema({
     avatar: {
         type: String,
         default: ''
-    }
+    },
+    courses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course'
+    }],
+    cart: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course'
+    }]
 });
 
 const User = mongoose.model('User', userSchema);

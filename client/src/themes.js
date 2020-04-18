@@ -4,7 +4,7 @@ const themes = {
     default: responsiveFontSizes(createMuiTheme({
         palette: {
             type: 'dark',
-            primary: { main: '#7fe1ed' },
+            primary: { main: '#01ffff' },
             secondary: { main: '#fffbc6' },
         },
         typography: {
