@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
@@ -20,6 +21,15 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import API from "../../modules/API";
 import { Edit, ViewModule } from "@material-ui/icons";
+=======
+import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/styles';
+import Typography from '@material-ui/core/Typography';
+import { Grid, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import CourseCard from './CourseCard';
+import API from '../../modules/API';
+>>>>>>> master
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,8 +54,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SubjectCard = (props) => {
+<<<<<<< HEAD
   const [courses, setCourses] = useState({});
   const classes = useStyles();
+=======
+    const [courses, setCourses] = useState({})
+    const classes = useStyles();
+    
+    useEffect(()=>{
+        API.get('/api/course/', {subject: props.subject}).then(res => {
+            if(res.status === 200){
+                setCourses(res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+    },[])
+>>>>>>> master
 
   useEffect(() => {
     API.get("/api/course/", { subject: props.subject })

@@ -4,11 +4,7 @@ var { Schema, Number } = mongoose;
 
 const blogSchema = new Schema({
   title: { type: String, required: true },
-  description: {
-    type: String,
-    default: "No description",
-  },
-  body: {},
+  description: { type: String, required: true },
   authors: [
     {
       type: String,
@@ -16,10 +12,6 @@ const blogSchema = new Schema({
     },
   ],
   date: { type: Date, default: Date.now },
-  published: {
-    type: Boolean,
-    default: false,
-  },
   // replies: [
   //     {
   //         title: {type: String, required: true},
