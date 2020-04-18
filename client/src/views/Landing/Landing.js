@@ -129,7 +129,7 @@ export default function Landing({match}) {
             classes={classes}
             match={match}
             />
-            <div style={{position: 'absolute', right: 1, top: 90}}>
+            <div style={{position: 'absolute', right: 15, top: 90}}>
                 <Socials/>
             </div>
         </div>
