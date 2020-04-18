@@ -30,10 +30,11 @@ export default function BlogCard(props){
                 <Box >
                     <ExpansionPanel expanded={hovering}>
                         <ExpansionPanelSummary>
+                            {/* Use grid for title and comment button to be separate? */}
                             <Typography className={classes.title}>{props.blog.title} (By {props.blog.authors})</Typography>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
-                            {props.blog.body}
+                            {props.blog.description}
                         </ExpansionPanelDetails>
                         {/* <ExpansionPanelDetails>
                             <ButtonGroup>
