@@ -1,71 +1,80 @@
 import React, { createContext, useState, useEffect } from "react";
-import API from '../modules/API'
+import API from "../modules/API";
 
 const UserContext = createContext();
 
 const UserProvider = (props) => {
-    const [authenticated, setAuthenticated] = useState(false);
-    const [user, setUser] = useState({});
+  const [authenticated, setAuthenticated] = useState(false);
+  const [user, setUser] = useState({});
 
-    const deauthenticateUser = () => {
-        localStorage.removeItem('token');
-        setAuthenticated(false);
+  const deauthenticateUser = () => {
+    localStorage.removeItem("token");
+    setAuthenticated(false);
+  };
+
+  const authenticateUser = (token) => {
+    localStorage.setItem("token", token);
+    setAuthenticated(true);
+  };
+
+  const isAuthenticated = () => {
+    return authenticated;
+  };
+
+  useEffect(() => {
+    if (user.username) return;
+    if (localStorage.getItem("token") !== null) {
+      setAuthenticated(true);
     }
+  }, [user]);
 
-    const authenticateUser = (token) => {
-        localStorage.setItem('token', token);
-        setAuthenticated(true);
-    }
-
-    const isAuthenticated = () => {
-        return authenticated;
-    }
-
-    useEffect(() => {
-        if(user.username) return;
-        if(localStorage.getItem('token') !== null){
-            setAuthenticated(true);
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      API.get("/api/user/").then((res) => {
+        console.log(res.data);
+        if (res.status == 200) {
+          const {
+            username,
+            email,
+            firstname,
+            lastname,
+            status,
+            avatar,
+            _id,
+          } = res.data;
+          setUser({
+            _id: _id,
+            username: username,
+            email: email,
+            firstname: firstname,
+            lastname: lastname,
+            avatar: avatar,
+            status: status,
+          });
         }
-    }, [user]);
-
-    useEffect(() => {
-        let ignore = false;
-        async function fetchData(){
-            API.get('/api/user/').then(res => {
-                if(res.status == 200){
-                    const {username, email, firstname, lastname, status, avatar} = res.data;
-                    setUser({
-                        username: username,
-                        email: email,
-                        firstname: firstname,
-                        lastname: lastname,
-                        avatar: avatar,
-                        status: status,
-                    });
-                }
-
-            });
-        }
-        fetchData();
-        return () => {ignore = true;}
-    }, [authenticated]);
-
-    const data = {
-        //data
-        user,
-        setUser,
-        authenticated,
-        //functions
-        authenticateUser,
-        deauthenticateUser,
-        isAuthenticated
+      });
+    }
+    fetchData();
+    return () => {
+      ignore = true;
     };
+  }, [authenticated]);
 
-    return (
-        <UserContext.Provider value={data}>
-            {props.children}
-        </UserContext.Provider>
-    );
+  const data = {
+    //data
+    user,
+    setUser,
+    authenticated,
+    //functions
+    authenticateUser,
+    deauthenticateUser,
+    isAuthenticated,
+  };
+
+  return (
+    <UserContext.Provider value={data}>{props.children}</UserContext.Provider>
+  );
 };
 
-export {UserContext, UserProvider};
+export { UserContext, UserProvider };

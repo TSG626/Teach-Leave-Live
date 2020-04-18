@@ -1,11 +1,9 @@
-import React from 'react';
-import './Confirmation.css';
+import React from "react";
 
 export default function Confirmation() {
-    return (
-        <div className="App">
-            <header className="App-header">
-            </header>
-        </div>
-    );
+  return (
+    <div className="App">
+      <header className="App-header"></header>
+    </div>
+  );
 }
