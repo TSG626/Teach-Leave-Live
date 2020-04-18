@@ -78,7 +78,6 @@ export default function BlogRouter({match}) {
               <Grid container alignContent={'center'} justify={'space-between'}>
                 <Typography className={classes.title}>
                     Blog
-                    {console.log(userInfo)}
                 </Typography>{((userInfo.user.status === 0) || (userInfo.user.status === 1)) ? <Button onClick={handleClickOpen} endIcon={<AddIcon/>} varient={'contained'}>Add Blog</Button> : <div></div>}
                 <SimpleDialog
                     open={adding}
