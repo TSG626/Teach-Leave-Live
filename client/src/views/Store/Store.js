@@ -70,7 +70,7 @@ const DefaultStore = () => {
     }, []);
 
     console.log(cart)
-    if(useLocation().pathname === "/Store")
+    if(useLocation().pathname === "/Store/")
     {
         return(
             <div>
@@ -82,7 +82,7 @@ const DefaultStore = () => {
                 </Box>
                 <div>
                     <Box align="center" mb={3}>
-                    <Button component={Link} to="/Store/Cart"><ShoppingCartIcon/></Button>
+                      <Button component={Link} to="/Store/Cart"><ShoppingCartIcon/></Button>
                     </Box>
                 </div>
             </header>
@@ -100,10 +100,10 @@ const DefaultStore = () => {
                                         <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
                                         <Card className={classes.root}>
                                         <CardContent>
-                                          <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
+                                          <Typography className={classes.title} color="textSecondary" gutterBottom>
                                             {course.subject}
                                           </Typography>
-                                          <Typography variant="h5" component="h2" align="center">
+                                          <Typography variant="h5" component="h2">
                                             {course.title}
                                           </Typography>
                                         </CardContent>
