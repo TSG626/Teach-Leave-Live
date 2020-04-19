@@ -14,16 +14,37 @@ import {
   Tooltip,
   Chip,
   Avatar,
+  CardContent,
+  CardActionArea,
+  Card,
+  TextField,
+  CardHeader,
+  Divider,
+  Collapse,
 } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import EJSContentViewer from "../../components/Interface/EJSContentViewer";
 import API from "../../modules/API";
+import { UserContext } from "../../contexts/UserContext";
+import { useContext } from "react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
   },
   body: {},
+  comments: {
+    padding: theme.spacing(2, 0),
+  },
+  commentsTitle: {
+    padding: theme.spacing(2),
+  },
+  comment: {
+    paddingLeft: theme.spacing(1),
+  },
+  name: {
+    padding: theme.spacing(0, 1),
+  },
   authorChip: {
     padding: theme.spacing(1),
   },
@@ -54,6 +75,94 @@ function AuthorChip(props) {
   );
 }
 
+function CommentForm(props) {
+  const classes = useStyles();
+  const [body, setBody] = useState("");
+  const { user } = useContext(UserContext);
+  const { message, blogId, parentId, reply } = props;
+
+  function handleChange(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (reply && parentId) {
+        API.put(`/api/blog/${blogId}/comment/${parentId}/`, {
+          replies: { body: body, postedBy: user._id },
+        });
+      } else {
+        API.put(`/api/blog/${blogId}`, {
+          comments: { body: body, postedBy: user._id },
+        });
+      }
+    } else {
+      setBody(e.target.value);
+    }
+  }
+
+  return (
+    <div className={classes.comment}>
+      <Card>
+        <CardHeader
+          avatar={<Avatar className={classes.avatar} src={user.avatar} />}
+          title={user.firstname + " " + user.lastname}
+        />
+        <CardContent>
+          <TextField
+            multiline
+            placeholder={message}
+            fullWidth
+            value={body}
+            onKeyDown={handleChange}
+            onChange={handleChange}
+          />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function Comment(props) {
+  const classes = useStyles();
+  const { comment, reply, blogId, parentId } = props;
+  const user = comment.postedBy;
+  const [open, setOpen] = useState(true);
+  return (
+    <div className={classes.comment}>
+      <Card>
+        <CardHeader
+          avatar={<Avatar className={classes.avatar} src={user.avatar} />}
+          title={user.firstname + " " + user.lastname}
+          subheader={Date(comment.date).toString()}
+        />
+        <CardContent>
+          <Typography>{comment.body}</Typography>
+        </CardContent>
+        <Collapse in={open}>
+          <Divider />
+          <CardContent>
+            {comment.replies.length === 0 ? (
+              <CommentForm
+                reply
+                message="Be the first to reply!"
+                blogId={blogId}
+                parentId={parentId}
+              />
+            ) : (
+              comment.replies.map((reply) => (
+                <Comment
+                  reply
+                  comment={reply}
+                  blogId={blogId}
+                  parentId={comment.id}
+                />
+              ))
+            )}
+          </CardContent>
+        </Collapse>
+      </Card>
+    </div>
+  );
+}
+
 function BlogViewer(props) {
   const classes = useStyles();
   let { id } = useParams();
@@ -62,7 +171,6 @@ function BlogViewer(props) {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(id);
       API.get(`/api/blog/`, { id: id }).then((res) => {
         if (res.status === 200) {
           setBlog(res.data);
@@ -103,7 +211,28 @@ function BlogViewer(props) {
             <EJSContentViewer data={blog.body} />
           </Paper>
         </div>
-        <div className={classes.comments}></div>
+        <div className={classes.comments}>
+          <Paper>
+            <Typography variant="h6" className={classes.commentsTitle}>
+              Comments
+            </Typography>
+            {blog.comments.length === 0 ? (
+              <CommentForm
+                message="Be the first to comment!"
+                blogId={blog._id}
+              />
+            ) : (
+              <div>
+                {blog.comments.map((comment) => (
+                  <Comment comment={comment} blogId={blog.id} />
+                ))}
+                <div>
+                  <CommentForm message="Leave a comment" blogId={blog._id} />
+                </div>
+              </div>
+            )}
+          </Paper>
+        </div>
       </div>
     </Grid>
   );
