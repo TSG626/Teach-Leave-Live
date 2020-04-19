@@ -46,7 +46,9 @@ export default function Landing({match}) {
             return(
                 <CssBaseline>
                     <Grid align={'center'} xs={12}>
-                        <Typography variant={'h2'} component={'h2'}>Welcome back, {context.user.firstname}!</Typography>
+                        <Box m={3}>
+                            <Typography variant={'h2'} component={'h2'}>Welcome back, {context.user.firstname}!</Typography>
+                        </Box>
                     </Grid>
                     <Grid align={'center'} xs={12}>
                         <Box p={2} display="flex">
