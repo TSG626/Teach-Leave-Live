@@ -8,7 +8,7 @@ router.get("/", (req, res, next) => {
     //admin
     if (req.query.id) {
       Blog.findById(req.query.id)
-        .populate("authors")
+        .populate("authors comments.postedBy comments.replies.postedBy")
         .exec((err, blogs) => {
           if (err) return next(err);
           res.json(blogs);
@@ -73,6 +73,13 @@ router.post("/", (req, res, next) => {
     if (err) {
       console.log(err);
     }
+  });
+});
+
+router.put("/:id", (req, res, next) => {
+  Blog.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
+    if (err) return next(err);
+    res.json(post);
   });
 });
 
