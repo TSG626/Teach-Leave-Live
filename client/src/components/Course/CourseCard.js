@@ -4,15 +4,17 @@ import {
   CardHeader,
   CardContent,
   CardActionArea,
+  Button,
 } from "@material-ui/core";
 
 function CourseCard(props) {
   const { course } = props;
+  const { title, description } = course;
 
   return (
     <Card>
-      <CardHeader>{course.title}</CardHeader>
-      <CardContent>{course.description}</CardContent>
+      <CardHeader>{title}</CardHeader>
+      <CardContent>{description}</CardContent>
       <CardActionArea>
         <Button>Preview</Button>
       </CardActionArea>
