@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext} from 'react';
-import { CssBaseline, Table, TableHead, TableRow, TableCell, TableContainer, TableBody, Grid, Box, makeStyles, Paper} from '@material-ui/core';
+import { CssBaseline, Table, TableHead, TableRow, TableCell, TableContainer, TableBody, Grid, Box, makeStyles, Paper, Typography} from '@material-ui/core';
 import API from '../../../../modules/API'
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -207,9 +207,13 @@ const GetUsers = () => {
 const UserEditor = () => {
     return (
         <CssBaseline>
-            <div className="App">
-                <header className="App-header">
-                    User Management
+            <div>
+                <header>
+                    <Box m={3}>
+                        <Typography variant="h3" align="center">
+                            User Management
+                        </Typography>
+                    </Box>
                 </header>
                 <GetUsers/>
             </div>
