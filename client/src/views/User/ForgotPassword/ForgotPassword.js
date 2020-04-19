@@ -3,11 +3,11 @@ import axios from "axios";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { Link } from "@material-ui/core";
-import { LockOpenOutlined } from "@material-ui/icons";
 import { UserContext } from "../../../contexts/UserContext";
 
 const useStyles = makeStyles((theme) => ({
@@ -207,7 +207,10 @@ export default function ForgotPassword() {
         <h5 class="message">{message}</h5>
         <h5 class="message">
           If you did not receive an email,
-          <Link href="/Contact">contact us.</Link>
+          <br />
+          <Link justify="center" href="/Contact">
+            contact us.
+          </Link>
         </h5>
         <Button
           type="submit"
@@ -289,121 +292,13 @@ export default function ForgotPassword() {
           <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
               <Avatar className={classes.avatar}>
-                <LockOpenOutlined />
+                <LockOutlinedIcon />
               </Avatar>
               {formSelection}
             </div>
-        ) : !validCode ? (  //Code form
-          <div>
-            <Typography component="h1" variant="h5">
-                Enter code
-            </Typography>
-            <form className={classes.form} onSubmit={(e) => handleCodeSubmit(e)}>
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="code"
-                label="Code"
-                name="code"
-                autoComplete="code"
-                autoFocus
-            />
-            <h5>{errors.code}</h5>
-            <h5 class="message">{message}</h5>
-            <h5 class="message">If you did not receive an email,<br/> 
-                <Link justify='center' href="/Contact">
-                    contact us.
-                </Link>
-            </h5>
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-            >
-                Confirm code
-            </Button>
-            <p>
-                {"We sent a 6-digit code to your email. If you don't receive it soon, "}
-                <Link href="/Contact">
-                    {"contact us"}
-                </Link>
-                {"."}
-            </p>
-            </form>
-          </div>
-        ) : (
-          <div>
-            <Typography component="h1" variant="h5">
-                New password
-            </Typography>
-            <form className={classes.form} onSubmit={(e) => handleNewPassSubmit(e)}>
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                type="password"
-                id="new password"
-                label="New Password"
-                name="new password"
-                autoComplete="new password"
-                onChange={() => {
-                    confirmPassword();
-                }}
-                autoFocus
-            />
-            <h5>{errors.newPassword}</h5>
-            <Typography component="h1" variant="h5">
-                Confirm password
-            </Typography>
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                type="password"
-                id="confirm password"
-                label="Confirm Password"
-                name="confirm password"
-                autoComplete="confirm password"
-                onChange={() => {
-                    confirmPassword();
-                }}
-                autoFocus
-            />
-            <h5>{passwordMismatchError}</h5>
-            <h5 class="message">{message}</h5>
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-            >
-                Submit new password
-            </Button>
-            </form>
-          </div>
-        )
-    );
-
-    return (
-        <UserContext.Consumer>{context => {
-            return (
-                <Container component="main" maxWidth="xs">
-                <CssBaseline/>
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon/>
-                    </Avatar>
-                    {formSelection}
-                </div>
-                </Container>
-            )
-        }}</UserContext.Consumer>
-    );
+          </Container>
+        );
+      }}
+    </UserContext.Consumer>
+  );
 }
