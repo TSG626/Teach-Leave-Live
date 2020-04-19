@@ -33,11 +33,9 @@ const useStyles = makeStyles({
 
 const DefaultStore = () => {
     const [courses, setCourses] = useState([]);
-    const [counter, setCounter] = useState(0);
     const [cart, setCart] = useState([]);
     const classes = useStyles();
-    const [expanded, setExpanded] = React.useState(false);
-
+    const [openedCourses, setOpenedCourses] = useState([]);
 
     const userInfo = useContext(UserContext);
     const handleClick = (props) => {
@@ -62,9 +60,19 @@ const DefaultStore = () => {
                 setCart(oldArr => [...oldArr, res.data[i]]);
             }
         })
+        for (var i = 0; i < courses; i++){
+          var checked = false;
+          for (var j = 0; j < cart; j++) {
+            if (cart[j]._id === courses[j]._id) {
+              checked = true;
+            }
+          }
+          if (checked === false) {
+            setOpenedCourses(oldArr => [...oldArr, {courses: courses[i], opened: false}]);
+          }
+        }
     }, []);
 
-    console.log(cart)
     if(useLocation().pathname === "/Store/")
     {
         return(
@@ -95,10 +103,10 @@ const DefaultStore = () => {
                             <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
                             <Card className={classes.root}>
                             <CardContent>
-                              <Typography className={classes.title} color="textSecondary" gutterBottom>
+                              <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
                                 {course.subject}
                               </Typography>
-                              <Typography variant="h5" component="h2">
+                              <Typography variant="h5" component="h2" align="center">
                                 {course.title}
                               </Typography>
                             </CardContent>
