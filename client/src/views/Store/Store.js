@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
 const useStyles = makeStyles({
     root: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles({
 const DefaultStore = () => {
     const [courses, setCourses] = useState([]);
     const [counter, setCounter] = useState(0);
-    const [changed, setChange] = useState(false);
+    const [cart, setCart] = useState([]);
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 
@@ -48,6 +48,8 @@ const DefaultStore = () => {
     const handleClick = (props) => {
         API.post('/api/user/addToCart',{'username': userInfo.user.username, 'title': props.title}).then(res =>{
             alert("Added " + props.title + " to Shopping Cart!");
+            window.location.pathname = "/Store/Cart"; 
+            return false;
         })
     }
 
@@ -57,53 +59,70 @@ const DefaultStore = () => {
         }).catch(err=>{
             console.log(err);
         });
-    }, [counter]);
+        API.get('/api/user/getCart', {username: userInfo.user.username}).then(res=>{
+            setCart(res.data);
+        })
+        API.get('/api/user/getCourses', {username: userInfo.user.username}).then(res=>{
+            for (var i = 0; i < res.data.length; i++) {
+                setCart(oldArr => [...oldArr, res.data[i]]);
+            }
+        })
+    }, []);
 
-    if(counter === 0) {
-        setCounter(1);
-        setChange(true);
-    }
+    console.log(cart)
     if(useLocation().pathname === "/Store")
     {
         return(
-            <div className="App">
-            <header className="App-header">
-                Course Store
+            <div>
+            <header>
+                <Box mt={3}>
+                <Typography variant="h2" align="center">
+                    Course Store
+                </Typography>
+                </Box>
                 <div>
+                    <Box align="center" mb={3}>
                     <Button component={Link} to="/Store/Cart"><ShoppingCartIcon/></Button>
+                    </Box>
                 </div>
             </header>
 
             <Grid container justify="center">
                             {courses.map(course => {
-                    return(
-                        <Grid item>
-                        <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
-                        <Card className={classes.root}>
-                        <CardContent>
-                          <Typography className={classes.title} color="textSecondary" gutterBottom>
-                            {course.title}
-                          </Typography>
-                          <Typography variant="h5" component="h2">
-                            {course.subject}
-                          </Typography>
-                          <Typography className={classes.pos} color="textSecondary">
-                            {courses.author ? courses.author.map((a, i, arr) => {
-                                if (i == arr.length - 1)
-                                    return(a);
-                                else
-                                    return(a + ", ");
-                            }) : <React.Fragment></React.Fragment>}
-                          </Typography>
-                          <Typography variant="body2" component="p">
-                            {course.description}
-                          </Typography>
-                        </CardContent>
-                        <Button size="small" onClick={() => handleClick(course)}><AddIcon/></Button>
-                      </Card>   
-                        </Box>
-                        </Grid>
-                    )
+                                var exists = false;
+                                cart.map(item => {
+                                    if (item === course._id)
+                                        exists = true;
+                                })
+                                if (exists === false) {
+                                    return(
+                                        <Grid item>
+                                        <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
+                                        <Card className={classes.root}>
+                                        <CardContent>
+                                          <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
+                                            {course.subject}
+                                          </Typography>
+                                          <Typography variant="h5" component="h2" align="center">
+                                            {course.title}
+                                          </Typography>
+                                        </CardContent>
+                                        <Grid container>
+                                            <Grid item>
+                                                <Box ml={2} mr={7}><Button size="small" onClick={() => handleClick(course)}><AddIcon/></Button></Box>
+                                            </Grid>
+                                            <Grid item>
+                                            <Box mb={2} ml={7}><Button><OpenInNewIcon/></Button></Box>
+                                            </Grid>
+                                        </Grid>
+                                      </Card>   
+                                        </Box>
+                                        </Grid>
+                                    )
+                                }
+                                else {
+                                    return(<React.Fragment/>)
+                                }
                 })}
             </Grid>
 

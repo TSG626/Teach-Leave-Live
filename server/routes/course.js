@@ -23,11 +23,6 @@ router.get('/getAllCourses', async (req, res) => {
         return res.json(data);
     })
 })
-router.get('/getCourse', (req, res, next) => {
-    Course.findById(req.query.id).then(course =>{
-        return res.json(course);
-    })
-})
 
 router.get('/', (req, res, next) => {
     if(req.query.id){
