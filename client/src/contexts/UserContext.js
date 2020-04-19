@@ -34,24 +34,7 @@ const UserProvider = (props) => {
       API.get("/api/user/").then((res) => {
         console.log(res.data);
         if (res.status == 200) {
-          const {
-            username,
-            email,
-            firstname,
-            lastname,
-            status,
-            avatar,
-            _id,
-          } = res.data;
-          setUser({
-            _id: _id,
-            username: username,
-            email: email,
-            firstname: firstname,
-            lastname: lastname,
-            avatar: avatar,
-            status: status,
-          });
+          setUser(res.data);
         }
       });
     }
