@@ -69,12 +69,17 @@ function Block(props) {
 }
 
 function EJSContentViewer(props) {
+  const { data } = props;
+
+  if (data === undefined)
+    return <Typography>Nothing to see here...</Typography>;
+
   return (
-    <Grid container>
-      {props.data.blocks.map((block, index) => {
+    <div>
+      {data.blocks.map((block, index) => {
         return <Block key={index} block={block} />;
       })}
-    </Grid>
+    </div>
   );
 }
 
