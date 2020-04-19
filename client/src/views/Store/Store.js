@@ -1,6 +1,8 @@
-import React, {useState, useEffect, useContext} from 'react';
-import { Route, Switch, Redirect, useLocation, Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import Cart from "./Cart/Cart";
+import Checkout from "./Checkout/Checkout";
+import Confirmation from "./Confirmation/Confirmation";
 import Summary from "./Summary/Summary";
 import { UserContext } from '../../contexts/UserContext';
 import { CssBaseline, Box, Grid, Collapse } from '@material-ui/core';
@@ -153,6 +155,44 @@ const Store = ({match}) => {
             }
         }}</UserContext.Consumer>
     );
-}
+  }
+  return <div></div>;
+};
+
+const Store = ({ match }) => {
+  return (
+    <UserContext.Consumer>
+      {(context) => {
+        if (context.isAuthenticated()) {
+          return (
+            <div>
+              <DefaultStore />
+              <Switch>
+                <Route exact path={`${match.path}/Cart`} component={Cart} />
+                <Route
+                  exact
+                  path={`${match.path}/Checkout`}
+                  component={Checkout}
+                />
+                <Route
+                  exact
+                  path={`${match.path}/Confirmation`}
+                  component={Confirmation}
+                />
+                <Route
+                  exact
+                  path={`${match.path}/Summary`}
+                  component={Summary}
+                />
+              </Switch>
+            </div>
+          );
+        } else {
+          return <Redirect to="/User/Login" />;
+        }
+      }}
+    </UserContext.Consumer>
+  );
+};
 
 export default Store;

@@ -1,44 +1,120 @@
-import React, {useState} from 'react';
-import InstagramIcon from '@material-ui/icons/Instagram'
-import Link2 from '@material-ui/core/Link'
-import { Typography, Box, CircularProgress, Grid, CssBaseline, Container } from '@material-ui/core';
-import {Redirect, Route, Switch} from 'react-router-dom';
-import {UserContext} from '../../contexts/UserContext';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import WebIcon from '@material-ui/icons/Web';
-import Blog from '../Admin/Publishers/Blog/Blog';
+import React, { useState, useContext } from "react";
+import InstagramIcon from "@material-ui/icons/Instagram";
+import Link2 from "@material-ui/core/Link";
+import { Typography, Box, CircularProgress, Slide } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import { Redirect, Link } from "react-router-dom";
+import { UserContext } from "../../contexts/UserContext";
+import FacebookIcon from "@material-ui/icons/Facebook";
+import TwitterIcon from "@material-ui/icons/Twitter";
+import Grow from "@material-ui/core/Grow";
 
 const ListCourses = () => {
-    const [courses, setCourses] = useState ([
-        {
-            title: "Tutuoring Forums",
-            progress: 70
-        }
-        , {
-            title: "Last 9 Weeks Checklist",
-            progress: 50
-        }
-    ])
-    return(
-        courses.map((course, index) => {
-            return(
-                <Box p={5} m={3} border={1} key={index}>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td align="left"><Typography component="h1" variant="h5">{course.title}:</Typography></td>
-                            <td align="right"><CircularProgress variant="static" value={course.progress}/></td>
-                        </tr>
-                    </tbody>
-                </table>
-                </Box>
-            )
-        })
-    )
-}
+  const [courses, setCourses] = useState([
+    {
+      title: "Tutuoring Forums",
+      progress: 70,
+    },
+    {
+      title: "Last 9 Weeks Checklist",
+      progress: 50,
+    },
+  ]);
+  return courses.map((course, index) => {
+    return (
+      <Box p={5} m={3} border={1} key={index}>
+        <table>
+          <tbody>
+            <tr>
+              <td className="left">
+                <Typography component="h1" variant="h5">
+                  {course.title}:
+                </Typography>
+              </td>
+              <td align="right">
+                <CircularProgress variant="static" value={course.progress} />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Box>
+    );
+  });
+};
 
-export default function Landing({match}) {
-    const [courses, setCourses] = useState("No courses listed!");
+const ListBlogs = () => {
+  //const [blogs, setBlogs] = useState("No blogs available!")
+  //TEMPORARY! For the purpose of presenting in Sprint 1
+  const [blogs, setBlogs] = useState([
+    {
+      title: "This website is cool",
+      date: "March 9, 2020",
+      post: "The first course is available! I hope you enjoy it!",
+      user: "Spencer",
+      comments: [
+        {
+          username: "john123",
+          text: "Awesome! Can't wait!",
+        },
+        {
+          username: "simon32",
+          text: "I'm excited!",
+        },
+      ],
+    },
+    {
+      title: "This website is nice",
+      date: "March 8, 2020",
+      post: "Welcome to TLL! Have fun!",
+      user: "Amanda",
+      comments: [
+        {
+          username: "bob7",
+          text: "Thanks!",
+        },
+        {
+          username: "maryC",
+          text: "Very cool!",
+        },
+        {
+          username: "john123",
+          text: "Hi!",
+        },
+        {
+          username: "simon32",
+          text: "This is helpful!",
+        },
+      ],
+    },
+  ]);
+  return blogs.map((blog, index) => {
+    return (
+      <div key={index}>
+        <Box p={5} m={4.5} border={1}>
+          <table>
+            <tbody>
+              <tr>
+                <td className="left">
+                  <Typography component="h1" variant="h5">
+                    {blog.user}:{" "}
+                  </Typography>
+                </td>
+                <td className="right">
+                  <Typography component="h1" variant="h5">
+                    {blog.title}
+                  </Typography>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Box>
+      </div>
+    );
+  });
+};
+
+const Home = () => {
+  const [courses, setCourses] = useState("No courses listed!");
 
     return (
     <UserContext.Consumer>{context => {
@@ -90,6 +166,9 @@ export default function Landing({match}) {
                 <Redirect to="/User/Login"/>
             );
         }
-    }}</UserContext.Consumer>
-    );
-}
+      }}
+    </UserContext.Consumer>
+  );
+};
+
+export default Home;
