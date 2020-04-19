@@ -3,7 +3,7 @@ import { Route, Switch, Redirect, useLocation, Link } from 'react-router-dom';
 import Cart from "./Cart/Cart";
 import Summary from "./Summary/Summary";
 import { UserContext } from '../../contexts/UserContext';
-import { CssBaseline, Box, Grid, Collapse } from '@material-ui/core';
+import { CssBaseline, Box, Grid } from '@material-ui/core';
 import API from '../../modules/API';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -38,9 +38,6 @@ const DefaultStore = () => {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-      };
 
     const userInfo = useContext(UserContext);
     const handleClick = (props) => {
@@ -86,41 +83,41 @@ const DefaultStore = () => {
             </header>
 
             <Grid container justify="center">
-                            {courses.map(course => {
-                                var exists = false;
-                                cart.map(item => {
-                                    if (item === course._id)
-                                        exists = true;
-                                })
-                                if (exists === false) {
-                                    return(
-                                        <Grid item>
-                                        <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
-                                        <Card className={classes.root}>
-                                        <CardContent>
-                                          <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                            {course.subject}
-                                          </Typography>
-                                          <Typography variant="h5" component="h2">
-                                            {course.title}
-                                          </Typography>
-                                        </CardContent>
-                                        <Grid container>
-                                            <Grid item>
-                                                <Box ml={2} mr={7}><Button size="small" onClick={() => handleClick(course)}><AddIcon/></Button></Box>
-                                            </Grid>
-                                            <Grid item>
-                                            <Box mb={2} ml={7}><Button><OpenInNewIcon/></Button></Box>
-                                            </Grid>
-                                        </Grid>
-                                      </Card>   
-                                        </Box>
-                                        </Grid>
-                                    )
-                                }
-                                else {
-                                    return(<React.Fragment/>)
-                                }
+                {courses.map(course => {
+                    var exists = false;
+                    cart.map(item => {
+                        if (item === course._id)
+                            exists = true;
+                    })
+                    if (exists === false) {
+                        return(
+                            <Grid item>
+                            <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
+                            <Card className={classes.root}>
+                            <CardContent>
+                              <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                {course.subject}
+                              </Typography>
+                              <Typography variant="h5" component="h2">
+                                {course.title}
+                              </Typography>
+                            </CardContent>
+                            <Grid container>
+                                <Grid item>
+                                    <Box ml={2} mr={7}><Button size="small" onClick={() => handleClick(course)}><AddIcon/></Button></Box>
+                                </Grid>
+                                <Grid item>
+                                <Box mb={2} ml={7}><Button><OpenInNewIcon/></Button></Box>
+                                </Grid>
+                            </Grid>
+                          </Card>   
+                            </Box>
+                            </Grid>
+                        )
+                    }
+                    else {
+                        return(<React.Fragment/>)
+                    }
                 })}
             </Grid>
 
