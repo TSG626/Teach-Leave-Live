@@ -30,7 +30,6 @@ function CourseTable(props) {
       API.get("/api/course/")
         .then((res) => {
           if (res.status == 200) {
-            console.log(res.data);
             resolve({
               data: res.data.map((course) => {
                 return {

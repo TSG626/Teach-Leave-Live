@@ -72,7 +72,6 @@ const DefaultStore = () => {
     );
   }, []);
 
-  console.log(cart);
   if (useLocation().pathname === "/Store/") {
     return (
       <div>

@@ -49,7 +49,6 @@ function AuthorForm(props) {
 
   function handleChange(event, author, reason) {
     let newAuthors = author.map((a) => a._id);
-    console.log(authors);
     if (!newAuthors.includes(user._id)) {
       newAuthors = [user._id, ...newAuthors];
     }

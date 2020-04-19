@@ -54,10 +54,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SubjectCard = (props) => {
-<<<<<<< HEAD
-  const [courses, setCourses] = useState({});
-  const classes = useStyles();
-=======
     const [courses, setCourses] = useState({})
     const classes = useStyles();
     
@@ -70,7 +66,6 @@ const SubjectCard = (props) => {
             console.log(err);
         });
     },[])
->>>>>>> master
 
   useEffect(() => {
     API.get("/api/course/", { subject: props.subject })
