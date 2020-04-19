@@ -180,7 +180,6 @@ export default function CourseEditor(props) {
   }
 
   function editSection(moduleIndex, sectionIndex, data) {
-    console.log(data);
     setCourse({
       ...course,
       modules: [...course.modules].map((module, i) => {
@@ -215,7 +214,6 @@ export default function CourseEditor(props) {
 
   async function handleSave() {
     setSaving(true);
-    console.log(course);
     API.put(`/api/course/${id}`, course).then((res) => {
       if (res.status === 200) {
         setSaving(false);

@@ -22,8 +22,6 @@ const ChangeUser = () => {
   const handleChange = (event) => {
     if (edituser === false) setEditUser(!edituser);
     else {
-      console.log(userInfo.user.username);
-      console.log(password);
       if (oldUser === userInfo.user.username || oldUser === "") {
         alert("Username didn't change!");
       } else {

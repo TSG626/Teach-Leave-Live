@@ -14,7 +14,6 @@ function CourseTable(props) {
       API.get("/api/blog/")
         .then((res) => {
           if (res.status == 200) {
-            console.log(res.data);
             resolve({
               data: res.data,
               page: 0,
