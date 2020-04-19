@@ -133,6 +133,49 @@ export default function Login() {
                       {email_message} Check your inbox. To resend the email,
                       click the button below.
                     </Typography>
+                    <form className={classes.form} onSubmit={(e) => handleSubmit(e, context)}>
+                    <TextField
+                        variant='filled'
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                    />
+                    <TextField
+                        variant="filled"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        className={classes.formField}
+                    />
+                    {message ? <Typography className={classes.error}>
+                        {message}
+                    </Typography> : <React.Fragment/>}
+                    {email_message ?
+                        <React.Fragment>
+                            <Typography className={classes.error}>
+                                {email_message} Check your inbox.
+                                To resend the email, click the button below.
+                            </Typography>
+                            <Button color = "primary" component={Link} href = '/User/Login' onClick = {(e) => handleClick(e)}>
+                                Resend Authentication Email
+                            </Button>
+                        </React.Fragment>
+                    : null}
+
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label="Remember me"
+                    />
                     <Button
                       color="primary"
                       component={Link}
