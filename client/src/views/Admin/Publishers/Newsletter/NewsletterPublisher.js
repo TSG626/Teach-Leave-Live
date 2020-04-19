@@ -75,7 +75,7 @@ export default function NewsletterPublisher() {
     setChecked(event.target.checked);
     setFailTry(false);
   };
-  
+
   const submitEmail = (event) => {
     if (checked === true) {
       API.post("/api/admin/newsletter/", { text, text1, text2 });
@@ -87,8 +87,7 @@ export default function NewsletterPublisher() {
     } else setFailTry(true);
   };
   return (
-    <div className="App">
-      <header className="App-header"></header>
+    <div>
       <div className={classes.center}>
         <Paper className={classes.container}>
           <Typography variant="h1 " component="h2" className={classes.title}>
