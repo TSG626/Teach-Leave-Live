@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import API from "../../../modules/API";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -63,13 +63,13 @@ export default function Login() {
       password: document.getElementById("password").value,
     })
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           context.authenticateUser(res.data.token);
           setAuthed(true);
         }
       })
       .catch((err) => {
-        if (err.response.data.name == "UnverifiedEmail") {
+        if (err.response.data.name === "UnverifiedEmail") {
           setEmail_message(err.response.data.message);
         } else {
           setMessage(err.response.data.message);
@@ -108,7 +108,6 @@ export default function Login() {
                   name="email"
                   autoComplete="email"
                   autoFocus
-                  className={classes.formField}
                 />
                 <TextField
                   variant="filled"
@@ -133,49 +132,6 @@ export default function Login() {
                       {email_message} Check your inbox. To resend the email,
                       click the button below.
                     </Typography>
-                    <form className={classes.form} onSubmit={(e) => handleSubmit(e, context)}>
-                    <TextField
-                        variant='filled'
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                    />
-                    <TextField
-                        variant="filled"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        className={classes.formField}
-                    />
-                    {message ? <Typography className={classes.error}>
-                        {message}
-                    </Typography> : <React.Fragment/>}
-                    {email_message ?
-                        <React.Fragment>
-                            <Typography className={classes.error}>
-                                {email_message} Check your inbox.
-                                To resend the email, click the button below.
-                            </Typography>
-                            <Button color = "primary" component={Link} href = '/User/Login' onClick = {(e) => handleClick(e)}>
-                                Resend Authentication Email
-                            </Button>
-                        </React.Fragment>
-                    : null}
-
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    />
                     <Button
                       color="primary"
                       component={Link}
