@@ -4,6 +4,7 @@ const path = require('path')
 const Hogan = require('hogan.js')
 const config = require('./config.js')
 const User = require('../models/UserModel.js');
+const Email = require('../models/EmailModel.js');
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -77,13 +78,13 @@ module.exports = {
         const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/newsletterPublisher/newsletterPublisher-inlined.html', 'utf-8');
         var compiledEmail = Hogan.compile(emailTemplate);
 
-        User.find({ 'email_verified': true }, (err, users) => {
+        Email.find({}, (err, users) => {
             users.forEach(user => {
                 var mailOptions = {
                     from: config.username,
                     to: user.email,
                     subject: "Teach Leave Live: " + title,
-                    html: compiledEmail.render({ firstname: user.firstname, body: body, link: link })
+                    html: compiledEmail.render({ body: body, link: link })
                 };
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {

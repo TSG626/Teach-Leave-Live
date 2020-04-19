@@ -21,6 +21,7 @@ import Button from "@material-ui/core/Button";
 import StripeCheckout from "react-stripe-checkout";
 import API from "../../../modules/API";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+
 const useStyles = makeStyles({
   table: {
     margin: "auto",

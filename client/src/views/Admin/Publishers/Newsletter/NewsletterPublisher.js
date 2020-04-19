@@ -75,7 +75,7 @@ export default function NewsletterPublisher() {
     setChecked(event.target.checked);
     setFailTry(false);
   };
-
+  
   const submitEmail = (event) => {
     if (checked === true) {
       API.post("/api/admin/newsletter/", { text, text1, text2 });
