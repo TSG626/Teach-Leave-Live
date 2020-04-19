@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';    //Baseline of look for entire page
-import { Typography, Container, Grid } from '@material-ui/core';
+import { Typography, Container, Grid, Box } from '@material-ui/core';
 import API from '../../modules/API';
 import { Switch, Route } from 'react-router-dom';
 import CourseViewer from './CourseViewer/CourseViewer';
@@ -8,7 +8,9 @@ import CourseViewer from './CourseViewer/CourseViewer';
 function Landing(props){
     return(
         <Grid container>
-            <Typography>Courses</Typography>
+            <Box p={1}>
+                <Typography>Courses</Typography>
+            </Box>
         </Grid>
     )
 }

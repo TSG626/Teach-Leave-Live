@@ -67,45 +67,44 @@ const DefaultStore = () => {
     {
         return(
             <div className="App">
-            <header className="App-header">
-                Course Store
-                <div>
-                    <Button component={Link} to="/Store/Cart"><ShoppingCartIcon/></Button>
-                </div>
-            </header>
-
-            <Grid container justify="center">
-                            {courses.map(course => {
-                    return(
-                        <Grid item>
-                        <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
-                        <Card className={classes.root}>
-                        <CardContent>
-                          <Typography className={classes.title} color="textSecondary" gutterBottom>
-                            {course.title}
-                          </Typography>
-                          <Typography variant="h5" component="h2">
-                            {course.subject}
-                          </Typography>
-                          <Typography className={classes.pos} color="textSecondary">
-                            {courses.author ? courses.author.map((a, i, arr) => {
-                                if (i == arr.length - 1)
-                                    return(a);
-                                else
-                                    return(a + ", ");
-                            }) : <React.Fragment></React.Fragment>}
-                          </Typography>
-                          <Typography variant="body2" component="p">
-                            {course.description}
-                          </Typography>
-                        </CardContent>
-                        <Button size="small" onClick={() => handleClick(course)}><AddIcon/></Button>
-                      </Card>   
-                        </Box>
-                        </Grid>
-                    )
-                })}
-            </Grid>
+                <Grid container>
+                    <Box p={1}>
+                        <Typography>Course Store</Typography>
+                        <Button component={Link} to="/Store/Cart"><ShoppingCartIcon/></Button>
+                    </Box>
+                </Grid>
+                <Grid container justify="center">
+                    {courses.map(course => {
+                        return(
+                            <Grid item>
+                            <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
+                            <Card className={classes.root}>
+                                <CardContent>
+                                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                    {course.title}
+                                </Typography>
+                                <Typography variant="h5" component="h2">
+                                    {course.subject}
+                                </Typography>
+                                <Typography className={classes.pos} color="textSecondary">
+                                    {courses.author ? courses.author.map((a, i, arr) => {
+                                        if (i == arr.length - 1)
+                                            return(a);
+                                        else
+                                            return(a + ", ");
+                                    }) : <React.Fragment></React.Fragment>}
+                                </Typography>
+                                <Typography variant="body2" component="p">
+                                    {course.description}
+                                </Typography>
+                                </CardContent>
+                                <Button size="small" onClick={() => handleClick(course)}><AddIcon/></Button>
+                            </Card>   
+                            </Box>
+                            </Grid>
+                        )
+                    })}
+                </Grid>
 
         </div>
             );
