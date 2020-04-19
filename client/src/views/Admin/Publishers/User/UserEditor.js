@@ -363,19 +363,17 @@ const GetUsers = () => {
 };
 
 const UserEditor = () => {
-    return (
-        <CssBaseline>
-            <div>
-                <header>
-                    <Box m={3}>
-                        <Typography variant="h3" align="center">
-                            User Management
-                        </Typography>
-                    </Box>
-                </header>
-                <GetUsers/>
-            </div>
-        </CssBaseline>
-    );
-}
-export default UserEditor
+  return (
+    <div>
+      <header>
+        <Box m={3}>
+          <Typography variant="h3" align="center">
+            User Management
+          </Typography>
+        </Box>
+      </header>
+      <GetUsers />
+    </div>
+  );
+};
+export default UserEditor;
