@@ -13,7 +13,9 @@ const Summary = (props) => {
     return (
         <div className="App">
             <header className="App-header">
-            <Typography component="h1" variant="h3">Payment Confirmed!</Typography>
+                <Box align="center" m={3}>
+                    <Typography component="h1" variant="h3">Payment Confirmed!</Typography>
+                </Box>
             </header>
             <Box ml="25%" mr="25%" pb={2}>
                 <TableContainer component={Paper}>
@@ -60,9 +62,11 @@ const Summary = (props) => {
                         </Table>
                     </TableContainer>
                 </Box>
-            Please check your email to see full details on your purchase! Thank you!
-            <Box mt={1}>
-                <Button component={Link} to="/Store">Return to Course Store</Button>
+                <Box m={3} align="center">
+                    Please check your email to see full details on your purchase! Thank you!
+                </Box>
+            <Box mt={1} align = "center">
+                <Button component={Link} to="/Store/">Return to Course Store</Button>
             </Box>
         </div>
     );
