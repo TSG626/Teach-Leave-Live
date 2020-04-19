@@ -52,6 +52,9 @@ const Cart = () => {
             console.log("RESPONSE", res);
             const {status} = res;
             console.log("STATUS", status);
+            for (var i = 0; i < products.length; i++) {
+                API.post('/api/user/addToCourse', {title: products[i].title, username: userInfo.user.username})
+            }
             API.post('/api/user/clearCart', {username: userInfo.user.username}).then(res => {
                 history.push({pathname: "/Store/Summary", state: {products: products, count: count, subcount: subcount, service: service}});
                 return(
@@ -174,7 +177,7 @@ const Cart = () => {
                     </React.Fragment>
                 }
                     <Box mt={3} align="center">
-                        <Button component={Link} to="/Store">Back to Store</Button>
+                        <Button component={Link} to="/Store/">Back to Store</Button>
                     </Box>
             </div>
         </CssBaseline>
