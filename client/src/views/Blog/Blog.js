@@ -1,45 +1,120 @@
-import React, { useState } from 'react';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
-import { Grid, CssBaseline } from '@material-ui/core';
-import Blog from '../Admin/Publishers/Blog/Blog'
-import { Route, Switch} from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import {
+  Typography,
+  Container,
+  Grid,
+  Box,
+  CardContent,
+  Card,
+  Button,
+  CircularProgress,
+} from "@material-ui/core";
+import API from "../../modules/API";
+import { Switch, Route, Redirect, Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import BlogViewer from "./BlogViewer";
 
-const useStyles = makeStyles(theme => ({
-    title: {
-      padding: theme.spacing(2,2),
-      alignText: "center"
-    },
-    card: {
-      padding: theme.spacing(1,1)
-    },
-    cardList: {
-      padding: theme.spacing(1, 1),
-      backgroundColor: 'grey'
-    },
-    courseCreatorWindow: {
-      padding: theme.spacing(4, 2),
-    },
-  }));
+function BlogList() {
+  const classes = useStyles();
+  const [blogs, setBlogs] = useState([]);
+  const [error, setError] = useState({});
 
-export default function BlogDisplay({match}) {
-    const classes = useStyles();
-    const [errors, setErrors] = useState({});
+  useEffect(() => {
+    API.get("/api/blog/")
+      .then((res) => {
+        if (res.status == 200) {
+          setBlogs(res.data);
+        }
+      })
+      .catch((err) => {
+        setError(err);
+      });
+  }, []);
 
-    return (
-      <CssBaseline>
-        <Grid container alignContent={'center'} justify={'space-between'}>
-            <Typography className={classes.title}>
-                Join in the Conversation!
-            </Typography>
-            <Container maxWidth='lg'>
-              <Switch>
-                <Route path={`${match.path}`} component={Blog} />
-              </Switch>
-            </Container>
+  if (blogs.length === 0) return <CircularProgress />;
+  return (
+    <div>
+      <Grid container>
+        <Grid container justify="center" spacing={3}>
+          {blogs.map((blog) => {
+            return (
+              <Grid item xs={12}>
+                <Card className={classes.root}>
+                  <CardContent>
+                    <Box m={2}>
+                      <Typography variant="h5" component="h2" align="center">
+                        {blog.title}
+                      </Typography>
+                    </Box>
+                    <Box m={2}>
+                      <Typography align="center">{blog.description}</Typography>
+                    </Box>
+                    <Box m={2}>
+                      <Typography
+                        color="textSecondary"
+                        component="h2"
+                        align="center"
+                      >
+                        {blog.title}
+                      </Typography>
+                    </Box>
+                    <Box m={2} align="center">
+                      <Button
+                        variant="contained"
+                        component={Link}
+                        to={`/Blog/${blog._id}`}
+                      >
+                        View Blog
+                      </Button>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+            );
+          })}
         </Grid>
-      </CssBaseline>
+      </Grid>
+    </div>
+  );
+}
 
+const useStyles = makeStyles({
+  root: {
+    minWidth: 275,
+  },
+  bullet: {
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)",
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+});
+
+function Landing() {
+  return (
+    <React.Fragment>
+      <Box m={3}>
+        <Typography variant="h2" align="center">
+          Blogs
+        </Typography>
+        <BlogList />
+      </Box>
+    </React.Fragment>
+  );
+}
+
+export default function Blog({ match }) {
+  return (
+    <Container>
+      <Switch>
+        <Route exact path={`${match.path}/`} component={Landing} />
+        <Route path={`${match.path}/:id/`} component={BlogViewer} />
+      </Switch>
+    </Container>
   );
 }

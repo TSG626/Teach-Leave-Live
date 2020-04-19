@@ -89,7 +89,6 @@ function LandingBody(props) {
 
   return (
     <div>
-      <CssBaseline />
       <Container maxWidth="lg">
         <Typography align={"center"} variant="h2">
           Welcome to TLL
@@ -138,21 +137,18 @@ function LandingBody(props) {
             </Box>
           </Grid>
         </Grid>
-        <Switch>
-          <Route path={`${props.match.path}`} component={Blog} />
-        </Switch>
       </Container>
     </div>
   );
 }
 
-export default function Landing({ match }) {
+export default function Landing() {
   const classes = useStyles();
   const [message, setMessage] = useState("");
 
   return (
     <div>
-      <LandingBody classes={classes} match={match} />
+      <LandingBody classes={classes} />
       <div style={{ position: "absolute", right: 1, top: 90 }}>
         <Socials />
       </div>

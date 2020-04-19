@@ -1,12 +1,12 @@
-const express = require('express');
-const multer  = require('multer');
-const GridFsStorage = require('multer-gridfs-storage');
-const Grid = require('gridfs-stream');
-const User = require('../models/UserModel.js');
-const Course = require('../models/CourseModel');
-const config = require('../config/config');
-const mongoose = require('mongoose');
-const path = require('path');
+const express = require("express");
+const multer = require("multer");
+const GridFsStorage = require("multer-gridfs-storage");
+const Grid = require("gridfs-stream");
+const User = require("../models/UserModel.js");
+const Course = require("../models/CourseModel");
+const config = require("../config/config");
+const mongoose = require("mongoose");
+const path = require("path");
 
 const router = express.Router();
 
@@ -102,30 +102,13 @@ router.get("/", (req, res, next) => {
     );
   } else {
     if (req.user) {
-      const {
-        username,
-        email,
-        firstname,
-        lastname,
-        status,
-        avatar,
-        _id,
-        cart,
-        courses,
-      } = req.user;
-      res.status(200).send(
-        JSON.stringify({
-          username: username,
-          email: email,
-          firstname: firstname,
-          lastname: lastname,
-          status: status,
-          avatar: avatar,
-          _id: _id,
-          cart: cart,
-          courses: courses,
-        })
-      );
+      User.findById(
+        req.user.id,
+        "username email firstname lastname status avatar cart courses"
+      ).exec((err, user) => {
+        if (err) return next(err);
+        res.status(200).send(user);
+      });
     } else {
       res.status(400).json({ message: "Not logged in." });
     }
@@ -140,81 +123,110 @@ router.post("/", (req, res, next) => {
 });
 
 router.put("/:id", (req, res, next) => {
-  User.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
-    if (err) return next(err);
-    res.json(post);
-  });
+  if (
+    req.user.id === req.params.id ||
+    req.user.status === 0 ||
+    req.user.status === 0
+  ) {
+    User.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
+      if (err) return next(err);
+      res.json(post);
+    });
+  }
 });
 
 router.delete("/:id", (req, res, next) => {
-  User.findByIdAndRemove(req.params.id, req.body, (err, post) => {
-    if (err) return next(err);
-    res.json(post);
-  });
+  if (req.user.status === 1) {
+    User.findById(req.params.id).then((user) => {
+      if (user.status == 0 || user.status == 1) {
+        res.status(401).send({ message: "Unauthorized action" });
+      } else {
+        User.findByIdAndRemove(req.params.id, req.body, (err, post) => {
+          if (err) return next(err);
+          res.json(post);
+        });
+      }
+    });
+  } else if (req.user.status === 0) {
+    User.findByIdAndRemove(req.params.id, req.body, (err, post) => {
+      if (err) return next(err);
+      res.json(post);
+    });
+  } else {
+    res.status(401).send({ message: "Unauthorized action" });
+  }
 });
 
-router.post('/addToCart', (req, res, next) => {
-    console.log(req.body);
-    Course.findOne({
-        'title' : req.body.title
-    }).then(course => {
-        User.findOneAndUpdate({'username': req.body.username},{$push: {'cart': course}})
-        .then(
-            (user) => {
-                return res.status(200).json({
-                    success: true,
-                });
-            }
-        ).catch(error => done(error))
-    }).catch(error => done(error))
-})
-
-router.post('/addToCourse', (req, res, next) => {
-    console.log(req.body);
-    Course.findOne({
-        'title' : req.body.title
-    }).then(course => {
-        User.findOneAndUpdate({'username': req.body.username},{$push: {'courses': course}})
-        .then(
-            (user) => {
-                return res.status(200).json({
-                    success: true,
-                });
-            }
-        ).catch(error => done(error))
-    }).catch(error => done(error))
-})
-
-router.get('/getCart', (req, res) => {
-    User.findOne({'username': req.user.username}).then(user => {
-        return res.json(user.cart);
+router.post("/addToCart", (req, res, next) => {
+  console.log(req.body);
+  Course.findOne({
+    title: req.body.title,
+  })
+    .then((course) => {
+      User.findOneAndUpdate(
+        { username: req.body.username },
+        { $push: { cart: course } }
+      )
+        .then((user) => {
+          return res.status(200).json({
+            success: true,
+          });
         })
-})
-router.get('/getCourses', (req, res) => {
-    User.findOne({'username': req.user.username}).then(user => {
-        return res.json(user.courses);
+        .catch((error) => done(error));
+    })
+    .catch((error) => done(error));
+});
+
+router.post("/addToCourse", (req, res, next) => {
+  console.log(req.body);
+  Course.findOne({
+    title: req.body.title,
+  })
+    .then((course) => {
+      User.findOneAndUpdate(
+        { username: req.body.username },
+        { $push: { courses: course } }
+      )
+        .then((user) => {
+          return res.status(200).json({
+            success: true,
+          });
         })
-})
-router.post('/deleteItem', (req, res, next) => {
-    User.update({'username': req.body.username},
-    {$pull: {'cart': req.body.number}}
-    ).then(
-        (user) => {
-            return res.status(200).json({
-                success: true,
-            });
-        }
-    ).catch(error => done(error))
-})
-router.post('/clearCart', (req, res, next) => {
-    User.update({'username': req.body.username},
-    {$set: {cart: []}}).then(
-        (user) => {
-            return res.status(200).json({
-                success: true,
-            });
-        }
-    ).catch(error => done(error))
-})
+        .catch((error) => done(error));
+    })
+    .catch((error) => done(error));
+});
+
+router.get("/getCart", (req, res) => {
+  User.findOne({ username: req.user.username }).then((user) => {
+    return res.json(user.cart);
+  });
+});
+router.get("/getCourses", (req, res) => {
+  User.findOne({ username: req.user.username }).then((user) => {
+    return res.json(user.courses);
+  });
+});
+router.post("/deleteItem", (req, res, next) => {
+  User.update(
+    { username: req.body.username },
+    { $pull: { cart: req.body.number } }
+  )
+    .then((user) => {
+      return res.status(200).json({
+        success: true,
+      });
+    })
+    .catch((error) => done(error));
+});
+router.post("/clearCart", (req, res, next) => {
+  User.update({ username: req.body.username }, { $set: { cart: [] } })
+    .then((user) => {
+      return res.status(200).json({
+        success: true,
+      });
+    })
+    .catch((error) => done(error));
+});
 
 module.exports = router;
