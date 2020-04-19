@@ -361,11 +361,19 @@ const GetUsers = () => {
 };
 
 const UserEditor = () => {
-  return (
-    <div className="App">
-      <header className="App-header">User Management</header>
-      <GetUsers />
-    </div>
-  );
-};
-export default UserEditor;
+    return (
+        <CssBaseline>
+            <div>
+                <header>
+                    <Box m={3}>
+                        <Typography variant="h3" align="center">
+                            User Management
+                        </Typography>
+                    </Box>
+                </header>
+                <GetUsers/>
+            </div>
+        </CssBaseline>
+    );
+}
+export default UserEditor

@@ -169,10 +169,52 @@ router.post('/addToCart', (req, res, next) => {
     }).catch(error => done(error))
 })
 
+router.post('/addToCourse', (req, res, next) => {
+    console.log(req.body);
+    Course.findOne({
+        'title' : req.body.title
+    }).then(course => {
+        User.findOneAndUpdate({'username': req.body.username},{$push: {'courses': course}})
+        .then(
+            (user) => {
+                return res.status(200).json({
+                    success: true,
+                });
+            }
+        ).catch(error => done(error))
+    }).catch(error => done(error))
+})
+
 router.get('/getCart', (req, res) => {
     User.findOne({'username': req.user.username}).then(user => {
         return res.json(user.cart);
         })
+})
+router.get('/getCourses', (req, res) => {
+    User.findOne({'username': req.user.username}).then(user => {
+        return res.json(user.courses);
+        })
+})
+router.post('/deleteItem', (req, res, next) => {
+    User.update({'username': req.body.username},
+    {$pull: {'cart': req.body.number}}
+    ).then(
+        (user) => {
+            return res.status(200).json({
+                success: true,
+            });
+        }
+    ).catch(error => done(error))
+})
+router.post('/clearCart', (req, res, next) => {
+    User.update({'username': req.body.username},
+    {$set: {cart: []}}).then(
+        (user) => {
+            return res.status(200).json({
+                success: true,
+            });
+        }
+    ).catch(error => done(error))
 })
 
 module.exports = router;
