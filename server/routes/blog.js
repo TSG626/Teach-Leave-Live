@@ -41,13 +41,17 @@ router.get("/", (req, res, next) => {
           "firstname lastname username status"
         )
         .then((blog) => {
-          res.json(blog);
+          if (blog.published) {
+            res.json(blog);
+          } else {
+            res.status(401).send({ message: "Blog not published" });
+          }
         })
         .catch((err) => {
           return next(err);
         });
     } else {
-      Blog.find({}, "title description authors date_published")
+      Blog.find({ published: true }, "title description authors date_published")
         .populate("authors", "firstname lastname username status")
         .then((blogs) => {
           res.json(blogs);

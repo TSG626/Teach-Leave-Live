@@ -142,13 +142,13 @@ function LandingBody(props) {
   );
 }
 
-export default function Landing({ match }) {
+export default function Landing() {
   const classes = useStyles();
   const [message, setMessage] = useState("");
 
   return (
     <div>
-      <LandingBody classes={classes} match={match} />
+      <LandingBody classes={classes} />
       <div style={{ position: "absolute", right: 1, top: 90 }}>
         <Socials />
       </div>

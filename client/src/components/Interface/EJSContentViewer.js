@@ -69,9 +69,14 @@ function Block(props) {
 }
 
 function EJSContentViewer(props) {
+  const { data } = props;
+
+  if (data === undefined)
+    return <Typography>Nothing to see here...</Typography>;
+
   return (
     <div>
-      {props.data.blocks.map((block, index) => {
+      {data.blocks.map((block, index) => {
         return <Block key={index} block={block} />;
       })}
     </div>

@@ -19,13 +19,6 @@ router.get("/subjects/", (req, res, next) => {
   });
 });
 
-router.get("/getAllCourses", async (req, res) => {
-  Course.find({}, function (err, data) {
-    if (err) return err;
-    return res.json(data);
-  });
-});
-
 router.get("/", (req, res, next) => {
   if (req.user.status === 1 || req.user.status === 0) {
     //admin
@@ -58,12 +51,15 @@ router.get("/", (req, res, next) => {
       Course.findById(req.query.id)
         .populate("authors", "firstname lastname username")
         .then((course) => {
-          console.log(course);
           if (
             req.user.courses.includes(req.query.id) ||
             Object.values(course.authors).keys("_id").includes(req.user._id)
           ) {
-            res.json(course);
+            if (course.published) {
+              res.json(course);
+            } else {
+              res.status(401).send({ message: "Course not published" });
+            }
           } else {
             res.status(401).send({ message: "User does not own this course." });
           }
@@ -72,7 +68,10 @@ router.get("/", (req, res, next) => {
           return next(err);
         });
     } else {
-      Course.find({}, "title description free cost subject authors")
+      Course.find(
+        { published: true },
+        "title description free cost subject authors"
+      )
         .populate("authors", "firstname lastname username status")
         .then((courses) => {
           res.json(courses);
