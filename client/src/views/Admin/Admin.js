@@ -1,131 +1,179 @@
-import React, {useState} from 'react';
-import { Route, Switch, Redirect, Link } from 'react-router-dom';
-import clsx from 'clsx';
-import {UserContext} from "../../contexts/UserContext"
+import React, { useState } from "react";
+import { Route, Switch, Link } from "react-router-dom";
+import clsx from "clsx";
 import Blog from "./Publishers/Blog/Blog";
 import Course from "./Publishers/Course/Course";
 import NewsletterPublisher from "./Publishers/Newsletter/NewsletterPublisher";
 import UserEditor from "./Publishers/User/UserEditor";
-import {Box, CssBaseline, Container, List, ListItem, Grid, ListItemText, makeStyles, ListItemIcon, Drawer } from '@material-ui/core';
-import { CourseProvider } from '../../contexts/Admin/CourseContext';
-import {Book as CourseIcon, Announcement as NewsletterIcon, Person as UserIcon, Note as BlogIcon, ChevronRight as OpenIcon, ChevronLeft as CloseIcon } from '@material-ui/icons/'
+import {
+  List,
+  ListItem,
+  Grid,
+  ListItemText,
+  makeStyles,
+  ListItemIcon,
+  Drawer,
+} from "@material-ui/core";
+import {
+  Book as CourseIcon,
+  Announcement as NewsletterIcon,
+  Person as UserIcon,
+  Note as BlogIcon,
+  ChevronRight as OpenIcon,
+  ChevronLeft as CloseIcon,
+} from "@material-ui/icons/";
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1,
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  header: {},
+  nav: {
+    boxShadow: 7,
+  },
+  window: {
+    paddingRight: 200,
+  },
+  footer: {},
+  drawer: {
+    width: 200,
+    flexShrink: 0,
+    whiteSpace: "nowrap",
+  },
+  drawerOpen: {
+    width: 200,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerClose: {
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: "hidden",
+    width: theme.spacing(7) + 1,
+    [theme.breakpoints.up("sm")]: {
+      width: theme.spacing(9) + 1,
     },
-    header: {
-
-    },
-    nav: {
-        boxShadow: 7
-    },
-    window: {
-
-    },
-    footer: {
-
-    },
-    drawer: {
-        width: 200,
-        flexShrink: 0,
-        whiteSpace: 'nowrap',
-      },
-    drawerOpen: {
-        width: 200,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerClose: {
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        overflowX: 'hidden',
-        width: theme.spacing(7) + 1,
-        [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9) + 1,
-        },
-    },
-    toolbar: theme.mixins.toolbar,
+  },
+  toolbar: theme.mixins.toolbar,
 }));
 
-function NavMenu(){
-    const classes = useStyles();
-    const [selected, setSelected] = useState(0);
-    const [open, setOpen] = useState(true);
-    return(
-        <Drawer
-            variant="permanent"
-            className={clsx(classes.drawer, {
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-            })}
-            classes={{
-            paper: clsx({
-                [classes.drawerOpen]: open,
-                [classes.drawerClose]: !open,
-            }),
-            }}
+function NavMenu() {
+  const classes = useStyles();
+  const [selected, setSelected] = useState(0);
+  const [open, setOpen] = useState(true);
+  return (
+    <Drawer
+      variant="permanent"
+      className={clsx(classes.drawer, {
+        [classes.drawerOpen]: open,
+        [classes.drawerClose]: !open,
+      })}
+      classes={{
+        paper: clsx({
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open,
+        }),
+      }}
+    >
+      <div className={classes.toolbar} />
+      <List>
+        <ListItem>
+          {open ? (
+            <CloseIcon onClick={() => setOpen(false)} />
+          ) : (
+            <OpenIcon onClick={() => setOpen(true)} />
+          )}
+        </ListItem>
+        <ListItem
+          selected={selected == 1}
+          button
+          component={Link}
+          to={`/Admin/Blog`}
+          onClick={() => setSelected(1)}
         >
-            <div className={classes.toolbar} />
-            <List>
-                <ListItem>
-                    {open ? <CloseIcon onClick={()=>setOpen(false)}/> : <OpenIcon onClick={()=>setOpen(true)}/>}
-                </ListItem>
-                <ListItem selected={selected === 1} button component={Link} to={`/Admin/Blog`} onClick={()=>setSelected(1)}>
-                    {open ? <ListItemText>Blogs</ListItemText> : <ListItemIcon><BlogIcon/></ListItemIcon>}
-                </ListItem>
-                <ListItem selected={selected === 2} button component={Link} to={`/Admin/Course`} onClick={()=>setSelected(2)}>
-                    {open ? <ListItemText>Courses</ListItemText> : <ListItemIcon><CourseIcon/></ListItemIcon>}
-                </ListItem>
-                <ListItem selected={selected === 3} button component={Link} to={`/Admin/Newsletter`} onClick={()=>setSelected(3)}>
-                    {open ? <ListItemText>Newsletters</ListItemText> : <ListItemIcon><NewsletterIcon/></ListItemIcon>}
-                </ListItem>
-                <ListItem selected={selected === 4} button component={Link} to={`/Admin/User`} onClick={()=>setSelected(4)}>
-                    {open ? <ListItemText>Users</ListItemText> : <ListItemIcon><UserIcon/></ListItemIcon>}
-                </ListItem>
-            </List>
-        </Drawer>
-    )
+          {open ? (
+            <ListItemText>Blogs</ListItemText>
+          ) : (
+            <ListItemIcon>
+              <BlogIcon />
+            </ListItemIcon>
+          )}
+        </ListItem>
+        <ListItem
+          selected={selected == 2}
+          button
+          component={Link}
+          to={`/Admin/Course`}
+          onClick={() => setSelected(2)}
+        >
+          {open ? (
+            <ListItemText>Courses</ListItemText>
+          ) : (
+            <ListItemIcon>
+              <CourseIcon />
+            </ListItemIcon>
+          )}
+        </ListItem>
+        <ListItem
+          selected={selected == 3}
+          button
+          component={Link}
+          to={`/Admin/Newsletter`}
+          onClick={() => setSelected(3)}
+        >
+          {open ? (
+            <ListItemText>Newsletters</ListItemText>
+          ) : (
+            <ListItemIcon>
+              <NewsletterIcon />
+            </ListItemIcon>
+          )}
+        </ListItem>
+        <ListItem
+          selected={selected == 4}
+          button
+          component={Link}
+          to={`/Admin/User`}
+          onClick={() => setSelected(4)}
+        >
+          {open ? (
+            <ListItemText>Users</ListItemText>
+          ) : (
+            <ListItemIcon>
+              <UserIcon />
+            </ListItemIcon>
+          )}
+        </ListItem>
+      </List>
+    </Drawer>
+  );
 }
 
-const Admin = ({match}) => {
-    const classes = useStyles();
-    return(
-            <UserContext.Consumer>{context => {
-                // if(context.user.status !== 1) {
-                    return(
-                        <div className={classes.root}>
-                            <CssBaseline/>
-                            <Grid container>
-                                <Grid item xs={12} sm={1}>
-                                    <Box className={classes.nav}>
-                                        <NavMenu/>
-                                    </Box>
-                                </Grid>
-                                <Grid item xs={12} sm={11}>
-                                    <Container maxWidth='lg'>
-                                        <Switch>
-                                            <Route path={`${match.path}/Blog`} component={Blog} />
-                                            <Route path={`${match.path}/Newsletter`} component={NewsletterPublisher} />
-                                            <Route path={`${match.path}/User`} component={UserEditor} />
-                                            <CourseProvider>
-                                                <Route path={`${match.path}/Course`} component={Course} />
-                                            </CourseProvider>
-                                        </Switch>
-                                    </Container>
-                                </Grid>
-                            </Grid>
-                        </div>
-                    )
-                // }
-                // else {
-                //     return(<Redirect to='/Home'/>)
-                // }
-            }}</UserContext.Consumer>
-    )
-}
-export default Admin
+const Admin = ({ match }) => {
+  const classes = useStyles();
+  return (
+    <div className={classes.root}>
+      <Grid container>
+        <div className={classes.nav}>
+          <NavMenu />
+        </div>
+        <div className={classes.view}>
+          <Switch>
+            <Route path={`${match.path}/Blog`} component={Blog} />
+            <Route
+              path={`${match.path}/Newsletter`}
+              component={NewsletterPublisher}
+            />
+            <Route path={`${match.path}/User`} component={UserEditor} />
+            <Route path={`${match.path}/Course`} component={Course} />
+          </Switch>
+        </div>
+      </Grid>
+    </div>
+  );
+};
+export default Admin;
