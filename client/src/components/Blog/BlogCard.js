@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
-import { Button, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Box, ButtonGroup } from '@material-ui/core';
+import { Grid, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails, Box, ButtonGroup, Button } from '@material-ui/core';
 import Hoverable from '../Interface/Hoverable';
 import { UserContext } from '../../contexts/UserContext';
 
@@ -27,11 +27,16 @@ export default function BlogCard(props){
     return (
         <Hoverable>{hovering => <div>
             <div className={classes.root}>
-                <Box >
+                <Box>
                     <ExpansionPanel expanded={hovering}>
                         <ExpansionPanelSummary>
                             {/* Use grid for title and comment button to be separate? */}
-                            <Typography className={classes.title}>{props.blog.title} (By {props.blog.authors})</Typography>
+                            <Grid xs={12}>
+                                <Typography className={classes.title}>{props.blog.title}</Typography>
+                                <Grid xs={6}>
+                                    <Typography className={classes.title}>By {props.blog.authors}</Typography>
+                                </Grid>
+                            </Grid>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                             {props.blog.description}
