@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import MaterialTable from "material-table";
 import { ViewHeadline, Search } from "@material-ui/icons";
 import { Chip, Switch, Avatar, Tooltip } from "@material-ui/core";
@@ -13,7 +13,7 @@ function CourseTable(props) {
     return new Promise((resolve, reject) => {
       API.get("/api/blog/")
         .then((res) => {
-          if (res.status == 200) {
+          if (res.status === 200) {
             resolve({
               data: res.data,
               page: 0,
@@ -42,7 +42,7 @@ function CourseTable(props) {
     }
   }
 
-  if (redirect != "") {
+  if (redirect !== "") {
     return <Redirect to={redirect} />;
   }
 

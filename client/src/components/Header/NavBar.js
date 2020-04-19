@@ -1,13 +1,12 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../../contexts/UserContext";
 import Button from "@material-ui/core/Button";
 import {
   Typography,
   AppBar,
   Toolbar,
-  InputBase,
   Grid,
   Box,
   Link,

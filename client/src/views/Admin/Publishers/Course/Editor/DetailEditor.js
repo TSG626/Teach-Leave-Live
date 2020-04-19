@@ -63,7 +63,7 @@ function PriceForm(props) {
           <FormControlLabel
             value="price"
             label={
-              (radio == "price" && (
+              (radio === "price" && (
                 <CurrencyTextField
                   variant="outlined"
                   currencySymbol="$"
@@ -100,7 +100,7 @@ export default function DetailEditor(props) {
   useEffect(() => {
     async function fetchData() {
       API.get("/api/course/subjects/").then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           if (!Object.keys(res.data).length) return;
           setSubjectList(res.data);
         }

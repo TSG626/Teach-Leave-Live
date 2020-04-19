@@ -10,7 +10,7 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import API from "../../modules/API";
-import { Switch, Route, Redirect, Link } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import BlogViewer from "./BlogViewer";
 
@@ -22,7 +22,7 @@ function BlogList() {
   useEffect(() => {
     API.get("/api/blog/")
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           setBlogs(res.data);
         }
       })

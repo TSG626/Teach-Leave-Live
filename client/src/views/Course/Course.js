@@ -10,7 +10,7 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import API from "../../modules/API";
-import { Switch, Route, Redirect, Link } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
 import CourseViewer from "./CourseViewer/CourseViewer";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -22,7 +22,7 @@ function CourseList(props) {
   useEffect(() => {
     API.get("/api/course/")
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           setCourse(res.data);
         }
       })
