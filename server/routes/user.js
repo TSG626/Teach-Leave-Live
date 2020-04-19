@@ -123,17 +123,38 @@ router.post("/", (req, res, next) => {
 });
 
 router.put("/:id", (req, res, next) => {
-  User.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
-    if (err) return next(err);
-    res.json(post);
-  });
+  if (
+    req.user.id === req.params.id ||
+    req.user.status === 0 ||
+    req.user.status === 0
+  ) {
+    User.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
+      if (err) return next(err);
+      res.json(post);
+    });
+  }
 });
 
 router.delete("/:id", (req, res, next) => {
-  User.findByIdAndRemove(req.params.id, req.body, (err, post) => {
-    if (err) return next(err);
-    res.json(post);
-  });
+  if (req.user.status === 1) {
+    User.findById(req.params.id).then((user) => {
+      if (user.status == 0 || user.status == 1) {
+        res.status(401).send({ message: "Unauthorized action" });
+      } else {
+        User.findByIdAndRemove(req.params.id, req.body, (err, post) => {
+          if (err) return next(err);
+          res.json(post);
+        });
+      }
+    });
+  } else if (req.user.status === 0) {
+    User.findByIdAndRemove(req.params.id, req.body, (err, post) => {
+      if (err) return next(err);
+      res.json(post);
+    });
+  } else {
+    res.status(401).send({ message: "Unauthorized action" });
+  }
 });
 
 router.post("/addToCart", (req, res, next) => {
