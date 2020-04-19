@@ -70,11 +70,11 @@ function Block(props) {
 
 function EJSContentViewer(props) {
   return (
-    <Grid container>
+    <div>
       {props.data.blocks.map((block, index) => {
         return <Block key={index} block={block} />;
       })}
-    </Grid>
+    </div>
   );
 }
 

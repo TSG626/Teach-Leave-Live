@@ -89,7 +89,6 @@ function LandingBody(props) {
 
   return (
     <div>
-      <CssBaseline />
       <Container maxWidth="lg">
         <Typography align={"center"} variant="h2">
           Welcome to TLL
@@ -138,9 +137,6 @@ function LandingBody(props) {
             </Box>
           </Grid>
         </Grid>
-        <Switch>
-          <Route path={`${props.match.path}`} component={Blog} />
-        </Switch>
       </Container>
     </div>
   );

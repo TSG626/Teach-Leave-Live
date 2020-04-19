@@ -23,6 +23,10 @@ const courseSchema = new Schema({
     required: true,
     default: true,
   },
+  published: {
+    type: Boolean,
+    default: false,
+  },
   price: {
     type: Number,
     required: true,
@@ -33,8 +37,6 @@ const courseSchema = new Schema({
     required: true,
     default: "Miscellaneous",
   },
-  //For ordering courses within subjects
-  subject_index: Number,
   modules: [
     {
       type: Object,
@@ -49,13 +51,13 @@ const courseSchema = new Schema({
       },
     },
   ],
-  last_updated: {
+  date_updated: {
     type: Date,
     default: Date.now,
   },
-  published: {
-    type: Boolean,
-    default: false,
+  date_published: {
+    type: Date,
+    default: Date.now,
   },
 });
 
