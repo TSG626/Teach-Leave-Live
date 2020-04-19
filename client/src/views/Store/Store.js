@@ -13,8 +13,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import { Popover } from '@material-ui/core';
+import Backdrop from '@material-ui/core/Backdrop';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root: {
       minWidth: 275,
     },
@@ -29,13 +32,17 @@ const useStyles = makeStyles({
     pos: {
       marginBottom: 12,
     },
-  });
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
+    },
+  }));
 
 const DefaultStore = () => {
     const [courses, setCourses] = useState([]);
     const [cart, setCart] = useState([]);
     const classes = useStyles();
-    const [openedCourses, setOpenedCourses] = useState([]);
+
 
     const userInfo = useContext(UserContext);
     const handleClick = (props) => {
@@ -47,7 +54,7 @@ const DefaultStore = () => {
     }
 
     useEffect(() => {
-        API.get('/api/course/getAllCourses').then(res=>{
+        API.get('/api/course/').then(res=>{
             setCourses(res.data);
         }).catch(err=>{
             console.log(err);
@@ -60,17 +67,6 @@ const DefaultStore = () => {
                 setCart(oldArr => [...oldArr, res.data[i]]);
             }
         })
-        for (var i = 0; i < courses; i++){
-          var checked = false;
-          for (var j = 0; j < cart; j++) {
-            if (cart[j]._id === courses[j]._id) {
-              checked = true;
-            }
-          }
-          if (checked === false) {
-            setOpenedCourses(oldArr => [...oldArr, {courses: courses[i], opened: false}]);
-          }
-        }
     }, []);
 
     if(useLocation().pathname === "/Store/")
@@ -97,7 +93,7 @@ const DefaultStore = () => {
                         if (item === course._id)
                             exists = true;
                     })
-                    if (exists === false) {
+                    if (exists === false && course.published === true) {
                         return(
                             <Grid item>
                             <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
@@ -109,13 +105,51 @@ const DefaultStore = () => {
                               <Typography variant="h5" component="h2" align="center">
                                 {course.title}
                               </Typography>
+                              <Box mt={1}>
+                              {course.price === 0 ? <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
+                                FREE
+                                </Typography>:<Typography className={classes.title} color="textSecondary" gutterBottom align="center">
+                                  {"$" + course.price.toFixed(2)}
+                                </Typography>}
+                              </Box>
                             </CardContent>
                             <Grid container>
                                 <Grid item>
                                     <Box ml={2} mr={7}><Button size="small" onClick={() => handleClick(course)}><AddIcon/></Button></Box>
                                 </Grid>
                                 <Grid item>
-                                <Box mb={2} ml={7}><Button><OpenInNewIcon/></Button></Box>
+                                <PopupState variant="popover" popupId="demo-popup-popover">
+                                {(popupState) => (
+                                  <div>
+                                    <Box mb={2} ml={7}><Button {...bindTrigger(popupState)}><OpenInNewIcon/></Button></Box>
+                                    <Popover
+                                      {...bindPopover(popupState)}
+                                      anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'center',
+                                      }}
+                                      transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'center',
+                                      }}
+                                    >
+                                      <Box p={2}>
+                                        <Typography align="Center">Description</Typography>
+                                        <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
+                                          {course.description}
+                                        </Typography>                                      
+                                        </Box>
+                                        <Box p={2}>
+                                        <Typography align="Center">Number of Modules</Typography>
+                                        <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
+                                          {course.modules.length}
+                                        </Typography> 
+                                        </Box>
+                                    </Popover>
+                                    <Backdrop className={classes.backdrop} open={popupState.isOpen} onClick={popupState.close}/>
+                                  </div>
+                                )}
+                              </PopupState>
                                 </Grid>
                             </Grid>
                           </Card>   
