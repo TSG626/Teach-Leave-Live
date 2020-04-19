@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Typography, Stepper, Step, StepLabel, StepContent, Button, makeStyles, Paper } from '@material-ui/core';
+import { Grid, Typography, Stepper, Step, StepLabel, StepContent, Button, makeStyles, Paper, Box } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import API from '../../../modules/API';
 import EJSContentViewer from '../../../components/Interface/EJSContentViewer';
@@ -64,7 +64,9 @@ function CourseViewer(props){
         <React.Fragment>
             {Object.keys(course).length > 0 ? 
                 <Grid>
-                    <Typography>{course.title}</Typography>
+                    <Box m={3}>
+                        <Typography variant="h3" align="center">{course.title}</Typography>
+                    </Box>
                     <div className={classes.root}>
                     <Stepper activeStep={activeStep.module} orientation="vertical">
                         {course.modules.map((module, i) => (

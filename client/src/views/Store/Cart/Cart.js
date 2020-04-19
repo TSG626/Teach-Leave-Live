@@ -173,7 +173,7 @@ const Cart = () => {
                         <Box m={3} align="center">
                             <Button variant="contained" color="primary">Checkout</Button>
                         </Box>
-                    </StripeCheckout> : <Button variant="contained" color="primary" onClick={checkoutFree}>Checkout</Button>}
+                    </StripeCheckout> : <Box m={3} align="center"><Button variant="contained" color="primary" onClick={checkoutFree}>Checkout</Button></Box>}
                     </React.Fragment>
                 }
                     <Box mt={3} align="center">
