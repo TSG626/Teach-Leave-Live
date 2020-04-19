@@ -1,15 +1,11 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Route, Switch, Redirect, useLocation, Link } from "react-router-dom";
+import React, {useState, useEffect, useContext} from 'react';
+import { Route, Switch, Redirect, useLocation, Link } from 'react-router-dom';
 import Cart from "./Cart/Cart";
-import Checkout from "./Checkout/Checkout";
-import Confirmation from "./Confirmation/Confirmation";
 import Summary from "./Summary/Summary";
 import { UserContext } from '../../contexts/UserContext';
 import { CssBaseline, Box, Grid, Collapse } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
 import API from '../../modules/API';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -19,21 +15,21 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 
 const useStyles = makeStyles({
-  root: {
-    minWidth: 275,
-  },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-});
+    root: {
+      minWidth: 275,
+    },
+    bullet: {
+      display: 'inline-block',
+      margin: '0 2px',
+      transform: 'scale(0.8)',
+    },
+    title: {
+      fontSize: 14,
+    },
+    pos: {
+      marginBottom: 12,
+    },
+  });
 
 const DefaultStore = () => {
     const [courses, setCourses] = useState([]);
@@ -42,9 +38,9 @@ const DefaultStore = () => {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+      };
 
     const userInfo = useContext(UserContext);
     const handleClick = (props) => {
@@ -72,7 +68,7 @@ const DefaultStore = () => {
     }, []);
 
     console.log(cart)
-    if(useLocation().pathname === "/Store")
+    if(useLocation().pathname === "/Store/")
     {
         return(
             <div>
@@ -84,7 +80,7 @@ const DefaultStore = () => {
                 </Box>
                 <div>
                     <Box align="center" mb={3}>
-                    <Button component={Link} to="/Store/Cart"><ShoppingCartIcon/></Button>
+                      <Button component={Link} to="/Store/Cart"><ShoppingCartIcon/></Button>
                     </Box>
                 </div>
             </header>
@@ -102,10 +98,10 @@ const DefaultStore = () => {
                                         <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
                                         <Card className={classes.root}>
                                         <CardContent>
-                                          <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
+                                          <Typography className={classes.title} color="textSecondary" gutterBottom>
                                             {course.subject}
                                           </Typography>
-                                          <Typography variant="h5" component="h2" align="center">
+                                          <Typography variant="h5" component="h2">
                                             {course.title}
                                           </Typography>
                                         </CardContent>
@@ -128,85 +124,33 @@ const DefaultStore = () => {
                 })}
             </Grid>
 
-        <Grid container justify="center">
-          {courses.map((course) => {
-            return (
-              <Grid item>
-                <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
-                  <Card className={classes.root}>
-                    <CardContent>
-                      <Typography
-                        className={classes.title}
-                        color="textSecondary"
-                        gutterBottom
-                      >
-                        {course.title}
-                      </Typography>
-                      <Typography variant="h5" component="h2">
-                        {course.subject}
-                      </Typography>
-                      <Typography className={classes.pos} color="textSecondary">
-                        {courses.author ? (
-                          courses.author.map((a, i, arr) => {
-                            if (i == arr.length - 1) return a;
-                            else return a + ", ";
-                          })
-                        ) : (
-                          <React.Fragment></React.Fragment>
-                        )}
-                      </Typography>
-                      <Typography variant="body2" component="p">
-                        {course.description}
-                      </Typography>
-                    </CardContent>
-                    <Button size="small" onClick={() => handleClick(course)}>
-                      <AddIcon />
-                    </Button>
-                  </Card>
-                </Box>
-              </Grid>
+        </div>
             );
-          })}
-        </Grid>
-      </div>
-    );
-  } else return <React.Fragment />;
-};
+    }
+    return(<div></div>);
+}
 
-const Store = ({ match }) => {
-  return (
-    <UserContext.Consumer>
-      {(context) => {
-        if (context.isAuthenticated()) {
-          return (
-            <div>
-              <DefaultStore />
-              <Switch>
-                <Route exact path={`${match.path}/Cart`} component={Cart} />
-                <Route
-                  exact
-                  path={`${match.path}/Checkout`}
-                  component={Checkout}
-                />
-                <Route
-                  exact
-                  path={`${match.path}/Confirmation`}
-                  component={Confirmation}
-                />
-                <Route
-                  exact
-                  path={`${match.path}/Summary`}
-                  component={Summary}
-                />
-              </Switch>
-            </div>
-          );
-        } else {
-          return <Redirect to="/User/Login" />;
-        }
-      }}
-    </UserContext.Consumer>
-  );
-};
+const Store = ({match}) => {
+    return(
+        <UserContext.Consumer>{context =>{
+            if(context.isAuthenticated()) {
+                return (
+                    <CssBaseline>
+                        <DefaultStore/>
+                        <Switch>
+                            <Route exact path={`${match.path}/Cart`} component={Cart} />
+                            <Route exact path={`${match.path}/Summary`} component={Summary} />
+                        </Switch>
+                    </CssBaseline>
+                );
+            }
+            else {
+                return(
+                    <Redirect to="/User/Login"/>
+                );
+            }
+        }}</UserContext.Consumer>
+    );
+}
 
 export default Store;
