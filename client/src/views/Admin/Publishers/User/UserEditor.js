@@ -10,6 +10,7 @@ import {
   Box,
   makeStyles,
   Paper,
+  Typography,
 } from "@material-ui/core";
 import API from "../../../../modules/API";
 import Menu from "@material-ui/core/Menu";
@@ -24,6 +25,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Avatar from "react-avatar";
 import { Link as RouterLink } from "react-router-dom";
+import { CssBaseline } from "@material-ui/core";
 
 const useStyles = makeStyles({
   table: {
