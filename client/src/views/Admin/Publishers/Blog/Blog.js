@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import BlogCard from '../../../../components/Blog/BlogCard';
-import { Typography, Button, Grid, CardContent, Dialog} from '@material-ui/core';
+import { Typography, Button, Grid, CardContent, Dialog, GridList} from '@material-ui/core';
 import { Switch, Route} from 'react-router-dom';
 import BlogCreator from './BlogCreator';
 import {Add as AddIcon} from '@material-ui/icons/';
@@ -37,10 +37,10 @@ function SimpleDialog(props) {
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
       <Container>
-            <CardContent>
-              <BlogCreator blogList={props.blogList} setBlogList={props.setBlogList} setAdding={props.setAdding}/>
-            </CardContent>
-        </Container>
+        <CardContent>
+          <BlogCreator blogList={props.blogList} setBlogList={props.setBlogList} setAdding={props.setAdding}/>
+        </CardContent>
+      </Container>
     </Dialog>
   );
 }
@@ -53,6 +53,7 @@ export default function BlogRouter({match}) {
 
     useEffect(() => {
       async function fetchData(){
+          console.log(userInfo);
           API.get('/api/blog/').then(res => {
               if(res.status === 200){
                   setBlogList(res.data);
@@ -60,7 +61,7 @@ export default function BlogRouter({match}) {
           });
       }
       fetchData();
-    }, []);
+    }, [adding]);
     
     const handleClickOpen = () => {
       setAdding(true);
@@ -78,7 +79,7 @@ export default function BlogRouter({match}) {
               <Grid container alignContent={'center'} justify={'space-between'}>
                 <Typography className={classes.title}>
                     Blog
-                </Typography>{((userInfo.user.status === 0) || (userInfo.user.status === 1)) ? <Button onClick={handleClickOpen} endIcon={<AddIcon/>} varient={'contained'}>Add Blog</Button> : <div></div>}
+                </Typography>{(((userInfo.user.status === 0) || (userInfo.user.status === 1)) && (userInfo.authenticated === true)) ? <Button onClick={handleClickOpen} endIcon={<AddIcon/>} varient={'contained'}>Add Blog</Button> : <div></div>}
                 <SimpleDialog
                     open={adding}
                     onClose={handleClose}
@@ -94,12 +95,12 @@ export default function BlogRouter({match}) {
                 alignItems="flex-start"
                 className={classes.cardList}>
                   {blogList.map((blog, index) => {
-                    return(
-                      <Grid key={index} item container xs={12} className={classes.card}>
-                        <BlogCard blog={blog}/>
-                      </Grid>
-                    )
-                  })}
+                      return(
+                        <Grid key={index} item container xs={12} className={classes.card}>
+                          <BlogCard blog={blog}/>
+                        </Grid>
+                      )
+                    })}
               </Grid>
             </Container>
             )

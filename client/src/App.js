@@ -43,9 +43,10 @@ const Authorization = () => {
             <Route exact path="/User/Login" component={Login}/>
             <Route exact path="/User/ForgotPassword" component={ForgotPassword}/>
             <Route path="/Contact" component={Contact} />
-            <Route path="/" component={() => {
+            <Route path="*" component={NotFound}/>
+            {/* <Route path="/" component={() => {
               return(<React.Fragment/>)
-            }}/>
+            }}/> */}
           </Switch>
         )
       }else{
@@ -67,7 +68,6 @@ const Routes = () => {
       <Route path="/Course" component={Course} />
       <Route path="/Store" component={Store} />
       <Route path="/Contact" component={Contact} />
-      <Route component={NotFound}/>
     </Switch>
   )
 }
@@ -78,7 +78,7 @@ const App = (props) => {
     <UserProvider>
       <MuiThemeProvider theme={themes.default}>
         <NavBar/>
-        <div className={classes.toolbar}/>
+          <div className={classes.toolbar}/>
         <Authorization/>
       </MuiThemeProvider>
     </UserProvider>

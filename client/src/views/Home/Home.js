@@ -68,7 +68,7 @@ export default function Landing({match}) {
                         </Box>
                     </Grid>
                     <Grid xs={6}>
-                        <Container maxWidth='md' maxHeight='md'>
+                        <Container maxWidth='md' maxHeight='sm'>
                             <Switch>
                                 <Route path={`${match.path}`} component={Blog} />
                             </Switch>
