@@ -116,6 +116,55 @@ const ListBlogs = () => {
 const Home = () => {
   const [courses, setCourses] = useState("No courses listed!");
 
+<<<<<<< HEAD
+    return (
+    <UserContext.Consumer>{context => {
+        if(context.isAuthenticated()) {
+            return(
+                <CssBaseline>
+                    <Grid align={'center'} xs={12}>
+                        <Typography variant={'h2'} component={'h2'}>Welcome back, {context.user.firstname}!</Typography>
+                    </Grid>
+                    <Grid align={'center'} xs={12}>
+                        <Box p={2} display="flex">
+                            <Box flexGrow={0.4}>
+                                <Link2 target="_blank" rel="noopener" href="https://www.instagram.com/teachleavelive/">
+                                    <InstagramIcon style={{ fontSize: 100 }} fontSize="large" color="inherit"/>
+                                </Link2>
+                            </Box>
+                            <Box flexGrow={0.4}>
+                                <Link2 target="_blank" rel="noopener" href="https://www.facebook.com/teachleavelive/">
+                                    <FacebookIcon style={{ fontSize: 100 }} fontSize="large" color="inherit"/>
+                                </Link2>
+                            </Box>
+                            <Box flexGrow={0.4}>
+                                <Link2 target="_blank" rel="noopener" href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live">
+                                    <WebIcon style={{ fontSize: 100 }} fontSize="large" color="inherit"/>
+                                </Link2>
+                            </Box>
+                        </Box>
+                    </Grid>
+                    <Grid xs={6}>
+                        <Container maxWidth='md' maxHeight='sm'>
+                            <Switch>
+                                <Route path={`${match.path}`} component={Blog} />
+                            </Switch>
+                        </Container>
+                    </Grid>
+                    <Grid xs={6}>
+                        {/* Holder for courses */}
+                    </Grid>
+                    <Grid xs={6}>
+                        
+                    </Grid>
+                </CssBaseline>
+            )
+        }
+        else {
+            return(
+                <Redirect to="/User/Login"/>
+            );
+=======
   return (
     <UserContext.Consumer>
       {(context) => {
@@ -221,6 +270,7 @@ const Home = () => {
           );
         } else {
           return <Redirect to="/User/Login" />;
+>>>>>>> cfb6e6cc9f2baabd40fe118e7304706513fc28c7
         }
       }}
     </UserContext.Consumer>

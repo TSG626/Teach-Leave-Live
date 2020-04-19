@@ -25,6 +25,46 @@ const useStyles = makeStyles((theme) => ({
 //Checks if user is signed in. If not, only allow them to access landing and signup/login
 //Redirect everything else to login.
 const Authorization = () => {
+<<<<<<< HEAD
+  return(
+    <UserContext.Consumer>{(context) => {
+      if(context.isAuthenticated() === false){
+        return(
+          <Switch>
+            <Route exact path="/" component={Landing}/>
+            <Route exact path="/User/SignUp" component={SignUp}/>
+            <Route exact path="/User/Login" component={Login}/>
+            <Route exact path="/User/ForgotPassword" component={ForgotPassword}/>
+            <Route path="/Contact" component={Contact} />
+            <Route path="*" component={NotFound}/>
+            {/* <Route path="/" component={() => {
+              return(<React.Fragment/>)
+            }}/> */}
+          </Switch>
+        )
+      }else{
+        return(<Routes/>);
+      }
+    }}</UserContext.Consumer>
+  )
+}
+
+const Routes = () => {
+  return(
+    <Switch>
+      <Route exact path="/" component={Landing} />
+      <Route exact path="/Home" component={Home} />
+      <Route path="/Admin" component={Admin} />
+      <Route path="/User" component={User}/>
+      <Route path="/Blog" component={Blog} />
+      <Route path="/Catalogue" component={Catalogue} />
+      <Route path="/Course" component={Course} />
+      <Route path="/Store" component={Store} />
+      <Route path="/Contact" component={Contact} />
+    </Switch>
+  )
+}
+=======
   return (
     <UserContext.Consumer>
       {(context) => {
@@ -76,12 +116,21 @@ const Routes = () => {
     </>
   );
 };
+>>>>>>> cfb6e6cc9f2baabd40fe118e7304706513fc28c7
 
 const App = (props) => {
   return (
     <UserProvider>
+<<<<<<< HEAD
+      <MuiThemeProvider theme={themes.default}>
+        <NavBar/>
+          <div className={classes.toolbar}/>
+        <Authorization/>
+      </MuiThemeProvider>
+=======
       <NavBar />
       <Authorization />
+>>>>>>> cfb6e6cc9f2baabd40fe118e7304706513fc28c7
     </UserProvider>
   );
 };
