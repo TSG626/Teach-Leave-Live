@@ -107,7 +107,7 @@ const Cart = () => {
             <div>
                 <header>
                     <Box m={3}>
-                        <Typography component="h1" variant="h3" align="center">Shopping Cart</Typography>
+                        <Typography variant="h2" align="center">Shopping Cart</Typography>
                     </Box>
                 </header>
                 {products.length === 0 ? <React.Fragment>

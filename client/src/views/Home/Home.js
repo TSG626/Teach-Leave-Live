@@ -1,49 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import Link2 from "@material-ui/core/Link";
 import {
   Typography,
   Box,
-  CircularProgress,
   Grid,
   CssBaseline,
+  Table,
+  TableBody,
+  TableRow,
+  Button,
 } from "@material-ui/core";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import WebIcon from "@material-ui/icons/Web";
+import API from "../../modules/API";
 
 const ListCourses = () => {
-  const [courses, setCourses] = useState([
-    {
-      title: "Tutuoring Forums",
-      progress: 70,
-    },
-    {
-      title: "Last 9 Weeks Checklist",
-      progress: 50,
-    },
-  ]);
-  return courses.map((course, index) => {
+  const userInfo = useContext(UserContext)
+  const [courses, setCourses] = useState([]);
+  useEffect(() => {
+    API.get("/api/user/getCourses", {username: userInfo.user.username}).then(res=>{
+      for (var i = 0; i < res.data.length; i++) {
+        API.get("/api/course/", {id: res.data[i]}).then(res=> {
+          setCourses(oldArr=>[...oldArr, res.data])
+        })
+      }
+    })
+    },[])
+  return (
+    <React.Fragment>
+      <Box m={2}>
+        <Typography variant="h4" align="center">Recent Courses</Typography>
+      </Box>
+    <Table>
+      <TableBody>
+    {courses.map((course, index) => {
     return (
-      <Box p={5} m={3} border={1} key={index}>
-        <table>
-          <tbody>
-            <tr>
-              <td align="left">
-                <Typography component="h1" variant="h5">
-                  {course.title}:
+      <Box border={1}>
+        <Button fullWidth component={Link} to={`/Course/${course._id}`}>
+        <Box p={3} m={2}  key={index} align="center">
+            <TableRow>
+                <Typography component="h1" variant="h5" align="center">
+                  {course.title}
                 </Typography>
-              </td>
-              <td align="right">
-                <CircularProgress variant="static" value={course.progress} />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            </TableRow>
+      </Box>
+      </Button>
       </Box>
     );
-  });
+  })}
+  </TableBody>
+  </Table>
+    </React.Fragment>);
 };
 
 export default function Landing({ match }) {
@@ -104,7 +114,7 @@ export default function Landing({ match }) {
                 </Box>
               </Grid>
               <Grid xs={6}>{/* Holder for blogs */}</Grid>
-              <Grid xs={6}>{/* Holder for courses */}</Grid>
+              <Grid xs={6}><ListCourses/></Grid>
             </CssBaseline>
           );
         } else {
