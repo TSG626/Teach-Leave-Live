@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Route, Switch } from "react-router-dom";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import WebIcon from "@material-ui/icons/Web";
-import { Link, Box } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import Link2 from "@material-ui/core/Link";
-import { CssBaseline, Container, Grid, Typography } from "@material-ui/core";
-import Blog from "../Admin/Publishers/Blog/Blog";
+import { Container, Grid, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import API from "../../modules/API.js";
@@ -144,7 +142,6 @@ function LandingBody(props) {
 
 export default function Landing() {
   const classes = useStyles();
-  const [message, setMessage] = useState("");
 
   return (
     <div>

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles, emphasize } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { useParams } from "react-router";
 import Grid from "@material-ui/core/Grid";
 import {
   Container,
   Paper,
   Typography,
-  Button,
   CircularProgress,
 } from "@material-ui/core";
 import { SaveTwoTone as SaveIcon, ViewModule } from "@material-ui/icons/";
@@ -86,10 +85,8 @@ export default function BlogEditor(props) {
       handleClick: handleSave,
     },
   ];
-
   const [open, setOpen] = useState(false);
-
-  if (blog == undefined) return <CircularProgress />;
+  if (blog === undefined) return <CircularProgress />;
 
   return (
     <Container>

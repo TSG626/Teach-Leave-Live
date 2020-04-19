@@ -1,11 +1,7 @@
 import React, { useState, useContext } from "react";
-import { Delete as DeleteIcon } from "@material-ui/icons";
 import {
-  Grid,
   Tooltip,
   TextField,
-  Button,
-  useStyles,
   CircularProgress,
   Chip,
   Avatar,
@@ -13,7 +9,6 @@ import {
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import API from "../../modules/API";
 import { useEffect } from "react";
-import themes from "../../themes";
 import { UserContext } from "../../contexts/UserContext";
 
 function AuthorForm(props) {

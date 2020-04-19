@@ -65,7 +65,7 @@ const DefaultStore = () => {
     );
     API.get("/api/user/getCourses", { username: userInfo.user.username }).then(
       (res) => {
-        for (var i = 0; i < res.data.length; i++) {
+        for (let i = 0; i < res.data.length; i++) {
           setCart((oldArr) => [...oldArr, res.data[i]]);
         }
       }

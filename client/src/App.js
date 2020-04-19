@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { UserContext, UserProvider } from "./contexts/UserContext";
-import { MuiThemeProvider, makeStyles, Toolbar } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import NavBar from "./components/Header/NavBar";
 import Landing from "./views/Landing/Landing";
 import Home from "./views/Home/Home";
@@ -16,7 +16,6 @@ import Login from "./views/User/Login/Login";
 import SignUp from "./views/User/SignUp/SignUp";
 import ForgotPassword from "./views/User/ForgotPassword/ForgotPassword";
 import Contact from "./views/Contact/Contact.js";
-import themes from "./themes";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
