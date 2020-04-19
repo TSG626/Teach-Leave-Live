@@ -69,6 +69,7 @@ const DefaultStore = () => {
         })
     }, []);
 
+    var count = 0
     if(useLocation().pathname === "/Store/")
     {
         return(
@@ -87,13 +88,15 @@ const DefaultStore = () => {
             </header>
 
             <Grid container justify="center">
-                {courses.map(course => {
+                {
+                courses.map(course => {
                     var exists = false;
                     cart.map(item => {
                         if (item === course._id)
                             exists = true;
                     })
                     if (exists === false && course.published === true) {
+                      count += 1;
                         return(
                             <Grid item>
                             <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
@@ -161,6 +164,7 @@ const DefaultStore = () => {
                         return(<React.Fragment/>)
                     }
                 })}
+                {count === 0 ? <Typography>No courses available!</Typography>: <React.Fragment></React.Fragment>}
             </Grid>
 
         </div>
