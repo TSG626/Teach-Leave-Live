@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Typography, Stepper, Step, StepLabel, StepContent, Button, makeStyles, Paper } from '@material-ui/core';
+import { Grid, Typography, Stepper, Step, StepLabel, StepContent, Button, makeStyles, Paper, Box } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import API from '../../../modules/API';
-import { UserContext } from '../../../contexts/UserContext';
 import EJSContentViewer from '../../../components/Interface/EJSContentViewer';
 
 const useStyles = makeStyles((theme) => ({
@@ -29,9 +28,7 @@ function CourseViewer(props){
 
     useEffect(()=>{
         async function fetchData(){
-            console.log(id);
             API.get(`/api/course/`, {id: id}).then((res)=>{
-                console.log(res);
                 if(res.status === 200){
                     setCourse(res.data);
                 }else{
@@ -50,7 +47,6 @@ function CourseViewer(props){
         }else{
             setActiveStep({...activeStep, section: activeStep.section + 1});
         }
-        console.log(activeStep);
     };
   
     const handleBack = () => {
@@ -65,7 +61,9 @@ function CourseViewer(props){
         <React.Fragment>
             {Object.keys(course).length > 0 ? 
                 <Grid>
-                    <Typography>{course.title}</Typography>
+                    <Box m={3}>
+                        <Typography variant="h3" align="center">{course.title}</Typography>
+                    </Box>
                     <div className={classes.root}>
                     <Stepper activeStep={activeStep.module} orientation="vertical">
                         {course.modules.map((module, i) => (

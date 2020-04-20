@@ -4,6 +4,7 @@ const path = require('path')
 const Hogan = require('hogan.js')
 const config = require('./config.js')
 const User = require('../models/UserModel.js');
+const Email = require('../models/EmailModel.js');
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -18,7 +19,7 @@ const transporter = nodemailer.createTransport({
 
 module.exports = {
     welcomeEmail: function (userInfo) {
-        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/authenticateEmail/authenticateEmail-inlined.html', 'utf-8')
+        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/welcomeEmail/welcomeEmail-inlined.html', 'utf-8')
         var compiledEmail = Hogan.compile(emailTemplate)
 
         var mailOptions = {
@@ -31,8 +32,6 @@ module.exports = {
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
-            } else {
-                console.log('Welcome email sent: ' + info.response);
             }
         });
     },
@@ -50,8 +49,6 @@ module.exports = {
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
-            } else {
-                console.log('Forgot password email sent: ' + info.response);
             }
         });
     },
@@ -68,8 +65,6 @@ module.exports = {
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
-            } else {
-                console.log('User Email Authenticate email sent: ' + info.response);
             }
         });
     },
@@ -77,19 +72,17 @@ module.exports = {
         const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/newsletterPublisher/newsletterPublisher-inlined.html', 'utf-8');
         var compiledEmail = Hogan.compile(emailTemplate);
 
-        User.find({ 'email_verified': true }, (err, users) => {
+        Email.find({}, (err, users) => {
             users.forEach(user => {
                 var mailOptions = {
                     from: config.username,
                     to: user.email,
                     subject: "Teach Leave Live: " + title,
-                    html: compiledEmail.render({ firstname: user.firstname, body: body, link: link })
+                    html: compiledEmail.render({ body: body, link: link })
                 };
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
                         console.log(error);
-                    } else {
-                        console.log('Newsletter email sent: ' + user.email);
                     }
                 });
             })
@@ -110,8 +103,6 @@ module.exports = {
       transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
               console.log(error);
-          } else {
-              console.log('Contact email sent from: ' + body.email);
           }
       });
     },

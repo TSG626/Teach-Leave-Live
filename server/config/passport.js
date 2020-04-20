@@ -1,9 +1,9 @@
 const LocalStrategy = require('passport-local').Strategy,
     passport = require('passport'),
     bcrypt = require('bcrypt'),
-    crypto = require('crypto'),
     sendEmail = require('../email/sendEmail'),
     User = require('../models/UserModel.js'),
+    Email = require('../models/EmailModel.js'),
     config = require('./config'),
     authEmail = require('../config/authEmail'),
     JWTStategy = require('passport-jwt').Strategy,
@@ -67,6 +67,18 @@ const register = async (req, email, password, done) => {
             firstname: req.body.firstname,
             lastname: req.body.lastname,
             reference: req.body.reference
+        });
+        Email.findOne({email: userData.email}).then((email) => {
+            if (!email){
+                const newEmail = new Email({
+                    email: userData.email,
+                });
+                newEmail.save((err) => {
+                    if(err){
+                        return done(err);
+                    }
+                });
+            }
         });
         authEmail.sendAuthenticationEmail(req, user);
         user.save((err) => {
