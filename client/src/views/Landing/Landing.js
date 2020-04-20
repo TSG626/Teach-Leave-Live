@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Route, Switch } from "react-router-dom";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import WebIcon from "@material-ui/icons/Web";
-import { Link, Box } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import Link2 from "@material-ui/core/Link";
 import { CssBaseline, Container, Grid, Typography, Table, TableBody, TableRow } from "@material-ui/core";
 import Blog from "../Admin/Publishers/Blog/Blog";

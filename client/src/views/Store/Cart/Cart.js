@@ -49,9 +49,7 @@ const Cart = () => {
     const makePayment = token => {
 
         API.post('/api/cart/payment', {product: {name: userInfo.user.username + "'s items", price: count.toFixed(2) }, token: token, username: userInfo.user.username}).then(res=>{
-            console.log("RESPONSE", res);
             const {status} = res;
-            console.log("STATUS", status);
             for (var i = 0; i < products.length; i++) {
                 API.post('/api/user/addToCourse', {title: products[i].title, username: userInfo.user.username})
             }
