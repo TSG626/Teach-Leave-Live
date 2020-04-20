@@ -88,13 +88,15 @@ function NavMenu() {
       <div className={classes.toolbar} />
       <div className={classes.drawerContainer}>
         <List>
-          <ListItem>
-            {open ? (
-              <CloseIcon onClick={() => setOpen(false)} />
-            ) : (
-              <OpenIcon onClick={() => setOpen(true)} />
-            )}
-          </ListItem>
+          <Box mt={5}>
+            <ListItem>
+              {open ? (
+                <CloseIcon onClick={() => setOpen(false)} />
+              ) : (
+                <OpenIcon onClick={() => setOpen(true)} />
+              )}
+            </ListItem>
+          </Box>
           <ListItem
             selected={selected === 1}
             button
