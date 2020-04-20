@@ -18,7 +18,7 @@ router.post('/', (req, res, next) => {
                 email: req.body.email,
             });
             newEmail.save((err) => {
-                if(err){
+                if (err) {
                     console.log(err);
                     return res.status(500);
                 }
