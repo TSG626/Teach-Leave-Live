@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Container, Grid, Box, CardContent, Card, Button } from "@material-ui/core";
+import { Typography, Container, Grid, Box, CardContent, Card, Button, Grow } from "@material-ui/core";
 import API from "../../modules/API";
 import { Switch, Route, Link } from "react-router-dom";
 import CourseViewer from "./CourseViewer/CourseViewer";
 import { makeStyles } from '@material-ui/core/styles';
 import Store from "../Store/Store";
+import { Fade } from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {
@@ -27,19 +28,24 @@ function Landing(courses) {
   const classes = useStyles();
   return (
     <React.Fragment>
+      <Fade  in="true" mountOnEnter timeout={3000}>
       <Box m={3}>
         <Typography variant="h2" align="center">Courses</Typography>
     </Box>
+    </Fade>
     {courses.length === 0 ? <React.Fragment>
-      <Typography align="center">No courses? Lets buy some!</Typography>
+      <Grow in="true" mountOnEnter timeout={3000}><Typography align="center">No courses? Lets buy some!</Typography></Grow>
+      <Grow in="true" mountOnEnter timeout={3000}>
         <Box mt={2} align="center">
           <Button variant="contained" component={Link} to="/Store/">Course Store</Button>
         </Box>
+        </Grow>
       </React.Fragment>:
     <React.Fragment>
       <Grid container justify="center" spacing={3}>
         {courses.map(course => {
           return(
+            <Grow in="true" mountOnEnter timeout={3000}>
             <Grid item xs={12}>
             <Card className={classes.root}>
             <CardContent>
@@ -62,6 +68,7 @@ function Landing(courses) {
             </CardContent>
             </Card>   
             </Grid>
+            </Grow>
           )
         })}
       </Grid>

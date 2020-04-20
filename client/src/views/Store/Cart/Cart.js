@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Redirect, useHistory, withRouter, BrowserRouter, Switch, Link } from 'react-router-dom';
-import { CssBaseline, Paper, TableCell, TableContainer, TableRow, TableHead, Box, Table, makeStyles, TableBody} from '@material-ui/core';
+import { CssBaseline, Paper, TableCell, TableContainer, TableRow, TableHead, Box, Table, makeStyles, TableBody, Fade, Grow, Zoom} from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import StripeCheckout from "react-stripe-checkout"
@@ -106,44 +106,49 @@ const Cart = () => {
         <CssBaseline>
             <div>
                 <header>
+                <Fade in="true" mountOnEnter timeout={3000}>
                     <Box m={3}>
                         <Typography variant="h2" align="center">Shopping Cart</Typography>
                     </Box>
+                </Fade>
                 </header>
                 {products.length === 0 ? <React.Fragment>
-                    <Typography align="center">Nothing in your cart! Start shopping!</Typography>
+                    <Grow in="true" mountOnEnter timeout={3000}><Typography align="center">Nothing in your cart! Start shopping!</Typography></Grow>
                     </React.Fragment>:
                     <React.Fragment>
-                                        <Box ml="17%" mr="17%" pb={2}>
-                <TableContainer component={Paper}>
-                    <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                    </TableHead>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell>Product</TableCell>
-                            <TableCell align="right">Price</TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                        {products.map(item => {
-                            subcount += item.price;
-                            service += subcount * .029;
-                            count = subcount + service;
-                            return(
-                                <TableRow>
-                                    <TableCell>{item.title}</TableCell>
-                                    <TableCell align="right">{item.price === 0 ? "FREE" : "$" + item.price.toFixed(2)}</TableCell>
-                                    <TableCell align="right">
-                                        <Button {...bindTrigger(popupState)} onClick={() => deleteItem(popupState, item)}><DeleteOutlineIcon/></Button>
-                                        </TableCell>
-                                </TableRow>
-                            )
-                        })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                </Box>
+                        <Box ml="17%" mr="17%" pb={2}>
+                            <Grow in="true" mountOnEnter timeout={3000}>
+                            <TableContainer component={Paper}>
+                        <Table className={classes.table} aria-label="simple table">
+                        <TableHead>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>Product</TableCell>
+                                <TableCell align="right">Price</TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                            {products.map(item => {
+                                subcount += item.price;
+                                service += subcount * .029;
+                                count = subcount + service;
+                                return(
+                                    <TableRow>
+                                        <TableCell>{item.title}</TableCell>
+                                        <TableCell align="right">{item.price === 0 ? "FREE" : "$" + item.price.toFixed(2)}</TableCell>
+                                        <TableCell align="right">
+                                            <Button {...bindTrigger(popupState)} onClick={() => deleteItem(popupState, item)}><DeleteOutlineIcon/></Button>
+                                            </TableCell>
+                                    </TableRow>
+                                )
+                            })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                            </Grow>
+                    </Box>
                 <Box ml="25%" mr="25%" pb={2}>
+                <Grow in="true" mountOnEnter timeout={3000}>
                     <TableContainer component={Paper} >
                         <Table className={classes.table} aria-label="simple table">
                         {subcount !== 0 ?
@@ -166,17 +171,22 @@ const Cart = () => {
                         </TableRow>
                         </Table>
                     </TableContainer>
+                    </Grow>
                 </Box>
                 {subcount !== 0 ? <StripeCheckout stripeKey={process.env.REACT_APP_KEY} token={makePayment} name="Teach. Leave. Live." amount={count.toFixed(2) * 100}>
+                    <Grow in="true" mountOnEnter timeout={3000}>
                         <Box m={3} align="center">
                             <Button variant="contained" color="primary">Checkout</Button>
                         </Box>
-                    </StripeCheckout> : <Box m={3} align="center"><Button variant="contained" color="primary" onClick={checkoutFree}>Checkout</Button></Box>}
+                    </Grow>
+                    </StripeCheckout> : <Grow in="true" mountOnEnter timeout={3000}><Box m={3} align="center"><Button variant="contained" color="primary" onClick={checkoutFree}>Checkout</Button></Box></Grow>}
                     </React.Fragment>
                 }
+                <Grow in="true" mountOnEnter timeout={3000}>
                     <Box mt={3} align="center">
                         <Button component={Link} to="/Store/">Back to Store</Button>
                     </Box>
+                </Grow>
             </div>
         </CssBaseline>
     );
