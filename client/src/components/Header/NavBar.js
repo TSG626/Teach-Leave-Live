@@ -84,10 +84,6 @@ const SimpleDialog = (props) => {
     onClose(selectedValue);
   };
 
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
-
   function handleFileUpload(event) {
     var formData = new FormData();
     var imagefile = event.target.files[0];
