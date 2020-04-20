@@ -52,8 +52,8 @@ router.get("/", (req, res, next) => {
         .populate("authors", "firstname lastname username")
         .then((course) => {
           if (
-            req.user.courses.includes(req.query.id) ||
-            Object.values(course.authors).keys("_id").includes(req.user._id)
+            req.user.courses.includes(req.query.id) || req.user.cart.includes(req.query.id) || 
+            (Object.values(course.authors).length !== 0 && Object.values(course.authors).keys("_id").includes(req.user._id))
           ) {
             if (course.published) {
               res.json(course);
@@ -70,7 +70,7 @@ router.get("/", (req, res, next) => {
     } else {
       Course.find(
         { published: true },
-        "title description free cost subject authors"
+        "title description free cost subject authors price modules published"
       )
         .populate("authors", "firstname lastname username status")
         .then((courses) => {

@@ -86,13 +86,14 @@ const DefaultStore = () => {
             </header>
 
             <Grid container justify="center">
-                {
-                courses.map(course => {
+                {courses.map(course => {
                     var exists = false;
-                    cart.map(item => {
+                    if(cart.length !== 0) {
+                      cart.map(item => {
                         if (item === course._id)
                             exists = true;
                     })
+                    }
                     if (exists === false && course.published === true) {
                       count += 1;
                         return(
@@ -164,7 +165,7 @@ const DefaultStore = () => {
                         return(<React.Fragment/>)
                     }
                 })}
-                {count === 0 ?       <Grow in="true" mountOnEnter timeout={2000}><Typography>No courses available!</Typography></Grow>: <React.Fragment></React.Fragment>}
+                {count === 0 ? <Grow in="true" mountOnEnter timeout={2000}><Typography>No courses available!</Typography></Grow>: <React.Fragment></React.Fragment>}
             </Grid>
 
         </div>
