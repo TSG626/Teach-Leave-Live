@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
 
 module.exports = {
     welcomeEmail: function (userInfo) {
-        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/authenticateEmail/authenticateEmail-inlined.html', 'utf-8')
+        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/welcomeEmail/welcomeEmail-inlined.html', 'utf-8')
         var compiledEmail = Hogan.compile(emailTemplate)
 
         var mailOptions = {
@@ -32,8 +32,6 @@ module.exports = {
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
-            } else {
-                console.log('Welcome email sent: ' + info.response);
             }
         });
     },
@@ -51,8 +49,6 @@ module.exports = {
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
-            } else {
-                console.log('Forgot password email sent: ' + info.response);
             }
         });
     },
@@ -69,8 +65,6 @@ module.exports = {
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
-            } else {
-                console.log('User Email Authenticate email sent: ' + info.response);
             }
         });
     },
@@ -89,8 +83,6 @@ module.exports = {
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
                         console.log(error);
-                    } else {
-                        console.log('Newsletter email sent: ' + user.email);
                     }
                 });
             })
@@ -111,8 +103,6 @@ module.exports = {
       transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
               console.log(error);
-          } else {
-              console.log('Contact email sent from: ' + body.email);
           }
       });
     },

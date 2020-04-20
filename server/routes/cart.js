@@ -3,6 +3,8 @@ const cors = require("cors");
 const config = require("../config/config")
 const stripe = require("stripe")(config.stripe.sk);
 const uuid = require("uuid/v4");
+const User = require('../models/UserModel');
+
 
 const router = express.Router();
 
@@ -10,9 +12,7 @@ const router = express.Router();
 router.use(cors());
 
 router.post('/payment', (req, res) => {
-    const {product, token} = req.body;
-    console.log("PRODUCT", product);
-    console.log("PRICE", product.price);
+    const {product, token, username} = req.body;
     //avoids getting paid twice
     const idempotencyKey = uuid();
     //creates customer
@@ -30,7 +30,9 @@ router.post('/payment', (req, res) => {
             description: `purchase of ${product.name}`
         }, {idempotencyKey})
         //success
-    }).then(result => res.status(200).json(result))
+    }).then(result => 
+        res.status(200).json(result)
+        )
     //error
     .catch(err => console.log(err))
 })
