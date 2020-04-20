@@ -4,21 +4,17 @@ import Link2 from "@material-ui/core/Link";
 import {
   Typography,
   Box,
-  CircularProgress,
   Grid,
   CssBaseline,
-  Container,
   Table,
   TableBody,
   TableRow,
-  TableCell,
   Button,
 } from "@material-ui/core";
-import { Redirect, Route, Switch, Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import WebIcon from "@material-ui/icons/Web";
-import Blog from "../Admin/Publishers/Blog/Blog";
 import API from "../../modules/API";
 
 const ListCourses = () => {

@@ -158,7 +158,6 @@ router.delete("/:id", (req, res, next) => {
 });
 
 router.post("/addToCart", (req, res, next) => {
-  console.log(req.body);
   Course.findOne({
     title: req.body.title,
   })
@@ -178,7 +177,6 @@ router.post("/addToCart", (req, res, next) => {
 });
 
 router.post("/addToCourse", (req, res, next) => {
-  console.log(req.body);
   Course.findOne({
     title: req.body.title,
   })

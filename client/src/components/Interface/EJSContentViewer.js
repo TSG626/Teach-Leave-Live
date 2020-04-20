@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Typography, makeStyles } from "@material-ui/core";
+import { Typography, makeStyles } from "@material-ui/core";
 import { Star as EndIcon } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
@@ -39,7 +39,7 @@ function Block(props) {
         </Typography>
       );
     case "list":
-      if (props.block.data.style == "ordered") {
+      if (props.block.data.style === "ordered") {
         return (
           <ol className={classes.list}>
             {props.block.data.items.map((item, index) => (

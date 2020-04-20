@@ -1,5 +1,4 @@
 import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
-import { grey } from "@material-ui/core/colors";
 
 const themes = {
   default: responsiveFontSizes(
@@ -12,7 +11,6 @@ const themes = {
       typography: {
         htmlFontSize: 10,
       },
-      // spacing: (factor => `${0.25 * factor}rem`),
     })
   ),
 };
