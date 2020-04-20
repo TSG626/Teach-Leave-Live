@@ -20,6 +20,9 @@ import { AccountCircle } from "@material-ui/icons";
 import Hoverable from "../Interface/Hoverable";
 import Avatar from "react-avatar";
 import API from "../../modules/API";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import Logo2 from './logo2.png';
+
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -65,6 +68,7 @@ const AccountOptions = () => {
                   </Link>
                 </Grid>
               )}
+              
             </Grid>
           );
         }
@@ -177,23 +181,18 @@ function Logo() {
                   <Box
                     display="flex"
                     justifyContent="center"
-                    bgcolor="white"
+                    bgcolor="black"
                     m={1}
-                    style={{ width: "3rem", height: "3rem" }}
+                    style={{ width: "5rem", height: "5rem" }}
                     borderRadius="50%"
                     boxShadow={hovering ? 7 : 2}
                     borderColor="secondary"
                   >
-                    <Typography
-                      style={{
-                        color: "black",
-                        fontSize: 32,
-                        fontFamily: "Georgia",
-                        paddingTop: 0,
-                      }}
-                    >
-                      T
-                    </Typography>
+                  <Avatar
+                    round={true}
+                    size="5rem"
+                    src={Logo2}
+                  />
                   </Box>
                 </Button>
               );
@@ -230,7 +229,7 @@ export default function NavBar() {
                 <Grid
                   key={index}
                   item
-                  xs={11}
+                  xs={12}
                   sm={1}
                   container
                   justify="center"
@@ -241,7 +240,7 @@ export default function NavBar() {
                 </Grid>
               );
             })}
-            <Grid item container xs={11} sm={2}>
+            <Grid item container xs={12} sm={2}>
               {["Store"].map((route, index) => {
                 return (
                   <Grid
@@ -259,13 +258,21 @@ export default function NavBar() {
                 );
               })}
             </Grid>
-            <Grid item xs={11} sm={4} container justify="center">
+            <Grid item xs={12} sm={4} container justify="center">
               <Logo />
             </Grid>
-            <Grid item xs={11} sm={2}>
+            <Grid item xs={12} sm={2}>
               <AccountOptions />
             </Grid>
-            <Grid item xs={11} sm={2}>
+            <Grid item xs={12} sm={2} align="center" container>
+              <Box pt={2} pl={3} pr={1}>
+              <Grid item xs={12} sm={6}>
+                <Button variant="contained" component={RouterLink} to="/Store/Cart">
+                  <ShoppingCartIcon/>
+                </Button>
+              </Grid>
+              </Box>
+              <Grid item xs={12} sm={6} align="right">
               <UserContext.Consumer>
                 {(context) => {
                   if (context.isAuthenticated()) {
@@ -318,6 +325,7 @@ export default function NavBar() {
                   }
                 }}
               </UserContext.Consumer>
+              </Grid>
             </Grid>
           </Grid>
         </Toolbar>

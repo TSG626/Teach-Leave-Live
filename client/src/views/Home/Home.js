@@ -33,6 +33,7 @@ const ListCourses = () => {
       }
     })
     },[])
+    var count = 0;
   return (
     <React.Fragment>
       <Box m={2}>
@@ -40,9 +41,10 @@ const ListCourses = () => {
       </Box>
     <Table>
       <TableBody>
-    {courses.map((course, index) => {
+    {courses.slice(0,3).map((course, index) => {
+      count += 1;
     return (
-      <Box border={1}>
+      <Box border={1} m={3}>
         <Button fullWidth component={Link} to={`/Course/${course._id}`}>
         <Box p={3} m={2}  key={index} align="center">
             <TableRow>
@@ -55,13 +57,52 @@ const ListCourses = () => {
       </Box>
     );
   })}
+  <Box align="center" m={3}>
+    {count === 0 ? <Box mb={4} align="center"><Typography>No course? Lets buy some!</Typography></Box> : <React.Fragment/>}
+    <Button>Course Store</Button>
+  </Box>
   </TableBody>
   </Table>
     </React.Fragment>);
 };
 
+const ListBlogs = () => {
+  const [blogs, setBlogs] = useState([]);
+  useEffect(() => {
+    API.get("/api/blog/").then(res=>{
+      setBlogs(res.data);
+    })
+    },[])
+    var count = 0;
+    return (
+      <React.Fragment>
+        <Box m={2}>
+          <Typography variant="h4" align="center">Recent Blogs</Typography>
+        </Box>
+      <Table>
+        <TableBody>
+      {blogs.slice(0,3).map((blog, index) => {
+        count += 1;
+      return (
+        <Box border={1} m={3}>
+          <Button fullWidth component={Link} to={`/Blog/${blog._id}`}>
+          <Box p={3} m={2}  key={index} align="center">
+              <TableRow>
+                  <Typography component="h1" variant="h5" align="center">
+                    {blog.title}
+                  </Typography>
+              </TableRow>
+        </Box>
+        </Button>
+        </Box>
+      );
+    })}
+    </TableBody>
+    </Table>
+      </React.Fragment>);
+}
+
 export default function Landing({ match }) {
-  const [courses, setCourses] = useState("No courses listed!");
 
   return (
     <UserContext.Consumer>
@@ -70,13 +111,15 @@ export default function Landing({ match }) {
           return (
             <CssBaseline>
               <Grid align={"center"} xs={12}>
-                <Typography variant={"h2"} component={"h2"}>
-                  Welcome back, {context.user.firstname}!
-                </Typography>
+                <Box m={2}>
+                  <Typography variant={"h2"} component={"h2"}>
+                    Welcome back, {context.user.firstname}!
+                  </Typography>
+                </Box>
               </Grid>
               <Grid align={"center"} xs={12}>
                 <Box p={2} display="flex">
-                  <Box flexGrow={0.4}>
+                  <Box flexGrow={0.6}>
                     <Link2
                       target="_blank"
                       rel="noopener"
@@ -89,7 +132,7 @@ export default function Landing({ match }) {
                       />
                     </Link2>
                   </Box>
-                  <Box flexGrow={0.4}>
+                  <Box flexGrow={0.6}>
                     <Link2
                       target="_blank"
                       rel="noopener"
@@ -102,23 +145,12 @@ export default function Landing({ match }) {
                       />
                     </Link2>
                   </Box>
-                  <Box flexGrow={0.4}>
-                    <Link2
-                      target="_blank"
-                      rel="noopener"
-                      href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live"
-                    >
-                      <WebIcon
-                        style={{ fontSize: 100 }}
-                        fontSize="large"
-                        color="inherit"
-                      />
-                    </Link2>
-                  </Box>
                 </Box>
               </Grid>
-              <Grid xs={6}>{/* Holder for blogs */}</Grid>
-              <Grid xs={6}><ListCourses/></Grid>
+              <Grid container>
+              <Grid item xs={6}><ListBlogs/></Grid>
+              <Grid item xs={6}><ListCourses/></Grid>
+              </Grid>
             </CssBaseline>
           );
         } else {
