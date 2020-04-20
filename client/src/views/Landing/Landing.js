@@ -3,13 +3,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import WebIcon from "@material-ui/icons/Web";
-import { Box } from "@material-ui/core";
+import { Link, Box, Fade, Grow } from "@material-ui/core";
 import Link2 from "@material-ui/core/Link";
 import { CssBaseline, Container, Grid, Typography, Table, TableBody, TableRow } from "@material-ui/core";
 import Blog from "../Admin/Publishers/Blog/Blog";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import API from "../../modules/API.js";
+import { Slide } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   cardList: {
@@ -21,10 +22,13 @@ const useStyles = makeStyles((theme) => ({
 function Socials() {
   return (
     <React.Fragment>
+      <Slide direction="left" timeout={3000} mountOnEnter in="true">
       <Box m={2} pt={2}>
         <Typography align="center">Visit our Socials!</Typography>
       </Box>
+      </Slide>
     <Grid container direction="column">
+    <Slide direction="left" timeout={3000} mountOnEnter in="true">
       <Grid item>
         <Box align="center" m={1}>
         <Link2
@@ -40,6 +44,8 @@ function Socials() {
         </Link2>
         </Box>
       </Grid>
+      </Slide>
+      <Slide direction="left" timeout={3000} mountOnEnter in="true">
       <Grid item>
         <Box align="center">
         <Link2
@@ -55,6 +61,7 @@ function Socials() {
         </Link2>
         </Box>
       </Grid>
+      </Slide>
     </Grid>
     </React.Fragment>
   );
@@ -88,12 +95,15 @@ function LandingBody(props) {
 
   return (
     <div>
+      <Fade in="true" mountOnEnter timeout={3000}>
         <Box m={5}>
         <Typography align={"center"} variant="h3">
           Welcome to Teach. Leave. Live.
         </Typography>
         </Box>
-        <Grid container>
+      </Fade>
+      <Grow in="true" mountOnEnter timeout={3000}>
+      <Grid container>
           <Grid xs={6} item>
             <Box width={1}>
               <Typography color={"initial"} variant="h5" align="center">
@@ -143,6 +153,7 @@ function LandingBody(props) {
             </Box>
           </Grid>
         </Grid>
+      </Grow>
     </div>
   );
 }
@@ -228,12 +239,14 @@ export default function Landing() {
     <div>
       <LandingBody classes={classes} />
       <div style={{ position: "absolute", right: 1, top: 90 }}>
-        <Socials />
+          <Socials />
       </div>
-      <Grid container>
-        <Grid item xs={6}><ListBlogs/></Grid>
-        <Grid item xs={6}><ListCourses/></Grid>
-      </Grid>
+      <Grow in="true" mountOnEnter timeout={3000}>
+        <Grid container>
+          <Grid item xs={6}><ListBlogs/></Grid>
+          <Grid item xs={6}><ListCourses/></Grid>
+        </Grid>
+      </Grow>
     </div>
   );
 }
