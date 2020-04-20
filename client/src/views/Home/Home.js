@@ -61,7 +61,7 @@ const ListCourses = () => {
   })}
   <Box align="center" m={3}>
     {count === 0 ? <Box mb={4} align="center"><Typography>No course? Lets buy some!</Typography></Box> : <React.Fragment/>}
-    <Button>Course Store</Button>
+    <Button component={Link} to="/Store/">Course Store</Button>
   </Box>
   </TableBody>
   </Table>
