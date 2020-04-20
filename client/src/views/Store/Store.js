@@ -3,7 +3,7 @@ import { Route, Switch, Redirect, useLocation, Link } from 'react-router-dom';
 import Cart from "./Cart/Cart";
 import Summary from "./Summary/Summary";
 import { UserContext } from '../../contexts/UserContext';
-import { CssBaseline, Box, Grid } from '@material-ui/core';
+import { CssBaseline, Box, Grid, Fade, Grow } from '@material-ui/core';
 import API from '../../modules/API';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -75,11 +75,13 @@ const DefaultStore = () => {
         return(
             <div>
             <header>
-                <Box mt={3}>
+            <Fade  in="true" mountOnEnter timeout={2000}>
+                <Box mt={3} mb={3}>
                 <Typography variant="h2" align="center">
                     Course Store
                 </Typography>
                 </Box>
+              </Fade>
 
             </header>
 
@@ -94,6 +96,7 @@ const DefaultStore = () => {
                     if (exists === false && course.published === true) {
                       count += 1;
                         return(
+                          <Grow in="true" mountOnEnter timeout={2000}>
                             <Grid item>
                             <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
                             <Card className={classes.root}>
@@ -154,13 +157,14 @@ const DefaultStore = () => {
                           </Card>   
                             </Box>
                             </Grid>
+                            </Grow>
                         )
                     }
                     else {
                         return(<React.Fragment/>)
                     }
                 })}
-                {count === 0 ? <Typography>No courses available!</Typography>: <React.Fragment></React.Fragment>}
+                {count === 0 ?       <Grow in="true" mountOnEnter timeout={2000}><Typography>No courses available!</Typography></Grow>: <React.Fragment></React.Fragment>}
             </Grid>
 
         </div>
