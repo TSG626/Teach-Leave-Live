@@ -14,6 +14,7 @@ import {
   makeStyles,
   ListItemIcon,
   Drawer,
+  Box,
 } from "@material-ui/core";
 import {
   Book as CourseIcon,
