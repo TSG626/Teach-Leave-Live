@@ -1,17 +1,15 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../../../contexts/UserContext";
-import { Redirect, Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import {
   TextField,
   Typography,
   makeStyles,
-  Box,
   Container,
   Grid,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import API from "../../../modules/API";
-import Avatar from "react-avatar";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -68,7 +66,7 @@ const ChangeUsername = () => {
             email: userInfo.user.email,
           })
             .then((res) => {
-              if (res.status == 200) {
+              if (res.status === 200) {
                 alert("Username changed!");
                 setMessage("");
                 isChanged(true);

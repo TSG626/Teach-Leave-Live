@@ -365,8 +365,6 @@ const sendCodeEmail = async (email, code) => {
     email: userInfo.get("email"),
     firstname: userInfo.get("firstname"),
   };
-  console.log(code);
-  console.log(sendInfo);
   sendEmail.forgotPassword(code, sendInfo);
   return "got here";
 };
@@ -436,7 +434,6 @@ router.post("/register", checkNotAuthenticated, registerHandler);
 
 //confirm email
 router.get("/confirmEmail", (req, res) => {
-  console.log(req.query.key);
   User.findOneAndUpdate(
     { key_for_verify: req.query.key },
     { $set: { email_verified: true } },
@@ -449,12 +446,10 @@ router.get("/confirmEmail", (req, res) => {
           '<script type="text/javascript">alert("Not verified"); window.close();</script>'
         );
       } else {
-        console.log(user);
         userInfo = {
           email: user.email,
           firstname: user.firstname,
         };
-        console.log(userInfo);
         sendEmail.welcomeEmail(userInfo);
         res.send(
           '<script type="text/javascript">alert("Successfully verified"); window.close();</script>'
