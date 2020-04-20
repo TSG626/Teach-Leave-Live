@@ -7,6 +7,7 @@ const express = require('express'),
     User = require('../models/UserModel.js'),
     PasswordReset = require('../models/PasswordResetModel.js'),
     bcrypt = require('bcrypt'),
+    crypto = require('crypto'),
     jwt = require('jsonwebtoken'),
     sendEmail = require('../email/sendEmail.js');
 
@@ -326,7 +327,7 @@ const updatePasswordUser = async (req, res, done) => {
 
 
 const generateCode = () => {
-    return Math.random().toString(36).slice(-6).toUpperCase();
+    return crypto.randomBytes(32).toString('base64').substr(125, 5);
 };
 
 const sendCodeEmail = async (email, code) => {

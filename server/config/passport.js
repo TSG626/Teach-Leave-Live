@@ -1,7 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy,
     passport = require('passport'),
     bcrypt = require('bcrypt'),
-    crypto = require('crypto'),
     sendEmail = require('../email/sendEmail'),
     User = require('../models/UserModel.js'),
     config = require('./config'),
