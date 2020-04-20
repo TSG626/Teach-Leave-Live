@@ -15,9 +15,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
-  heading: {
-    marginTop: "2.5%",
-  },
   container: {
     width: "70%",
     marginBottom: "2.5%",

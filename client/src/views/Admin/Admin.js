@@ -7,18 +7,13 @@ import Course from "./Publishers/Course/Course";
 import NewsletterPublisher from "./Publishers/Newsletter/NewsletterPublisher";
 import UserEditor from "./Publishers/User/UserEditor";
 import {
-  Box,
-  CssBaseline,
   Container,
   List,
   ListItem,
-  Grid,
   ListItemText,
   makeStyles,
   ListItemIcon,
   Drawer,
-  Typography,
-  AppBar,
 } from "@material-ui/core";
 import {
   Book as CourseIcon,
@@ -168,7 +163,7 @@ const Admin = ({ match }) => {
   return (
     <UserContext.Consumer>
       {(context) => {
-        if (context.user.status == 0 || context.user.status == 1) {
+        if (context.user.status === 0 || context.user.status === 1) {
           return (
             <div className={classes.root}>
               <NavMenu />

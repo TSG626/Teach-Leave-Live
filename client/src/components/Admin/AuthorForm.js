@@ -1,11 +1,7 @@
 import React, { useState, useContext } from "react";
-import { Delete as DeleteIcon } from "@material-ui/icons";
 import {
-  Grid,
   Tooltip,
   TextField,
-  Button,
-  useStyles,
   CircularProgress,
   Chip,
   Avatar,
@@ -13,7 +9,6 @@ import {
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import API from "../../modules/API";
 import { useEffect } from "react";
-import themes from "../../themes";
 import { UserContext } from "../../contexts/UserContext";
 
 function AuthorForm(props) {
@@ -49,7 +44,6 @@ function AuthorForm(props) {
 
   function handleChange(event, author, reason) {
     let newAuthors = author.map((a) => a._id);
-    console.log(authors);
     if (!newAuthors.includes(user._id)) {
       newAuthors = [user._id, ...newAuthors];
     }
