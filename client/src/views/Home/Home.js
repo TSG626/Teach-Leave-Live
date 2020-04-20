@@ -13,6 +13,8 @@ import {
   TableRow,
   TableCell,
   Button,
+  Fade,
+  Grow,
 } from "@material-ui/core";
 import { Redirect, Route, Switch, Link } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
@@ -111,14 +113,17 @@ export default function Landing({ match }) {
           return (
             <CssBaseline>
               <Grid align={"center"} xs={12}>
+              <Fade in="true" mountOnEnter timeout={3000}>
                 <Box m={2}>
                   <Typography variant={"h2"} component={"h2"}>
                     Welcome back, {context.user.firstname}!
                   </Typography>
                 </Box>
+                </Fade>
               </Grid>
               <Grid align={"center"} xs={12}>
                 <Box p={2} display="flex">
+                <Grow in="true" mountOnEnter timeout={3000}>
                   <Box flexGrow={0.6}>
                     <Link2
                       target="_blank"
@@ -132,6 +137,8 @@ export default function Landing({ match }) {
                       />
                     </Link2>
                   </Box>
+                  </Grow>
+                  <Grow in="true" mountOnEnter timeout={3000}>
                   <Box flexGrow={0.6}>
                     <Link2
                       target="_blank"
@@ -145,11 +152,16 @@ export default function Landing({ match }) {
                       />
                     </Link2>
                   </Box>
+                  </Grow>
                 </Box>
               </Grid>
               <Grid container>
+              <Grow in="true" mountOnEnter timeout={3000}>
               <Grid item xs={6}><ListBlogs/></Grid>
+              </Grow>
+              <Grow in="true" mountOnEnter timeout={3000}>
               <Grid item xs={6}><ListCourses/></Grid>
+              </Grow>
               </Grid>
             </CssBaseline>
           );
