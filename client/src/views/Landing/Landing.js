@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Route, Switch } from "react-router-dom";
 import InstagramIcon from "@material-ui/icons/Instagram";
@@ -6,7 +6,7 @@ import FacebookIcon from "@material-ui/icons/Facebook";
 import WebIcon from "@material-ui/icons/Web";
 import { Link, Box } from "@material-ui/core";
 import Link2 from "@material-ui/core/Link";
-import { CssBaseline, Container, Grid, Typography } from "@material-ui/core";
+import { CssBaseline, Container, Grid, Typography, Table, TableBody, TableRow } from "@material-ui/core";
 import Blog from "../Admin/Publishers/Blog/Blog";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -21,8 +21,13 @@ const useStyles = makeStyles((theme) => ({
 
 function Socials() {
   return (
+    <React.Fragment>
+      <Box m={2} pt={2}>
+        <Typography align="center">Visit our Socials!</Typography>
+      </Box>
     <Grid container direction="column">
       <Grid item>
+        <Box align="center" m={1}>
         <Link2
           target="_blank"
           rel="noopener"
@@ -34,8 +39,10 @@ function Socials() {
             color="inherit"
           />
         </Link2>
+        </Box>
       </Grid>
       <Grid item>
+        <Box align="center">
         <Link2
           target="_blank"
           rel="noopener"
@@ -47,17 +54,10 @@ function Socials() {
             color="inherit"
           />
         </Link2>
-      </Grid>
-      <Grid item>
-        <Link2
-          target="_blank"
-          rel="noopener"
-          href="https://www.teacherspayteachers.com/Store/Teach-Leave-Live"
-        >
-          <WebIcon style={{ fontSize: 50 }} fontSize="small" color="inherit" />
-        </Link2>
+        </Box>
       </Grid>
     </Grid>
+    </React.Fragment>
   );
 }
 
@@ -89,16 +89,18 @@ function LandingBody(props) {
 
   return (
     <div>
-      <Container maxWidth="lg">
-        <Typography align={"center"} variant="h2">
-          Welcome to TLL
+        <Box m={5}>
+        <Typography align={"center"} variant="h3">
+          Welcome to Teach. Leave. Live.
         </Typography>
-        <Grid container direction="row" spacing={0}>
-          <Grid item>
-            <Box width={1 / 2}>
-              <Typography color={"initial"} variant="h6">
-                About TLL
+        </Box>
+        <Grid container>
+          <Grid xs={6} item>
+            <Box width={1}>
+              <Typography color={"initial"} variant="h5" align="center">
+                About T.L.L.
               </Typography>
+              <Box pt={1} ml={7} mr={7}>
               <Typography varient={"body2"}>
                 TLL is a web-based platform designed to provide tools to
                 teachers so that they can teach their hearts out, leave work at
@@ -106,12 +108,14 @@ function LandingBody(props) {
                 teachers to learn how to efficiently manage time and organize
                 their work.
               </Typography>
+              </Box>
             </Box>
           </Grid>
-          <Grid item>
-            <Box width={1}>
-              <Typography variant="h6">Join our newsletter</Typography>
+          <Grid item xs={6}>
+            <Box width={1} >
+              <Typography variant="h5" align="center">Join Our Newsletter!</Typography>
               <form onSubmit={(e) => handleEmailSubmit(e)}>
+                <Box ml={7} mr={7}>
                 <TextField
                   variant="filled"
                   margin="normal"
@@ -123,6 +127,8 @@ function LandingBody(props) {
                   autoComplete="email"
                   autoFocus
                 />
+                </Box>
+                <Box ml={7} mr={7}>
                 <Button
                   type="submit"
                   fullWidth
@@ -132,19 +138,92 @@ function LandingBody(props) {
                 >
                   Sign Up
                 </Button>
+                  </Box>
                 <Typography variant="subtitle">{message}</Typography>
               </form>
             </Box>
           </Grid>
         </Grid>
-      </Container>
     </div>
   );
+}
+const ListBlogs = () => {
+  const [blogs, setBlogs] = useState([]);
+  useEffect(() => {
+    API.get("/api/blog/").then(res=>{
+      setBlogs(res.data);
+    })
+    },[])
+    var count = 0;
+    return (
+      <React.Fragment>
+            <Box m={2} pt={3}>
+              <Typography variant="h5" align="center">Recent Blogs</Typography>
+            </Box>
+          <Table >
+            <TableBody>
+          {blogs.slice(0,3).map((blog, index) => {
+            count += 1;
+          return (
+            <Box border={1} m={3} >
+              <Button fullWidth component={Link} to={`/Blog/${blog._id}`}> 
+              <Box p={2} m={2}  key={index} align="center">
+                  <TableRow>
+                      <Typography component="h1" variant="h5" align="center">
+                        {blog.title}
+                      </Typography>
+                  </TableRow>
+            </Box>
+            </Button>
+            </Box>
+          );
+        })}
+        {count === 0 ? <Box m={3} align="center"><Typography>No Blogs!</Typography></Box> : <React.Fragment/>}
+        </TableBody>
+        </Table>
+       </React.Fragment>);
+}
+
+const ListCourses = () => {
+  const [courses, setCourses] = useState([]);
+  useEffect(() => {
+    API.get("/api/course/").then(res=>{
+      setCourses(res.data)
+    })
+    },[])
+    var count = 0;
+  return (
+    <React.Fragment>
+      <Box m={2} pt={3}>
+        <Typography variant="h5" align="center">Recent Course</Typography>
+      </Box>
+    <Table>
+      <TableBody>
+    {courses.slice(0,3).map((course, index) => {
+      count += 1;
+    return (
+      <Box border={1} m={3}>
+        <Box p={1} m={2}  key={index} align="center">
+            <TableRow>
+                <Typography component="h1" variant="h5" align="center">
+                  {course.title}
+                </Typography>
+                <Typography variant="secondary">
+                  {course.description}
+                </Typography>
+            </TableRow>
+      </Box>
+      </Box>
+    );
+  })}
+    {count === 0 ? <Box m={3} align="center"><Typography>No Courses!</Typography></Box> : <React.Fragment/>}
+  </TableBody>
+  </Table>
+    </React.Fragment>);
 }
 
 export default function Landing() {
   const classes = useStyles();
-  const [message, setMessage] = useState("");
 
   return (
     <div>
@@ -152,6 +231,10 @@ export default function Landing() {
       <div style={{ position: "absolute", right: 1, top: 90 }}>
         <Socials />
       </div>
+      <Grid container>
+        <Grid item xs={6}><ListBlogs/></Grid>
+        <Grid item xs={6}><ListCourses/></Grid>
+      </Grid>
     </div>
   );
 }
