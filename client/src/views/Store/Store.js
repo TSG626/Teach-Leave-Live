@@ -80,11 +80,7 @@ const DefaultStore = () => {
                     Course Store
                 </Typography>
                 </Box>
-                <div>
-                    <Box align="center" mb={3}>
-                      <Button component={Link} to="/Store/Cart"><ShoppingCartIcon/></Button>
-                    </Box>
-                </div>
+
             </header>
 
             <Grid container justify="center">

@@ -39,7 +39,7 @@ const Authorization = () => {
                 component={ForgotPassword}
               />
               <Route path="/Contact" component={Contact} />
-              <Route path="*" component={NotFound} />
+              <Route path="*" component={Login} />
             </Switch>
           );
         } else {
