@@ -1,14 +1,15 @@
-const express = require("express"),
-  passport = require("passport"),
-  passwordmaster = require("../config/passwordreset.js"),
-  authEmail = require("../config/authEmail"),
-  validator = require("validator"),
-  config = require("../config/config"),
-  User = require("../models/UserModel.js"),
-  PasswordReset = require("../models/PasswordResetModel.js"),
-  bcrypt = require("bcrypt"),
-  jwt = require("jsonwebtoken"),
-  sendEmail = require("../email/sendEmail.js");
+const express = require('express'),
+    passport = require('passport'),
+    passwordmaster = require('../config/passwordreset.js'),
+    authEmail = require('../config/authEmail'),
+    validator = require('validator'),
+    config = require('../config/config'),
+    User = require('../models/UserModel.js'),
+    PasswordReset = require('../models/PasswordResetModel.js'),
+    bcrypt = require('bcrypt'),
+    crypto = require('crypto'),
+    jwt = require('jsonwebtoken'),
+    sendEmail = require('../email/sendEmail.js');
 
 const router = express.Router();
 
@@ -356,7 +357,7 @@ const updatePasswordUser = async (req, res, done) => {
 };
 
 const generateCode = () => {
-  return Math.random().toString(36).slice(-6).toUpperCase();
+    return crypto.randomBytes(32).toString('base64').substr(25, 6).toUpperCase();
 };
 
 const sendCodeEmail = async (email, code) => {
