@@ -11,6 +11,8 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import API from "../../modules/API.js";
 import { Slide } from "@material-ui/core";
+import { Link as RouterLink } from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
   cardList: {
@@ -176,7 +178,7 @@ const ListBlogs = () => {
             count += 1;
           return (
             <Box border={1} m={3} >
-              <Button fullWidth component={Link} to={`/Blog/${blog._id}`}> 
+              <Button fullWidth component={RouterLink} to={`/Blog/${blog._id}`}> 
               <Box p={2} m={2}  key={index} align="center">
                   <TableRow>
                       <Typography component="h1" variant="h5" align="center">

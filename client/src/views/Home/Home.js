@@ -95,6 +95,7 @@ const ListBlogs = () => {
         </Box>
       );
     })}
+    {count === 0 ? <Box mt={2}><Typography align="center">No Blogs!</Typography></Box>:<React.Fragment/>}
     </TableBody>
     </Table>
       </React.Fragment>);
