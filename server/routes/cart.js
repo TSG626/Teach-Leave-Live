@@ -13,8 +13,6 @@ router.use(cors());
 
 router.post('/payment', (req, res) => {
     const {product, token, username} = req.body;
-    console.log("PRODUCT", product);
-    console.log("PRICE", product.price);
     //avoids getting paid twice
     const idempotencyKey = uuid();
     //creates customer

@@ -1,12 +1,9 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  CssBaseline,
   Typography,
   Grid,
-  MuiThemeProvider,
 } from "@material-ui/core";
-import themes from "../themes";
 import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,8 +22,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function NotFound({ match }) {
-  const classes = useStyles();
-  let string = "";
   return (
     <div>
       <Grid>
