@@ -1,60 +1,99 @@
-import  React, { useState } from "react";
-import { Delete as DeleteIcon } from '@material-ui/icons';
-import { Grid, Tooltip, TextField, Button, useStyles } from "@material-ui/core";
+import React, { useState, useContext } from "react";
+import {
+  Tooltip,
+  TextField,
+  CircularProgress,
+  Chip,
+  Avatar,
+} from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import API from "../../modules/API";
+import { useEffect } from "react";
+import { UserContext } from "../../contexts/UserContext";
 
-export default function AuthorForm(props){
-    const [author,setAuthor] = useState('');
+function AuthorForm(props) {
+  const { authors, setAuthors } = props;
+  const { user } = useContext(UserContext);
+  const [users, setUsers] = useState([]);
 
-    function addAuthor(a){
-        props.setAuthors(props.authors.concat(a));
+  function addAuthor(a) {
+    setAuthors(authors.concat(a));
+  }
+
+  useEffect(() => {
+    addAuthor(user._id);
+  }, []);
+
+  const loading = users.length === 0;
+
+  useEffect(() => {
+    let active = true;
+    if (!loading) {
+      return undefined;
     }
+    (async () => {
+      const response = await API.get("/api/admin/getAllUsers");
+      if (active && response.status === 200) {
+        setUsers(response.data);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [loading]);
 
-    function removeAuthor(index){
-        const newAuthors = props.authors.filter((a, i) => {
-            if(i !== index) return(a);
-        }) 
-        props.setAuthors(newAuthors);
+  function handleChange(event, author, reason) {
+    let newAuthors = author.map((a) => a._id);
+    if (!newAuthors.includes(user._id)) {
+      newAuthors = [user._id, ...newAuthors];
     }
+    setAuthors(newAuthors);
+  }
 
-    function handleAuthorSubmit(event){
-        if(event.key === 'Enter'){
-            addAuthor(document.getElementById('author').value);
-            setAuthor('');
-        }
-    }
-
-    return(
-        <Grid container>
-            <Tooltip arrow title="Type a name and press Enter">
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="author"
-                label="Authors"
-                name="author"
-                value={author}
-                onChange={(event) => setAuthor(event.target.value)}
-                onKeyPress={handleAuthorSubmit}
+  return (
+    <Autocomplete
+      multiple
+      value={users.filter((user) => authors.includes(user._id))}
+      loading={loading}
+      onChange={handleChange}
+      style={{ width: "100%" }}
+      options={users}
+      getOptionLabel={(option) => option.firstname + " " + option.lastname}
+      filterSelectedOptions
+      getOptionSelected={(option) => authors.includes(option._id)}
+      renderTags={(value, getTagProps) =>
+        value.map((option, index) => (
+          <Tooltip key={index} title={option.username}>
+            <Chip
+              avatar={<Avatar src={option.avatar} />}
+              label={option.firstname + " " + option.lastname}
+              {...getTagProps({ index })}
+              disabled={index === 0}
             />
-            </Tooltip>
-            <Grid container>
-                {props.authors.map((author, index) => {
-                    return(
-                        <Grid item key={index} style={{paddingRight: 5, paddingBottom: 5}}>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                endIcon={<DeleteIcon/>}
-                                onClick={(event) => removeAuthor(index)}
-                            >
-                                {author}
-                            </Button>
-                        </Grid>
-                    )
-                })}
-            </Grid>
-        </Grid>   
-    )
+          </Tooltip>
+        ))
+      }
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Author(s)"
+          variant="outlined"
+          placeholder="Author"
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <React.Fragment>
+                {loading ? (
+                  <CircularProgress color="inherit" size={20} />
+                ) : null}
+                {params.InputProps.endAdornment}
+              </React.Fragment>
+            ),
+          }}
+        />
+      )}
+    />
+  );
 }
+
+export default AuthorForm;
