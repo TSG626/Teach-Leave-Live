@@ -13,7 +13,6 @@ module.exports = {
     resendEmail: async(req) => {
         const email = req.body.email;
         const key = crypto.randomBytes(256).toString('hex').substr(35, 10);
-        console.log(key);
         UserModel.findOneAndUpdate({'email': email}, {$set:{'key_for_verify': key}}, (err, user) => {
             if (err) {
                 console.log(err);

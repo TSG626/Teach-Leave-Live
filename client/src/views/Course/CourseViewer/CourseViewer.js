@@ -28,9 +28,7 @@ function CourseViewer(props){
 
     useEffect(()=>{
         async function fetchData(){
-            console.log(id);
             API.get(`/api/course/`, {id: id}).then((res)=>{
-                console.log(res);
                 if(res.status === 200){
                     setCourse(res.data);
                 }else{
@@ -49,7 +47,6 @@ function CourseViewer(props){
         }else{
             setActiveStep({...activeStep, section: activeStep.section + 1});
         }
-        console.log(activeStep);
     };
   
     const handleBack = () => {

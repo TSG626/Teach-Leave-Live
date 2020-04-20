@@ -1,25 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import MaterialTable from "material-table";
 import {
-  Edit,
-  Delete,
-  VerifiedUser,
-  ViewModule,
-  ViewComfy,
   ViewHeadline,
   Search,
 } from "@material-ui/icons";
 import {
   Chip,
   Switch,
-  CircularProgress,
   Avatar,
   Tooltip,
 } from "@material-ui/core";
-import themes from "../../../../themes";
 import API from "../../../../modules/API";
 import { Redirect } from "react-router-dom";
-import { red } from "@material-ui/core/colors";
 
 function CourseTable(props) {
   const [redirect, setRedirect] = useState("");
@@ -29,8 +21,7 @@ function CourseTable(props) {
     return new Promise((resolve, reject) => {
       API.get("/api/course/")
         .then((res) => {
-          if (res.status == 200) {
-            console.log(res.data);
+          if (res.status === 200) {
             resolve({
               data: res.data.map((course) => {
                 return {
@@ -73,7 +64,7 @@ function CourseTable(props) {
     }
   }
 
-  if (redirect != "") {
+  if (redirect !== "") {
     return <Redirect to={redirect} />;
   }
 

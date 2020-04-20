@@ -60,7 +60,7 @@ function PriceForm(props) {
           <FormControlLabel
             value="price"
             label={
-              (radio == "price" && (
+              (radio === "price" && (
                 <CurrencyTextField
                   variant="outlined"
                   currencySymbol="$"
@@ -99,12 +99,12 @@ export default function CourseCreator(props) {
       title: document.getElementById("title").value,
       authors: authors,
       description: document.getElementById("description").value,
-      free: price == 0,
+      free: price === 0,
       price: price,
       subject: subject,
     })
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           props.setAdding(false);
           window.location.reload(false);
           return false;
