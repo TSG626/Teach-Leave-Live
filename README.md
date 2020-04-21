@@ -48,3 +48,4 @@ https://teachleavelive.herokuapp.com/
 - Nodemon: This assists developers utilizing Node.js by handling file changes.
 - StripeAPI: This sets up payments for the web application to purchase courses.
 - React Avatar: This allows users to upload an avatar to their account.
+- Axios: This is the API package.
