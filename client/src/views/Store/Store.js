@@ -60,10 +60,12 @@ const DefaultStore = () => {
             console.log(err);
         });
         API.get('/api/user/getCart', {username: userInfo.user.username}).then(res=>{
+          if (res.data !== null)
             setCart(res.data);
         })
         API.get('/api/user/getCourses', {username: userInfo.user.username}).then(res=>{
             for (var i = 0; i < res.data.length; i++) {
+              if (res.data[i] !== null)
                 setCart(oldArr => [...oldArr, res.data[i]]);
             }
         })
@@ -105,7 +107,7 @@ const DefaultStore = () => {
                               <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
                                 {course.subject}
                               </Typography>
-                              <Typography variant="h5" component="h2" align="center">
+                              <Typography variant="h6" component="h2" align="center">
                                 {course.title}
                               </Typography>
                               <Box mt={1}>
