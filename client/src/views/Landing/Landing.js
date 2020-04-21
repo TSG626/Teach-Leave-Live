@@ -8,6 +8,9 @@ import Link2 from "@material-ui/core/Link";
 import { CssBaseline, Container, Grid, Typography, Table, TableBody, TableRow } from "@material-ui/core";
 import Blog from "../Admin/Publishers/Blog/Blog";
 import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
 import TextField from "@material-ui/core/TextField";
 import API from "../../modules/API.js";
 import { Slide } from "@material-ui/core";
@@ -24,15 +27,10 @@ const useStyles = makeStyles((theme) => ({
 function Socials() {
   return (
     <React.Fragment>
-      <Slide direction="left" timeout={3000} mountOnEnter in="true">
-      <Box m={2} pt={2}>
-        <Typography align="center">Visit our Socials!</Typography>
-      </Box>
-      </Slide>
     <Grid container direction="column">
     <Slide direction="left" timeout={3000} mountOnEnter in="true">
       <Grid item>
-        <Box align="center" m={1}>
+        <Box display="flex" align="center" m={1} mt={6}>
         <Link2
           target="_blank"
           rel="noopener"
@@ -107,23 +105,27 @@ function LandingBody(props) {
       <Grow in="true" mountOnEnter timeout={3000}>
       <Grid container>
           <Grid xs={6} item>
-            <Box width={1}>
-              <Typography color={"initial"} variant="h5" align="center">
-                About T.L.L.
-              </Typography>
-              <Box pt={1} ml={7} mr={7}>
-              <Typography varient={"body2"}>
-                TLL is a web-based platform designed to provide tools to
-                teachers so that they can teach their hearts out, leave work at
-                work, and live life with intention. We provide resources for
-                teachers to learn how to efficiently manage time and organize
-                their work.
-              </Typography>
-              </Box>
+            <Box width={1} m={4}>
+              <Paper>
+                  <Typography color={"initial"} variant="h5" align="center">
+                    About T.L.L.
+                  </Typography>
+                  <Box pt={1} ml={7} mr={7}>
+                  <List>
+                    <ListItem>
+                      TLL is a web-based platform designed to provide tools to
+                      teachers so that they can teach their hearts out, leave work at
+                      work, and live life with intention. We provide resources for
+                      teachers to learn how to efficiently manage time and organize
+                      their work.
+                    </ListItem>
+                  </List>
+                </Box>
+              </Paper>
             </Box>
           </Grid>
           <Grid item xs={6}>
-            <Box width={1} >
+            <Box width={1} m={4}>
               <Typography variant="h5" align="center">Join Our Newsletter!</Typography>
               <form onSubmit={(e) => handleEmailSubmit(e)}>
                 <Box ml={7} mr={7}>
@@ -149,14 +151,14 @@ function LandingBody(props) {
                 >
                   Sign Up
                 </Button>
-                  </Box>
                 <Typography variant="subtitle">{message}</Typography>
-              </form>
-            </Box>
-          </Grid>
+              </Box>
+            </form>
+          </Box>
         </Grid>
-      </Grow>
-    </div>
+      </Grid>
+    </Grow>
+  </div>
   );
 }
 const ListBlogs = () => {
@@ -178,7 +180,7 @@ const ListBlogs = () => {
             count += 1;
           return (
             <Box border={1} m={3} >
-              <Button fullWidth component={RouterLink} to={`/Blog/${blog._id}`}> 
+              <Button fullWidth component={RouterLink} to={`/Blog/${blog._id}`}>
               <Box p={2} m={2}  key={index} align="center">
                   <TableRow>
                       <Typography component="h1" variant="h5" align="center">
