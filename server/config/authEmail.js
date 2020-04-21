@@ -5,7 +5,7 @@ const express = require('express'),
 
 module.exports = {
     sendAuthenticationEmail: async (req, userInfo) => {
-        const key = crypto.randomBytes(32).toString('base64').substr(119, 10);
+        const key = crypto.randomBytes(32).toString('base64').substr(25, 10);
         userInfo.key_for_verify = key;
         const url = 'http://' + req.get('host')+'/api/confirmEmail'+'?key='+key;
         sendEmail.userAuthenticate(url, userInfo);
