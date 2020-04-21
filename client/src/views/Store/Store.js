@@ -3,7 +3,7 @@ import { Route, Switch, Redirect, useLocation, Link } from 'react-router-dom';
 import Cart from "./Cart/Cart";
 import Summary from "./Summary/Summary";
 import { UserContext } from '../../contexts/UserContext';
-import { CssBaseline, Box, Grid, Fade, Grow } from '@material-ui/core';
+import { CssBaseline, Box, Grid, Fade, Grow, Tooltip, TextField, Select, MenuItem } from '@material-ui/core';
 import API from '../../modules/API';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -19,7 +19,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 
 const useStyles = makeStyles(theme => ({
     root: {
-      minWidth: 275,
+      minWidth: 700,
     },
     bullet: {
       display: 'inline-block',
@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
       transform: 'scale(0.8)',
     },
     title: {
-      fontSize: 14,
+      fontSize: 20,
     },
     pos: {
       marginBottom: 12,
@@ -41,6 +41,8 @@ const useStyles = makeStyles(theme => ({
 const DefaultStore = () => {
     const [courses, setCourses] = useState([]);
     const [cart, setCart] = useState([]);
+    const [priceFilter, setPriceFilter] = useState(null);
+    const [search, setSearch] = useState('');
     const classes = useStyles();
 
 
@@ -48,7 +50,7 @@ const DefaultStore = () => {
     const handleClick = (props) => {
         API.post('/api/user/addToCart',{'username': userInfo.user.username, 'title': props.title}).then(res =>{
             alert("Added " + props.title + " to Shopping Cart!");
-            window.location.pathname = "/Store/Cart"; 
+            window.location.pathname = "/Store/Cart";
             return false;
         })
     }
@@ -71,6 +73,10 @@ const DefaultStore = () => {
         })
     }, []);
 
+    const handlePriceFilterChange = (event) => {
+        setPriceFilter(event.target.value);
+    }
+
     var count = 0
     if(useLocation().pathname === "/Store/")
     {
@@ -79,9 +85,32 @@ const DefaultStore = () => {
             <header>
             <Fade  in="true" mountOnEnter timeout={2000}>
                 <Box mt={3} mb={3}>
-                <Typography variant="h2" align="center">
-                    Course Store
-                </Typography>
+                  <Grid container direction='column' alignContent='center'>
+                    <Grid item>
+                      <Typography variant="h2">
+                          Course Store
+                      </Typography>
+                    </Grid>
+                    <TextField
+                    id='search'
+                    variant='filled'
+                    label='search'
+                    onChange={() => setSearch(document.getElementById('search').value)}
+                    />
+                    <form>
+                      <Select
+                        id='priceFilter'
+                        value={priceFilter}
+                        onChange={handlePriceFilterChange}
+                        displayEmpty
+                      >
+                        <MenuItem value={null}>Price filter</MenuItem>
+                        <MenuItem value={0}>Free</MenuItem>
+                        <MenuItem value={1}>$1 or less</MenuItem>
+                        <MenuItem value={5}>$5 or less</MenuItem>
+                      </Select>
+                    </form>
+                  </Grid>
                 </Box>
               </Fade>
 
@@ -94,14 +123,20 @@ const DefaultStore = () => {
                       cart.map(item => {
                         if (item === course._id)
                             exists = true;
-                    })
+                      })
                     }
-                    if (exists === false && course.published === true) {
+                    if (exists === false && course.published === true
+                      && (course.title.toLowerCase().includes(search.toLowerCase())
+                        || course.subject.toLowerCase().includes(search.toLowerCase())
+                        || course.description.toLowerCase().includes(search.toLowerCase())
+                      ) && (priceFilter === null || course.price <= priceFilter)
+                    ){
                       count += 1;
+                      console.log(course.price + ' ' + priceFilter);
                         return(
                           <Grow in="true" mountOnEnter timeout={2000}>
                             <Grid item>
-                            <Box width="25%" ml={3} mr={3} mb={3} alignItems="center">
+                            <Box width="50%">
                             <Card className={classes.root}>
                             <CardContent>
                               <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
@@ -110,6 +145,9 @@ const DefaultStore = () => {
                               <Typography variant="h6" component="h2" align="center">
                                 {course.title}
                               </Typography>
+                              <Box display="flex" justifyContent="center">
+                                <Typography noWrap={true} color="textSecondary">{course.description}</Typography>
+                              </Box>
                               <Box mt={1}>
                               {course.price === 0 ? <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
                                 FREE
@@ -118,15 +156,23 @@ const DefaultStore = () => {
                                 </Typography>}
                               </Box>
                             </CardContent>
-                            <Grid container>
+                            <Grid container justify='space-between'>
                                 <Grid item>
-                                    <Box ml={2} mr={7}><Button size="small" onClick={() => handleClick(course)}><AddIcon/></Button></Box>
+                                    <Box p={4} ml={6}>
+                                      <Tooltip title='Add to cart'>
+                                        <Button size="small" onClick={() => handleClick(course)}><AddIcon/></Button>
+                                      </Tooltip>
+                                    </Box>
                                 </Grid>
                                 <Grid item>
                                 <PopupState variant="popover" popupId="demo-popup-popover">
                                 {(popupState) => (
                                   <div>
-                                    <Box mb={2} ml={7}><Button {...bindTrigger(popupState)}><OpenInNewIcon/></Button></Box>
+                                    <Box p={4} mr={6}>
+                                      <Tooltip title='More information'>
+                                        <Button {...bindTrigger(popupState)}><OpenInNewIcon/></Button>
+                                      </Tooltip>
+                                    </Box>
                                     <Popover
                                       {...bindPopover(popupState)}
                                       anchorOrigin={{
@@ -139,17 +185,16 @@ const DefaultStore = () => {
                                       }}
                                     >
                                       <Box p={2}>
-                                        <Typography align="Center">Description</Typography>
                                         <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
                                           {course.description}
-                                        </Typography>                                      
-                                        </Box>
-                                        <Box p={2}>
-                                        <Typography align="Center">Number of Modules</Typography>
+                                        </Typography>
+                                      </Box>
+                                      <Box p={2}>
+                                        <Typography align="Center" className={classes.title}>Number of Modules</Typography>
                                         <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
                                           {course.modules.length}
-                                        </Typography> 
-                                        </Box>
+                                        </Typography>
+                                      </Box>
                                     </Popover>
                                     <Backdrop className={classes.backdrop} open={popupState.isOpen} onClick={popupState.close}/>
                                   </div>
@@ -157,7 +202,7 @@ const DefaultStore = () => {
                               </PopupState>
                                 </Grid>
                             </Grid>
-                          </Card>   
+                          </Card>
                             </Box>
                             </Grid>
                             </Grow>
