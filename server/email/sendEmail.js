@@ -23,10 +23,13 @@ module.exports = {
         var compiledEmail = Hogan.compile(emailTemplate)
 
         var mailOptions = {
-            from: config.username,
+            from: 'Teach Leave Live',
             to: userInfo.email,
             subject: 'Welcome to Teach Leave Live',
-            html: compiledEmail.render({ firstname: userInfo.firstname })
+            html: compiledEmail.render({
+                firstname: userInfo.firstname,
+                logo: config.website.url + '/logo.png', instagram: config.website.url + '/instagram.png', url: config.website.url
+            })
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -40,10 +43,13 @@ module.exports = {
         var compiledEmail = Hogan.compile(emailTemplate)
 
         var mailOptions = {
-            from: config.username,
+            from: 'Teach Leave Live',
             to: userInfo.email,
             subject: 'Teach Leave Live: Forgot Password',
-            html: compiledEmail.render({ firstname: userInfo.firstname, code: key })
+            html: compiledEmail.render({
+                firstname: userInfo.firstname, code: key,
+                logo: config.website.url + '/logo.png', instagram: config.website.url + '/instagram.png', url: config.website.url
+            })
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -57,10 +63,13 @@ module.exports = {
         var compiledEmail = Hogan.compile(emailTemplate);
 
         var mailOptions = {
-            from: config.username,
+            from: 'Teach Leave Live',
             to: userInfo.email,
             subject: 'Teach Leave Live: Please verify your email',
-            html: compiledEmail.render({ firstname: userInfo.firstname, url: url })
+            html: compiledEmail.render({
+                firstname: userInfo.firstname, url: url,
+                logo: config.website.url + '/logo.png', instagram: config.website.url + '/instagram.png', website: config.website.url
+            })
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
@@ -75,10 +84,13 @@ module.exports = {
         Email.find({}, (err, users) => {
             users.forEach(user => {
                 var mailOptions = {
-                    from: config.username,
+                    from: 'Teach Leave Live',
                     to: user.email,
                     subject: "Teach Leave Live: " + title,
-                    html: compiledEmail.render({ body: body, link: link })
+                    html: compiledEmail.render({
+                        body: body, link: link,
+                        logo: config.website.url + '/logo.png', instagram: config.website.url + '/instagram.png', url: config.website.url
+                    })
                 };
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
@@ -91,19 +103,22 @@ module.exports = {
 
     },
     contact: function (body) {
-      const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/contact/contact-inlined.html', 'utf-8');
-      let compiledEmail = Hogan.compile(emailTemplate);
+        const emailTemplate = fs.readFileSync(path.resolve(__dirname) + '/contact/contact-inlined.html', 'utf-8');
+        let compiledEmail = Hogan.compile(emailTemplate);
 
-      let mailOptions = {
-          from: body.email,
-          to: config.email.username,
-          subject: 'From the TLL contact form',
-          html: compiledEmail.render({email: body.email, body: body.message})
-      };
-      transporter.sendMail(mailOptions, function (error, info) {
-          if (error) {
-              console.log(error);
-          }
-      });
+        let mailOptions = {
+            from: 'Contact Form',
+            to: config.email.username,
+            subject: 'From the TLL contact form',
+            html: compiledEmail.render({
+                email: body.email, body: body.message,
+                logo: config.website.url + '/logo.png', instagram: config.website.url + '/instagram.png', url: config.website.url
+            })
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            }
+        });
     },
 }
