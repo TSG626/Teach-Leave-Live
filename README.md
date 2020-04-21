@@ -3,7 +3,7 @@ Teach. Leave. Live. (TLL) is an online platform where teachers can leave work at
 
 Join the newsletter to be updated on teaching advice, and visit the blog to hear from us directly!
 
-# Team Members
+## Team Members
 - Omer Amir
 - Simon Frank
 - Spencer Bass
@@ -11,7 +11,7 @@ Join the newsletter to be updated on teaching advice, and visit the blog to hear
 - Daniel Park
 - Amanda Aribe
 
-# Features (User)
+## Features (User)
 - Landing Page: This is the page where all users begin. This includes recent blogs, recent courses, an about section, social media links, and newsletter sign up.
 - Sign Up Page: This is where users can sign up for an account. They must provide a first name, last name, a unique user name, a unqiue email, and a password. Users may also include where they heard about the web application from.
 - Login Page: This is where users can log into their account. They must provide a valid email with a corresponding password to access an account.
@@ -24,7 +24,7 @@ Join the newsletter to be updated on teaching advice, and visit the blog to hear
 - User Account View: This is the page where users can view their credentials. The user may change its username, password, and profile picture by clicking the corresponding buttons.
 - Contact Me Page: This allows users to send inquiries to the owner by inputting their email and description.
 
-# Features (Moderator, Admin, and Owner)
+## Features (Moderator, Admin, and Owner)
 - User Management: Users are able to view the status of all users in this page. Every users' name, email, username, and secruity status is listed on each row. Depending on the status level, users may promote or demote user statuses. Users may also be deleted through here as well.
 - Blog Publisher: Users are able to publish blogs in this page. All preexisting blogs are displayed by row. Blogs can also be edited and deleted. Additionally, adding a blog requires a title, description, and author contribution.
 - Course Publisher: Users are able to publish courses in this page. All preexisting courses are displayed by row. Courses can also be edited and deleted. Additionally, adding a course requires a title, description, author contribution, and a price.
