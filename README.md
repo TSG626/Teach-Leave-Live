@@ -30,7 +30,7 @@ Join the newsletter to be updated on teaching advice, and visit the blog to hear
 - Course Publisher: Users are able to publish courses in this page. All preexisting courses are displayed by row. Courses can also be edited and deleted. Additionally, adding a course requires a title, description, author contribution, and a price.
 - Newletter Publisher: Users are able to publish a newsletter in this page. They must provide and title and description. The user can also provide a link if they choose to. Upon sending the newsletter will allow all accounts and newletter signed up emails to recieve the email.
 
-# Dependencies
+## Dependencies
 - EditorJS
 - Material UI: This is where our UI stems off from.
 - React: This is the main JavaScript library used for user interface.
