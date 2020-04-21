@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginBottom: "2.5%",
     marginTop: "2.5%",
+    marginLeft: "4.5%",
   },
   heading: {
     marginBottom: "2.5%",
@@ -137,8 +138,8 @@ export default function NewsletterPublisher() {
                   Please confirm your newsletter first
                 </Typography>
               ) : (
-                ""
-              )}
+                  ""
+                )}
               <Grid item>
                 <FormControlLabel
                   control={
