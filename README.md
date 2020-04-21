@@ -29,3 +29,19 @@ Join the newsletter to be updated on teaching advice, and visit the blog to hear
 - Blog Publisher: Users are able to publish blogs in this page. All preexisting blogs are displayed by row. Blogs can also be edited and deleted. Additionally, adding a blog requires a title, description, and author contribution.
 - Course Publisher: Users are able to publish courses in this page. All preexisting courses are displayed by row. Courses can also be edited and deleted. Additionally, adding a course requires a title, description, author contribution, and a price.
 - Newletter Publisher: Users are able to publish a newsletter in this page. They must provide and title and description. The user can also provide a link if they choose to. Upon sending the newsletter will allow all accounts and newletter signed up emails to recieve the email.
+
+# Dependencies
+- EditorJS
+- Material UI: This is where our UI stems off from.
+- React: This is the main JavaScript library used for user interface.
+- PassportJS
+- Bcrypt: This allows passwords to be encrypted.
+- Express
+- Jsonwebtoken
+- Mocha
+- Morgan
+- MongoDB: This is where users, blogs, courses, and emails are stored for the web application.
+- Nodemailer: This allows Node.js to send emails.
+- Nodemon: This assists developers utilizing Node.js by handling file changes.
+- StripeAPI: This sets up payments for the web application to purchase courses.
+- React Avatar: This allows users to upload an avatar to their account.
