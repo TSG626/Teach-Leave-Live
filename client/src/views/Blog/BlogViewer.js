@@ -137,7 +137,7 @@ function CommentForm(props) {
 
 function Comment(props) {
   const classes = useStyles();
-  const { comment, reply, blogId, parentId } = props;
+  const { comment, reply, blogId, parent } = props;
   const { postedBy } = comment;
   const [open, setOpen] = useState(false);
   const { user } = useContext(UserContext);
@@ -154,7 +154,7 @@ function Comment(props) {
       });
     } else {
       API.delete(
-        `/api/blog/${blogId}/comment/${parentId}/:rid/${comment._id}`
+        `/api/blog/${blogId}/comment/${parent._id}/reply/${comment._id}`
       ).then((res) => {
         if (res.status == 200) history.go(history.location);
       });
@@ -286,7 +286,7 @@ function BlogViewer(props) {
           </Paper>
         </div>
         <div className={classes.comments}>
-          {true ? (
+          {blog.comments_allowed ? (
             <Paper>
               <Typography variant="h6" className={classes.commentsTitle}>
                 Comments
