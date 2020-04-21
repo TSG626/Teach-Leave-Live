@@ -64,7 +64,7 @@ function Block(props) {
       return <EndIcon />;
     // case "link":
     default:
-      return "OOPS";
+      return <React.Fragment/>;
   }
 }
 
