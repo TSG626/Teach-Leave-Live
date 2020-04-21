@@ -60,10 +60,12 @@ const DefaultStore = () => {
             console.log(err);
         });
         API.get('/api/user/getCart', {username: userInfo.user.username}).then(res=>{
+          if (res.data !== null)
             setCart(res.data);
         })
         API.get('/api/user/getCourses', {username: userInfo.user.username}).then(res=>{
             for (var i = 0; i < res.data.length; i++) {
+              if (res.data[i] !== null)
                 setCart(oldArr => [...oldArr, res.data[i]]);
             }
         })
@@ -86,13 +88,14 @@ const DefaultStore = () => {
             </header>
 
             <Grid container justify="center">
-                {
-                courses.map(course => {
+                {courses.map(course => {
                     var exists = false;
-                    cart.map(item => {
+                    if(cart.length !== 0) {
+                      cart.map(item => {
                         if (item === course._id)
                             exists = true;
                     })
+                    }
                     if (exists === false && course.published === true) {
                       count += 1;
                         return(
@@ -104,7 +107,7 @@ const DefaultStore = () => {
                               <Typography className={classes.title} color="textSecondary" gutterBottom align="center">
                                 {course.subject}
                               </Typography>
-                              <Typography variant="h5" component="h2" align="center">
+                              <Typography variant="h6" component="h2" align="center">
                                 {course.title}
                               </Typography>
                               <Box mt={1}>
@@ -164,7 +167,7 @@ const DefaultStore = () => {
                         return(<React.Fragment/>)
                     }
                 })}
-                {count === 0 ?       <Grow in="true" mountOnEnter timeout={2000}><Typography>No courses available!</Typography></Grow>: <React.Fragment></React.Fragment>}
+                {count === 0 ? <Grow in="true" mountOnEnter timeout={2000}><Typography>No courses available!</Typography></Grow>: <React.Fragment></React.Fragment>}
             </Grid>
 
         </div>
