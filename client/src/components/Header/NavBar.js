@@ -67,7 +67,7 @@ const AccountOptions = () => {
                   </Link>
                 </Grid>
               )}
-              
+
             </Grid>
           );
         }
