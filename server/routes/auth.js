@@ -357,7 +357,7 @@ const updatePasswordUser = async (req, res, done) => {
 };
 
 const generateCode = () => {
-    return crypto.randomBytes(32).toString('base64').substr(25, 6).toUpperCase();
+    return crypto.randomBytes(32).toString('base64').replace(/[0-9]/g, '').substr(25, 6).toUpperCase();
 };
 
 const sendCodeEmail = async (email, code) => {
