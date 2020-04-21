@@ -30,7 +30,8 @@ const Cart = () => {
         API.get('/api/user/getCart', {'username': userInfo.user.username}).then(res=>{
             for (var i = 0; i < res.data.length; i++) {
                 API.get('/api/course/', {'id': res.data[i]}).then(res=>{
-                    setProducts(oldArray => [...oldArray, res.data])
+                    if (res.data !== null)
+                        setProducts(oldArray => [...oldArray, res.data])
                 })
             }
                 }).catch(err=>{
@@ -97,10 +98,6 @@ const Cart = () => {
                 </BrowserRouter>
             )
         })
-    }
-    const ReturnStore = () => {
-        window.location.pathname = "/Store"; 
-        return false;
     }
     return (
         <CssBaseline>
