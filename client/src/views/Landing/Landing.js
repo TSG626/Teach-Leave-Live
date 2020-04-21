@@ -249,6 +249,11 @@ export default function Landing() {
         <Grid container>
           <Grid item xs={6}><ListBlogs/></Grid>
           <Grid item xs={6}><ListCourses/></Grid>
+          <Grid item xs={6}>
+            <Box p={4} display="flex" justifyContent='center' color='primary'>
+              <Link href='/Contact'>Contact Us</Link>
+            </Box>
+          </Grid>
         </Grid>
       </Grow>
     </div>
