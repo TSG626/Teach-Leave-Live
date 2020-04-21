@@ -18,6 +18,10 @@ const blogSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  comments_allowed: {
+    type: Boolean,
+    default: true,
+  },
   comments: [
     {
       body: { type: String, required: true },
