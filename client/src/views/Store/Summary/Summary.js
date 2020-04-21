@@ -68,7 +68,7 @@ const Summary = (props) => {
                 </Box>
             <Grow in="true" mountOnEnter timeout={3000}>
                 <Box m={3} align="center">
-                    Please check your email to see full details on your purchase! Thank you!
+                    Thank you for your purchase! Please check your courses to get started!
                 </Box>
             </Grow>
             <Grow in="true" mountOnEnter timeout={3000}>
