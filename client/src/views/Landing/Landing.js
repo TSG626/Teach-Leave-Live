@@ -151,14 +151,14 @@ function LandingBody(props) {
                 >
                   Sign Up
                 </Button>
-                  </Box>
                 <Typography variant="subtitle">{message}</Typography>
-              </form>
-            </Box>
-          </Grid>
+              </Box>
+            </form>
+          </Box>
         </Grid>
-      </Grow>
-    </div>
+      </Grid>
+    </Grow>
+  </div>
   );
 }
 const ListBlogs = () => {
