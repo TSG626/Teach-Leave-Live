@@ -33,14 +33,18 @@ router.get("/", (req, res, next) => {
   } else {
     //user
     if (req.query.id) {
-      Blog.findById(req.query.id, "")
+      Blog.findById(req.query.id)
         .populate("authors", "firstname lastname username status")
-        .populate("comments.postedBy", "firstname lastname username status")
+        .populate(
+          "comments.postedBy",
+          "firstname avatar lastname username status"
+        )
         .populate(
           "comments.replies.postedBy",
-          "firstname lastname username status"
+          "firstname lastname username avatar status"
         )
         .then((blog) => {
+          console.log(blog.comments);
           if (blog.published) {
             res.json(blog);
           } else {
@@ -76,11 +80,54 @@ router.post("/", (req, res, next) => {
   });
 });
 
-router.put("/:id", (req, res, next) => {
-  Blog.findByIdAndUpdate(req.params.id, req.body, (err, post) => {
-    if (err) return next(err);
-    res.json(post);
-  });
+router.post("/:bid/comment/", (req, res, next) => {
+  Blog.findByIdAndUpdate(
+    req.params.bid,
+    { $push: { comments: { ...req.body } } },
+    (err, post) => {
+      if (err) return next(err);
+      res.json(post);
+    }
+  );
+});
+
+router.delete("/:bid/comment/:cid", (req, res, next) => {
+  const { bid, cid } = req.params;
+  Blog.findById(bid)
+    .then((blog) => {
+      comment = blog.comments.id(cid);
+      comment.remove();
+      blog.save();
+    })
+    .then((blog) => {
+      res.status(200).json(blog);
+    });
+});
+
+router.post("/:bid/comment/:cid", (req, res, next) => {
+  const { bid, cid } = req.params;
+  Blog.update(
+    { _id: bid, "comments._id": cid },
+    { $push: { "comments.$.replies": req.body } },
+    { upsert: true },
+    function (err, blog) {
+      res.status(200).json(blog);
+    }
+  );
+});
+
+router.delete("/:bid/comment/:cid/reply/:rid", (req, res, next) => {
+  const { bid, cid, rid } = req.params;
+  Blog.findById(bid)
+    .then((blog) => {
+      comment = blog.comments.id(cid);
+      reply = comments.replies.id(rid);
+      reply.remove();
+      blog.save();
+    })
+    .then((blog) => {
+      res.status(200).json(blog);
+    });
 });
 
 router.put("/:id", (req, res, next) => {
