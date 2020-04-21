@@ -160,6 +160,11 @@ export default function Landing({ match }) {
               <Grid item xs={6}><ListCourses/></Grid>
               </Grow>
               </Grid>
+              <Grid xs={6}>
+                <Box p={4} display="flex" justifyContent='center'>
+                  <Button href='/Contact'>Contact Us</Button>
+                </Box>
+              </Grid>
             </CssBaseline>
           );
         } else {
