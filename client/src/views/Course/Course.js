@@ -87,7 +87,8 @@ export default function Course({ match }) {
         if (res.status === 200) {
           for (var i = 0; i < res.data.length; i++) {
             API.get("/api/course/", {id: res.data[i]}).then(course => {
-              setCourses(oldArr => [...oldArr, course.data]);
+              if (course.data !== null)
+                setCourses(oldArr => [...oldArr, course.data]);
             })
           }
         }

@@ -1,6 +1,7 @@
 const express = require("express");
 const Course = require("../models/CourseModel.js");
 const User = require("../models/UserModel");
+const mongoose = require("mongoose")
 
 const router = express.Router();
 
@@ -25,7 +26,11 @@ router.get("/", (req, res, next) => {
     if (req.query.id) {
       Course.findById(req.query.id, (err, course) => {
         if (err) return next(err);
-        res.json(course);
+        if (course === null) {
+          User.update({}, {$pull: {cart: mongoose.Types.ObjectId(req.query.id)}}, {multi: true}).then(res=>{})
+          User.update({}, {$pull: {courses: mongoose.Types.ObjectId(req.query.id)}}, {multi: true}).then(res=>{})
+        }
+          res.json(course);
       });
     } else if (req.query.subject) {
       Course.find(
@@ -51,9 +56,13 @@ router.get("/", (req, res, next) => {
       Course.findById(req.query.id)
         .populate("authors", "firstname lastname username")
         .then((course) => {
+          if (course === null) {           
+             User.update({}, {$pull: {cart: mongoose.Types.ObjectId(req.query.id)}}, {multi: true}).then(res=>{})
+             User.update({}, {$pull: {courses: mongoose.Types.ObjectId(req.query.id)}}, {multi: true}).then(res=>{})
+          }
           if (
-            req.user.courses.includes(req.query.id) ||
-            Object.values(course.authors).keys("_id").includes(req.user._id)
+            req.user.courses.includes(req.query.id) || req.user.cart.includes(req.query.id) || 
+            (Object.values(course.authors).length !== 0 && Object.values(course.authors).keys("_id").includes(req.user._id))
           ) {
             if (course.published) {
               res.json(course);
@@ -70,7 +79,7 @@ router.get("/", (req, res, next) => {
     } else {
       Course.find(
         { published: true },
-        "title description free cost subject authors"
+        "title description free cost subject authors price modules published"
       )
         .populate("authors", "firstname lastname username status")
         .then((courses) => {
