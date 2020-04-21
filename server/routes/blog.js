@@ -116,14 +116,23 @@ router.post("/:bid/comment/:cid", (req, res, next) => {
   );
 });
 
-router.delete("/:bid/comment/:cid/reply/:rid", (req, res, next) => {
+router.delete("/:bid/comment/:cid/reply/:rid/", (req, res, next) => {
   const { bid, cid, rid } = req.params;
+  console.log(req.params);
   Blog.findById(bid)
     .then((blog) => {
       comment = blog.comments.id(cid);
-      reply = comments.replies.id(rid);
-      reply.remove();
-      blog.save();
+      reply = comment.replies.id(rid);
+      if (
+        req.user.status === 0 ||
+        req.user.status === 1 ||
+        req.user._id === blog.postedBy._id
+      ) {
+        reply.remove();
+        blog.save();
+      } else {
+        res.status(401).send({ message: "Unauthorized action" });
+      }
     })
     .then((blog) => {
       res.status(200).json(blog);
