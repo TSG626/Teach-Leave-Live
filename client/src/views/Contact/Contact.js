@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper"
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
@@ -27,11 +28,13 @@ const Contact = () => {
     },
     input: {
       marginTop: theme.spacing(5),
+      marginLeft: "1.5%",
     },
   }));
 
   function handleSubmit(e) {
     e.preventDefault();
+    console.log("Creates post")
     API.post("/api/contact/", {
       email: document.getElementById("email").value,
       message: document.getElementById("message").value,
@@ -43,21 +46,32 @@ const Contact = () => {
 
   const classes = useStyles();
   return !sent ? (
-    <div>
-      <Box p={4}>
+    <Paper className={classes.paper}>
+      <div>
         <div class="title">
           <h1>Teach. Leave. Live.</h1>
         </div>
-      </Box>
-      <Box p={4}>
         <div class="message">
           <Typography component="h1" variant="h5">
             Email us
-          </Typography>
+        </Typography>
           <form className={classes.form} onSubmit={(e) => handleSubmit(e)}>
             <Input
               className={classes.input}
-              placeholder="message"
+              placeholder="Your Email"
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              required
+            />
+            <Input
+              className={classes.input}
+              placeholder="Message"
               variant="outlined"
               margin="normal"
               required
@@ -68,18 +82,7 @@ const Contact = () => {
               name="message"
               autoComplete="message"
               autoFocus
-            />
-            <Input
-              className={classes.input}
-              placeholder="email"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
+              required
             />
             <Button
               type="submit"
@@ -89,23 +92,23 @@ const Contact = () => {
               className={classes.submit}
             >
               Send
-            </Button>
+          </Button>
           </form>
         </div>
-      </Box>
-    </div>
+      </div>
+    </Paper>
   ) : (
-    <div>
-      <div class="title">
-        <h1>Teach. Leave. Live.</h1>
-      </div>
-      <div class="message">
-        <Typography component="h1" variant="h5">
-          Email sent.
+      <div className={classes.paper}>
+        <div class="title">
+          <h1>Teach. Leave. Live.</h1>
+        </div>
+        <div class="message">
+          <Typography component="h1" variant="h5">
+            Email sent.
         </Typography>
+        </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default Contact;
