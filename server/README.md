@@ -3,7 +3,7 @@ This is where the backend is located for the web application. This includes data
 
 ## config
 - authEmail.js: This is the process of how emails are sent when a user creates an account
-- config.js: This is where the MongoDB and Stripe API keys are stroed.
+- config.js: This is where the MongoDB and Stripe API keys are stored.
 - express.js: This is where the middlewhere is set up.
 - passport.js: This is where logging in is handled.
 - passwordreset.js: This is how the password resets are set up for "Forgot Password" functionality.
